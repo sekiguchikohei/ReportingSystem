@@ -83,6 +83,10 @@ namespace 業務報告システム.Areas.Identity.Pages.Account
             /// </summary>
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
+
+           
+
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
