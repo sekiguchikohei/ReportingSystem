@@ -22,12 +22,11 @@ namespace 業務報告システム.Models
         public string UserId { get; set; }
 
         //User_NP
-        public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser User { get; set; }
 
         //Todo_FK
-        public int TodoId { get; set; }
+        //public int TodoId { get; set; }
 
         //Todo_NP
-        public Todo Todo { get; set; }
     }
 }

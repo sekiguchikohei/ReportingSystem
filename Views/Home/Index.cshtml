@@ -35,10 +35,14 @@
         <p>@item.LastName @item.FirstName</p>
         <p>@item.Email</p>
 
-        @foreach (var pn in item.ProjectName)
+        @if (item.Projects != null)
         {
-         <p>@pn</p>    
+            @foreach (var project in item.Projects)
+            {
+                <p>@project.Name</p>
+            }
         }
+        
 
         <form asp-action="Delete" onSubmit="return check()">
             <input type="hidden" name="id" value="@item.Id" />
@@ -49,15 +53,15 @@
 
     else if (User.IsInRole("Manager"))
     {
-        if (ViewBag.Projectnames.Contains(item.ProjectName))
+        if (ViewBag.Projectnames.Contains(item.Projects))
         {
             if (item.Email.Equals(User.Identity.Name))
             {
                 <p>@item.LastName @item.FirstName</p>
                 <p>@item.Email</p>
-                @foreach (var pn in item.ProjectName)
+                @foreach (var project in item.Projects)
                 {
-                    <p>@pn</p>
+                    <p>@project.Name</p>
                 }
                 // 自分の情報では詳細に飛ぶリンクつけない
             }
@@ -66,9 +70,13 @@
             {
                 <p>@item.LastName @item.FirstName</p>
                 <p>@item.Email</p>
-                @foreach (var pn in item.ProjectName)
+               
+                @if (item.Projects != null)
                 {
-                    <p>@pn</p>
+                    @foreach (var project in item.Projects)
+                    {
+                        <p>@project.Name</p>
+                    }
                 }
                 //詳細に飛ぶリンクつける予定
             }

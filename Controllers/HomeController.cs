@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Security.Claims;
 using 業務報告システム.Data;
 using 業務報告システム.Models;
-using 業務報告システム.ViewModels;
 
 namespace 業務報告システム.Controllers
 {
@@ -40,28 +39,9 @@ namespace 業務報告システム.Controllers
 
             var users = _userManager.Users.ToList();
 
-            foreach (var user in users)
-            {
-                var roles = await _userManager.GetRolesAsync(user);
-                var role = roles.FirstOrDefault();
-
-                if (!string.IsNullOrEmpty(role))
-                {
-                    var usersRole = new Users()
-                    {
-                        UserId = user.Id,
-                        Email = user.Email,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        ProjectName = user.ProjectName,
-                        Role = role
-                    };
-                }
-            }
-
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             ApplicationUser loginUser = await _userManager.FindByIdAsync(loginUserId);
-            ViewBag.Projectnames = loginUser.ProjectName;
+            ViewBag.Projectnames = loginUser.Projects;
 
             return View(users);
 
