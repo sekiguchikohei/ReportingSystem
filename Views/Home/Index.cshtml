@@ -1,10 +1,92 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<業務報告システム.Models.ApplicationUser>;
+
+@{
+    ViewData["Title"] = "Index";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>メンバーリスト</h1>
 
-test
+@if (TempData["AlertUser"] != null)
+{
+    <div class="alert alert-success alert-dismissable fade show m-1" role="alert">
+        @TempData["AlertUser"]
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["AlertUserError"] != null)
+{
+    <div class="alert alert-danger alert-dismissable fade show m-1" role="alert">
+        @TempData["AlertUserError"]
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<p>admin用ユーザー追加ボタン作る予定</p>
+
+@* <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">Add New User</a> *@
+
+<p>ユーザー一覧</p>
+
+@foreach (var item in Model)
+{
+    @if (User.IsInRole("Admin"))
+    {
+        <p>@item.LastName @item.FirstName</p>
+        <p>@item.Email</p>
+
+        @foreach (var pn in item.ProjectName)
+        {
+         <p>@pn</p>    
+        }
+
+        <form asp-action="Delete" onSubmit="return check()">
+            <input type="hidden" name="id" value="@item.Id" />
+            <input type="submit" value="削除" class="btn btn-danger" />
+        </form>
+        <p>---------------------</p>
+    }
+
+    else if (User.IsInRole("Manager"))
+    {
+        if (ViewBag.Projectnames.Contains(item.ProjectName))
+        {
+            if (item.Email.Equals(User.Identity.Name))
+            {
+                <p>@item.LastName @item.FirstName</p>
+                <p>@item.Email</p>
+                @foreach (var pn in item.ProjectName)
+                {
+                    <p>@pn</p>
+                }
+                // 自分の情報では詳細に飛ぶリンクつけない
+            }
+
+            else
+            {
+                <p>@item.LastName @item.FirstName</p>
+                <p>@item.Email</p>
+                @foreach (var pn in item.ProjectName)
+                {
+                    <p>@pn</p>
+                }
+                //詳細に飛ぶリンクつける予定
+            }
+
+            <p>---------------------</p>
+
+        }
+
+    }
+}
+
+<script>
+    function check() {
+        if (window.confirm('このユーザーを削除しますか？')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+</script>
