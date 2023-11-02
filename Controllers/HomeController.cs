@@ -38,8 +38,10 @@ namespace 業務報告システム.Controllers
         public async Task<IActionResult> Index() {
 
             var users = _userManager.Users.ToList();
-
+            
+            //現在ログインしているユーザーのログインＩＤ取得の変数
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             ApplicationUser loginUser = await _userManager.FindByIdAsync(loginUserId);
             ViewBag.Projectnames = loginUser.Projects;
 
