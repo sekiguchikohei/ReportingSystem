@@ -70,7 +70,7 @@ using (var scope = app.Services.CreateScope())
         var user = new ApplicationUser();
         user.UserName = email;
         user.Email = email;
-        user.ProjectName = "Admin";
+        user.ProjectName.Add("Admin");
         user.FirstName = "Admin";
         user.LastName = "Super";
 
