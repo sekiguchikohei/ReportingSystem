@@ -13,7 +13,7 @@ namespace 業務報告システム.Models
         public string TaskName { get; set; }
 
         //進捗　1～10の10段階
-        [Range(1,10)]
+        [Range(0,10)]
         public int Progress { get; set; }
 
         //Taskの開始日
