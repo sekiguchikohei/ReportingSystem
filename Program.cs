@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using 業務報告システム.Data;
 using 業務報告システム.Models;
@@ -70,7 +71,7 @@ using (var scope = app.Services.CreateScope())
         var user = new ApplicationUser();
         user.UserName = email;
         user.Email = email;
-        user.ProjectName.Add("Admin");
+
         user.FirstName = "Admin";
         user.LastName = "Super";
 

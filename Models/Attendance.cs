@@ -34,6 +34,6 @@ namespace 業務報告システム.Models
         public string UserId { get; set; }
 
         //NP
-        public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }
