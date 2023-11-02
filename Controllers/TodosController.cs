@@ -66,7 +66,6 @@ namespace 業務報告システム.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.applicationuser, "Id", "Id", todo.UserId);
             return View(todo);
         }
 
