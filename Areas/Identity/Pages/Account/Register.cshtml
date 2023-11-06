@@ -35,6 +35,10 @@
                     <option>Member</option>
                     <option>Manager</option>
                 </select>
+                <div class="form-group">
+                    <label class="control-label">Project</label>
+                    <select class="form-control" asp-items="ViewBag.Projects" name="projectSelect"></select>
+                </div>
                 <div class="form-floating">
                     <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
                     <label asp-for="Input.Password"></label>
