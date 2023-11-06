@@ -13,7 +13,9 @@ namespace 業務報告システム.Models
         [Required]
         public string LastName { get; set; }
 
-        public List<Project>? Projects { get; set; }
+        //public List<Project>? Projects { get; set; }
+
+        public ICollection<Project> Projects { get; set; }
 
         public ICollection<Attendance> Attendances {  get; set; }
         
