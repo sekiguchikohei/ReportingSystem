@@ -17,6 +17,8 @@ namespace 業務報告システム.Data
         public DbSet<業務報告システム.Models.Todo>? todo { get; set; }
         public DbSet<業務報告システム.Models.Feedback>? feedback { get; set; }
 
+        public DbSet<業務報告システム.Models.Project>? project { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

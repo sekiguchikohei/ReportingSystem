@@ -1,0 +1,43 @@
+﻿@model IEnumerable<業務報告システム.Models.Project>
+
+@{
+}
+@if (TempData["AlertProject"] != null)
+{
+    <div class="alert alert-success alert-dismissable fade show m-1" role="alert">
+        @TempData["AlertProject"]
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h1>Project Index</h1>
+
+<a class="btn btn-primary" asp-action="Create">Create new Project</a>
+
+@if (Model != null)
+{
+    @foreach (var item in Model)
+    {
+        <p>@item.Name</p>
+        
+
+        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a>
+
+        <form asp-controller="Projects" asp-action="Delete" onSubmit="return check()">
+            <input type="hidden" name="id" value="@item.ProjectId" />
+            <input type="submit" value="Delete" class="btn btn-warning" />
+        </form>
+    }
+    
+}
+
+<script>
+    function check() {
+        if (window.confirm('このプロジェクトを削除しますか？')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+</script>

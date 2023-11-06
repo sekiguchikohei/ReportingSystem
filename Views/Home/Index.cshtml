@@ -4,6 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
+@if (User.IsInRole("Admin"))
+{
+    <a class="btn btn-primary" asp-controller="Projects" asp-action="Index">プロジェクト管理</a>
+
+}
+
 <h1>メンバーリスト</h1>
 
 @if (TempData["AlertUser"] != null)
