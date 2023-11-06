@@ -29,26 +29,6 @@ namespace 業務報告システム.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Todos/Details/5
-        [Authorize]
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.todo == null)
-            {
-                return NotFound();
-            }
-
-            var todo = await _context.todo
-                .Include(t => t.User)
-                .FirstOrDefaultAsync(m => m.TodoId == id);
-            if (todo == null)
-            {
-                return NotFound();
-            }
-
-            return View(todo);
-        }
-
         // GET: Todos/Create
         [Authorize]
         public IActionResult Create()
@@ -166,13 +146,16 @@ namespace 業務報告システム.Controllers
                 return Problem("Entity set 'ApplicationDbContext.todo'  is null.");
             }
             var todo = await _context.todo.FindAsync(id);
-            if (todo != null)
-            {
+            //if (todo != null)
+            //{
                 _context.todo.Remove(todo);
-            }
-            
+           // }
+
+            TempData["AlertTodo"] = "Todoを削除しました。";
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+           
+            //return Redirect("/Todos/Index");
         }
 
         private bool TodoExists(int id)
