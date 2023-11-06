@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Security.Claims;
 using 業務報告システム.Data;
@@ -44,7 +46,11 @@ namespace 業務報告システム.Controllers
 
             ApplicationUser loginUser = await _userManager.FindByIdAsync(loginUserId);
 
-            if (_context.project == null)
+            var projects = _context.project;
+            var listProject = await projects.ToListAsync();
+            int projectCount = listProject.Count;
+
+            if (projectCount == 0)
             {
 
                 if (User.IsInRole("Admin"))
