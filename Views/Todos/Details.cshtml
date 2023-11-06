@@ -1,7 +1,9 @@
-﻿@model 業務報告システム.Models.Todo
+﻿@using System.Security.Claims;
+@model 業務報告システム.Models.Todo
 
 @{
     ViewData["Title"] = "Details";
+    var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
 <h1>Details</h1>
