@@ -1,7 +1,9 @@
-﻿@model 業務報告システム.Models.Todo
+﻿@using System.Security.Claims;
+@model 業務報告システム.Models.Todo
 
 @{
     ViewData["Title"] = "Edit";
+    var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
 <h1>Edit</h1>
@@ -18,11 +20,26 @@
                 <input asp-for="TaskName" class="form-control" />
                 <span asp-validation-for="TaskName" class="text-danger"></span>
             </div>
+            @* Edit画面でprogressを0~10で選択できるようにする
+            追記=======================
+            編集前
             <div class="form-group">
                 <label asp-for="Progress" class="control-label"></label>
                 <input asp-for="Progress" class="form-control" />
                 <span asp-validation-for="Progress" class="text-danger"></span>
             </div>
+            編集後 *@
+            <div class="form-group">
+                <label asp-for="Progress" class="control-label"></label>
+                <select asp-for="Progress" class="form-control">
+                    @for (int i = 0; i <= 10; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+                <span asp-validation-for="Progress" class="text-danger"></span>
+            </div>
+            @* 追記======================== *@
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
                 <input asp-for="StartDate" class="form-control" />
@@ -38,11 +55,19 @@
                 <input asp-for="Comment" class="form-control" />
                 <span asp-validation-for="Comment" class="text-danger"></span>
             </div>
+            @* Edit画面でUserIdは表示させずに自動入力させる。
+            追記=======================
+            編集前
             <div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
                 <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
                 <span asp-validation-for="UserId" class="text-danger"></span>
+            </div> *@
+            @* 編集後 *@
+            <div class="form-group">
+                <input asp-for="UserId" type="hidden" asp-items="@loginUserId"/>
             </div>
+            @* 追記======================= *@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
