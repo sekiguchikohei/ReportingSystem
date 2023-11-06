@@ -43,9 +43,30 @@ namespace 業務報告システム.Controllers
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             ApplicationUser loginUser = await _userManager.FindByIdAsync(loginUserId);
-            ViewBag.Projectnames = loginUser.Projects;
 
-            return View(users);
+            if (_context.project == null)
+            {
+
+                if (User.IsInRole("Admin"))
+                {
+                    TempData["AlertProjectCreate"] = "一つ目のプロジェクトを登録してください。";
+                    return Redirect("/Projects/Create");
+                }
+                else
+                {
+                    TempData["AlertError"] = "サービスの利用前に、Adminユーザーにプロジェクト作成の初期設定を依頼してください。";
+                    return Redirect("/Home/Home");
+                }
+
+            }
+            else {
+
+                ViewBag.Projectnames = loginUser.Projects;
+
+                return View(users);
+            }
+
+           
 
         }
 

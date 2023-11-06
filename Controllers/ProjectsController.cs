@@ -44,6 +44,7 @@ namespace 業務報告システム.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name")] Project project)
         {
+            ModelState.Remove("Users");
             if (ModelState.IsValid)
             {
                 _context.Add(project);
