@@ -29,7 +29,6 @@ namespace 業務報告システム.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-       
         // GET: Todos/Create
         [Authorize]
         public IActionResult Create()
@@ -148,13 +147,16 @@ namespace 業務報告システム.Controllers
                 return Problem("Entity set 'ApplicationDbContext.todo'  is null.");
             }
             var todo = await _context.todo.FindAsync(id);
-            if (todo != null)
-            {
+            //if (todo != null)
+            //{
                 _context.todo.Remove(todo);
-            }
-            
+           // }
+
+            TempData["AlertTodo"] = "Todoを削除しました。";
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+           
+            //return Redirect("/Todos/Index");
         }
 
         private bool TodoExists(int id)

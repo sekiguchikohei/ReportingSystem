@@ -5,6 +5,14 @@
     ViewData["Title"] = "Index";
     var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
+@if (TempData["AlertTodo"] != null)
+{
+    <div class="alert alert-success alert-dismissable fade show m-1" role="alert">
+        @TempData["AlertTodo"]
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 
 <h1>Index</h1>
 <p>
@@ -99,8 +107,21 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.TodoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TodoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TodoId">Delete</a>
+                @* <a asp-action="Delete" asp-route-id="@item.TodoId">Delete</a> *@
+
+                <form asp-action="Delete" onSubmit="return check()">
+                    <input type="hidden" name="id" value="@item.TodoId" />
+                    <input type="submit" value="削除" class="btn btn-danger" />
+                </form>
+                    <script>
+                        function check() {
+                            if (window.confirm('このユーザーを削除しますか？')) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    </script>
             </td>
         </tr>
 }
