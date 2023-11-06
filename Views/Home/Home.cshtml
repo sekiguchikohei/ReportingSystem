@@ -10,9 +10,18 @@
     </div>
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-
-test
+@if (User.IsInRole("Admin"))
+{
+    <h1>あなたはAdminユーザーです</h1>
+}
+else if (User.IsInRole("Manager"))
+{
+    <h1>あなたはManagerユーザーです</h1>
+}
+else if (User.IsInRole("Member"))
+{
+    <h1>あなたはMemberユーザーです</h1>
+} else
+{
+    <h1>ログインしてください。</h1>
+}

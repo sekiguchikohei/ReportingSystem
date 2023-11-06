@@ -4,10 +4,14 @@ namespace 業務報告システム.ViewModels
 {
     public class UserIndex
     {
-        public List<ApplicationUser> Users { get; set; }
+        public string FirstName { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public string LastName { get; set; }
 
-        public List<Project> Projects { get; set; }
+        public string Email { get; set; }  
+
+        public string Role {  get; set; }
+
+        public string Project {  get; set; }
     }
 }
