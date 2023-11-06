@@ -92,6 +92,7 @@ namespace 業務報告システム.Controllers
                 return NotFound();
             }
 
+            ModelState.Remove("User");
             if (ModelState.IsValid)
             {
                 try
