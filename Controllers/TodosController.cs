@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -87,6 +88,14 @@ namespace 業務報告システム.Controllers
             {
                 return NotFound();
             }
+            //Todo Edit画面でタスクIDとログインユーザーIDが一致していない場合は「アクセス権がありません」と表示する。
+            //追記=================================
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!todo.UserId.Equals(loginUserId))
+            {
+                return NotFound("アクセス権がありません");
+            }
+            //追記=================================
             ViewData["UserId"] = new SelectList(_context.applicationuser, "Id", "Id", todo.UserId);
             return View(todo);
         }
