@@ -29,36 +29,7 @@ namespace 業務報告システム.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Todos/Details/5
-        [Authorize]
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.todo == null)
-            {
-                return NotFound();
-            }
-
-            var todo = await _context.todo
-                .Include(t => t.User)
-                .FirstOrDefaultAsync(m => m.TodoId == id);
-            if (todo == null)
-            {
-                return NotFound();
-            }
-
-            //Todo Detail画面でタスクIDとログインユーザーIDが一致していない場合は「アクセス権がありません」と表示する。
-            //追記=================================
-            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!todo.UserId.Equals(loginUserId))
-            {
-                return NotFound("アクセス権がありません");
-            }
-            //追記=================================
-
-
-            return View(todo);
-        }
-
+       
         // GET: Todos/Create
         [Authorize]
         public IActionResult Create()
