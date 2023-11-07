@@ -22,6 +22,21 @@ namespace 業務報告システム.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("ApplicationUserProject", b =>
+                {
+                    b.Property<int>("ProjectsProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ProjectsProjectId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ApplicationUserProject");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -313,16 +328,11 @@ namespace 業務報告システム.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectId"), 1L, 1);
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProjectId");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("project");
                 });
@@ -408,6 +418,21 @@ namespace 業務報告システム.Data.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
+            modelBuilder.Entity("ApplicationUserProject", b =>
+                {
+                    b.HasOne("業務報告システム.Models.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("業務報告システム.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -485,13 +510,6 @@ namespace 業務報告システム.Data.Migrations
                     b.Navigation("Report");
                 });
 
-            modelBuilder.Entity("業務報告システム.Models.Project", b =>
-                {
-                    b.HasOne("業務報告システム.Models.ApplicationUser", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("ApplicationUserId");
-                });
-
             modelBuilder.Entity("業務報告システム.Models.Report", b =>
                 {
                     b.HasOne("業務報告システム.Models.ApplicationUser", "User")
@@ -519,8 +537,6 @@ namespace 業務報告システム.Data.Migrations
                     b.Navigation("Attendances");
 
                     b.Navigation("Feedbacks");
-
-                    b.Navigation("Projects");
 
                     b.Navigation("Reports");
 

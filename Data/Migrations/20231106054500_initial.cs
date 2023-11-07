@@ -54,22 +54,16 @@ namespace 業務報告システム.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Project",
+                name: "project",
                 columns: table => new
                 {
                     ProjectId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Project", x => x.ProjectId);
-                    table.ForeignKey(
-                        name: "FK_Project_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                    table.PrimaryKey("PK_project", x => x.ProjectId);
                 });
 
             migrationBuilder.CreateTable(
@@ -119,6 +113,30 @@ namespace 業務報告システム.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ApplicationUserProject",
+                columns: table => new
+                {
+                    ProjectsProjectId = table.Column<int>(type: "int", nullable: false),
+                    UsersId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUserProject", x => new { x.ProjectsProjectId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserProject_AspNetUsers_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserProject_project_ProjectsProjectId",
+                        column: x => x.ProjectsProjectId,
+                        principalTable: "project",
+                        principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "feedback",
                 columns: table => new
                 {
@@ -148,6 +166,11 @@ namespace 業務報告システム.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserProject_UsersId",
+                table: "ApplicationUserProject",
+                column: "UsersId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_attendance_UserId",
                 table: "attendance",
                 column: "UserId");
@@ -163,11 +186,6 @@ namespace 業務報告システム.Data.Migrations
                 column: "ReportId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Project_ApplicationUserId",
-                table: "Project",
-                column: "ApplicationUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_report_UserId",
                 table: "report",
                 column: "UserId");
@@ -181,16 +199,19 @@ namespace 業務報告システム.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ApplicationUserProject");
+
+            migrationBuilder.DropTable(
                 name: "attendance");
 
             migrationBuilder.DropTable(
                 name: "feedback");
 
             migrationBuilder.DropTable(
-                name: "Project");
+                name: "todo");
 
             migrationBuilder.DropTable(
-                name: "todo");
+                name: "project");
 
             migrationBuilder.DropTable(
                 name: "report");
