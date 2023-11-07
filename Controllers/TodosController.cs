@@ -159,6 +159,52 @@ namespace 業務報告システム.Controllers
             //return Redirect("/Todos/Index");
         }
 
+        //Manager用************************************
+        //*********************************************
+
+        // GET: Todos/MgrCreate
+        [Authorize]
+        public IActionResult MgrCreate()
+        {
+            if (User.IsInRole("Manager"))
+            {
+
+                var users = _context.applicationuser.ToList();
+                var members = users.Select(user => new SelectListItem
+                {
+                    Value = user.Id,
+                    Text = $"{user.LastName} {user.FirstName}",
+                });
+
+                ViewBag.Members = new SelectList(members, "Value", "Text");
+
+                return View();
+            }
+            return NotFound("アクセス権が有りません");
+        }
+
+
+        // POST: Todos/MgrCreate
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MgrCreate([Bind("TodoId,TaskName,Progress,StartDate,EndDate,Comment,UserId")] Todo todo)
+        {
+            //ModelState.Remove("User");
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(todo);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            return View(todo);
+        }
+
+
+
+        //************************************************
+
         private bool TodoExists(int id)
         {
           return (_context.todo?.Any(e => e.TodoId == id)).GetValueOrDefault();
