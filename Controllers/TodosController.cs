@@ -196,6 +196,8 @@ namespace 業務報告システム.Controllers
 
             }
 
+            todoIndex.Users.Remove(manager);
+
             return View(todoIndex);
         }
 

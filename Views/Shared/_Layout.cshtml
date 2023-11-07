@@ -22,10 +22,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Home">Home</a>
                         </li>
-                        @if (!(User.IsInRole("Member")))
+                        @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Index</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">ユーザー一覧</a>
+                            </li>
+                        } else if (User.IsInRole("Manager"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="MgrIndex">ユーザー一覧</a>
                             </li>
                         }
 
