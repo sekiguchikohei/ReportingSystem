@@ -1,0 +1,27 @@
+﻿@model 業務報告システム.ViewModels.TodoIndex;
+
+@{
+}
+
+@foreach (var project in Model.Projects)
+{
+    <p>所属プロジェクト名　： @project.Name </p>
+
+}
+
+<p>
+    マネージャー（ログイン中）：@Model.User.LastName @Model.User.FirstName
+</p>
+
+@foreach (var user in Model.Users)
+{
+    <p>@user.LastName @user.FirstName</p>
+
+    @foreach (var todo in Model.Todos)
+    {
+        @if (todo.UserId.Equals(user.Id))
+        {
+            <p>@todo.TaskName</p>
+        }  
+    }
+}

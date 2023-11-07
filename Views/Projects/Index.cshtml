@@ -19,6 +19,16 @@
     @foreach (var item in Model)
     {
         <p>@item.Name</p>
+
+        @if (item.UserProjects != null)
+        {
+            @foreach (var user in item.UserProjects)
+            {
+                <p>ユーザーID : @user.UserId</p>
+            }
+        }
+       
+       
         
 
         <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a>

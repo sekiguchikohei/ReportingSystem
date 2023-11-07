@@ -133,8 +133,13 @@ namespace 業務報告システム.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
 
-                user.Projects = new List<Project>();
-                user.Projects.Add(project);
+                user.UserProjects = new List<UserProject>();
+                UserProject userProject = new UserProject() { 
+                ProjectId = project.ProjectId,
+                UserId = user.Id,
+                };
+
+                user.UserProjects.Add(userProject);
 
                 await _userManager.AddToRoleAsync(user, Input.Role);
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
