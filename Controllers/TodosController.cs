@@ -1,24 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using 業務報告システム.Data;
 using 業務報告システム.Models;
+using 業務報告システム.ViewModels;
 
 namespace 業務報告システム.Controllers
 {
     public class TodosController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TodosController(ApplicationDbContext context)
+        public TodosController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Todos
@@ -33,7 +38,7 @@ namespace 業務報告システム.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.applicationuser, "Id", "Id");
+            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id");
             return View();
         }
 
@@ -76,7 +81,7 @@ namespace 業務報告システム.Controllers
                 return NotFound("アクセス権がありません");
             }
             //追記=================================
-            ViewData["UserId"] = new SelectList(_context.applicationuser, "Id", "Id", todo.UserId);
+            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", todo.UserId);
             return View(todo);
         }
 
@@ -113,8 +118,85 @@ namespace 業務報告システム.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.applicationuser, "Id", "Id", todo.UserId);
+            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", todo.UserId);
             return View(todo);
+        }
+
+        [Authorize(Roles ="Manager")]
+        public async Task<IActionResult> MgrIndex()
+        {
+            //viewmodelの呼び出し
+            TodoIndex todoIndex = new TodoIndex();
+
+            //viewmodelのusersリストを初期化
+            todoIndex.Users = new List<ApplicationUser>();
+
+            //viewmodelのprojectリストを初期化
+            todoIndex.Projects = new List<Project>();
+
+            //viewmodelのusersリストを初期化
+            todoIndex.Users = new List<ApplicationUser>();
+
+            //viewmodelのtodosリストを初期化
+            todoIndex.Todos = new List<Todo>();
+
+            //ログインしているマネージャーのIDを取得して全ユーザーから特定し、viewmodelのuserに追加
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ApplicationUser manager = await _userManager.FindByIdAsync(loginUserId);
+            todoIndex.User = manager;
+
+            //全プロジェクトのリストを作成
+            var allprojects = _context.project.ToList();
+
+            //マネージャーの所属しているプロジェクトのリスト（参照用）を作成
+            var managerprojects = _context.userproject.Where(x => x.UserId.Equals(manager.Id)).ToList();
+
+            //マネージャーの所属しているプロジェクトを参照リストから特定してviewmodelのProjectsに追加
+            foreach (var project in managerprojects) {
+                foreach (var allproject in allprojects) {
+                    if (project.ProjectId == allproject.ProjectId) {
+                        Project pj = new Project();
+                        pj.ProjectId = allproject.ProjectId;
+                        pj.Name = allproject.Name;
+                        todoIndex.Projects.Add(pj);
+                    }
+                }
+            }
+
+            //全ユーザーの所属しているプロジェクトのリスト（参照用）を作成
+            var alluserprojects = _context.userproject.ToList();
+
+            //全ユーザーのプロジェクトの参照リストからマネージャーのプロジェクトと一致するものを持つユーザーをviewmodelのusersに追加
+            foreach (var userproject in alluserprojects) {
+                foreach (var managerproject in todoIndex.Projects) {
+                    if (userproject.ProjectId == managerproject.ProjectId) {
+                        ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
+                        todoIndex.Users.Add(user);
+                    }
+                }
+              
+            }
+
+            //全ユーザーのリストを作成
+            var allusers = _userManager.Users.ToList();
+
+            //全Todoのリストを作成
+            var alltodos =  _context.todo.ToList();
+
+            //全todoからログインマネージャーと同じプロジェクトのユーザーのtodoを検索し、viewmodelのtodosに追加
+            foreach (var todo in alltodos)
+            {
+                foreach (var user in todoIndex.Users)
+                {
+                    if (todo.UserId.Equals(user.Id))
+                    {
+                        todoIndex.Todos.Add(todo);
+                    }
+                }
+
+            }
+
+            return View(todoIndex);
         }
 
         // GET: Todos/Delete/5
