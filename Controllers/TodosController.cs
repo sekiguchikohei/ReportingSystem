@@ -251,7 +251,7 @@ namespace 業務報告システム.Controllers
             if (User.IsInRole("Manager"))
             {
 
-                var users = _context.applicationuser.ToList();
+                var users = _context.user.ToList();
                 var members = users.Select(user => new SelectListItem
                 {
                     Value = user.Id,
