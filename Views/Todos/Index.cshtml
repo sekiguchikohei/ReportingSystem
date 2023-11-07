@@ -23,43 +23,6 @@
 {
     @if (loginUserId.Equals(item.UserId))
     {
-        @item.TaskName<br />
-        @switch (item.Progress)
-        {
-            case 0:
-                <p>0%</p>
-                break;
-            case 1:
-                <p>10%</p>
-                break;
-            case 2:
-                <p>20%</p>
-                break;
-            case 3:
-                <p>30%</p>
-                break;
-            case 4:
-                <p>40%</p>
-                break;
-            case 5:
-                <p>50%</p>
-                break;
-            case 6:
-                <p>60%</p>
-                break;
-            case 7:
-                <p>70%</p>
-                break;
-            case 8:
-                <p>80%</p>
-                break;
-            case 9:
-                <p>90%</p>
-                break;
-            case 10:
-                <p>100%</p>
-                break;
-            }
 }
     else if (loginUserId.Equals(item.UserId) == null)
     {
@@ -70,60 +33,99 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TaskName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Progress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Comment)
-            </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Progress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comment)
+        </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TaskName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Progress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comment)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TodoId">Edit</a> |
-                @* <a asp-action="Delete" asp-route-id="@item.TodoId">Delete</a> *@
 
-                <form asp-action="Delete" onSubmit="return check()">
-                    <input type="hidden" name="id" value="@item.TodoId" />
-                    <input type="submit" value="削除" class="btn btn-danger" />
-                </form>
-                    <script>
-                        function check() {
-                            if (window.confirm('このユーザーを削除しますか？')) {
-                                return true;
-                            } else {
-                                return false;
-                            }
+    @foreach (var item in Model) {
+        @if (loginUserId.Equals(item.UserId))
+        {
+        <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaskName)
+        </td>
+        <td>
+            @switch (item.Progress)
+            {
+                case 0:
+                    <p>0%</p>
+                    break;
+                case 1:
+                    <p>10%</p>
+                    break;
+                case 2:
+                    <p>20%</p>
+                    break;
+                case 3:
+                    <p>30%</p>
+                    break;
+                case 4:
+                    <p>40%</p>
+                    break;
+                case 5:
+                    <p>50%</p>
+                    break;
+                case 6:
+                    <p>60%</p>
+                    break;
+                case 7:
+                    <p>70%</p>
+                    break;
+                case 8:
+                    <p>80%</p>
+                    break;
+                case 9:
+                    <p>90%</p>
+                    break;
+                case 10:
+                    <p>100%</p>
+                    break;
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EndDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comment)
+        </td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.TodoId">Edit</a> |
+            @* <a asp-action="Delete" asp-route-id="@item.TodoId">Delete</a> *@
+
+            <form asp-action="Delete" onSubmit="return check()">
+                <input type="hidden" name="id" value="@item.TodoId" />
+                <input type="submit" value="削除" class="btn btn-danger" />
+            </form>
+                <script>
+                    function check() {
+                        if (window.confirm('このユーザーを削除しますか？')) {
+                            return true;
+                        } else {
+                            return false;
                         }
-                    </script>
+                    }
+                </script>
             </td>
         </tr>
+        }
 }
     </tbody>
 </table>
