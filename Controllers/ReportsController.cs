@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -49,6 +50,7 @@ namespace 業務報告システム.Controllers
         }
 
         // GET: Reports/Create
+        [Authorize(Roles = "Member")]
         public IActionResult Create()
         {
             ViewData["UserId"] = new SelectList(_context.user, "Id", "Id");
@@ -62,6 +64,7 @@ namespace 業務報告システム.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ReportId,Date,Comment,TommorowComment,UserId")] Report report)
         {
+            ModelState.Remove("User");
             if (ModelState.IsValid)
             {
                 _context.Add(report);

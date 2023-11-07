@@ -1,7 +1,9 @@
-﻿@model 業務報告システム.Models.Report
+﻿@using System.Security.Claims;
+@model 業務報告システム.Models.Report
 
 @{
     ViewData["Title"] = "Create";
+        var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
 <h1>Create</h1>
@@ -28,8 +30,7 @@
                 <span asp-validation-for="TommorowComment" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+                <input asp-for="UserId" type="hidden" value="@loginUserId" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
