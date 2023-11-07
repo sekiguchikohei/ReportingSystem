@@ -139,7 +139,7 @@ namespace 業務報告システム.Controllers
 
             //viewmodelのtodosリストを初期化
             todoIndex.Todos = new List<Todo>();
-
+            //-------------------------------------------------------------------------------------------------------------------------------------
             //ログインしているマネージャーのIDを取得して全ユーザーから特定し、viewmodelのuserに追加
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             ApplicationUser manager = await _userManager.FindByIdAsync(loginUserId);
@@ -246,12 +246,91 @@ namespace 業務報告システム.Controllers
 
         // GET: Todos/MgrCreate
         [Authorize]
-        public IActionResult MgrCreate()
+        public async Task<IActionResult> MgrCreate()
         {
             if (User.IsInRole("Manager"))
             {
+                //-------------------------------------------------------------------------------------------------------------------------------------
+                //viewmodelの呼び出し
+                TodoIndex todoIndex = new TodoIndex();
 
-                var users = _context.user.ToList();
+                //viewmodelのusersリストを初期化
+                todoIndex.Users = new List<ApplicationUser>();
+
+                //viewmodelのprojectリストを初期化
+                todoIndex.Projects = new List<Project>();
+
+                //viewmodelのtodosリストを初期化
+                todoIndex.Todos = new List<Todo>();
+
+                //ログインしているマネージャーのIDを取得して全ユーザーから特定し、viewmodelのuserに追加
+                var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                ApplicationUser manager = await _userManager.FindByIdAsync(loginUserId);
+                todoIndex.User = manager;
+
+                //全プロジェクトのリストを作成
+                var allprojects = _context.project.ToList();
+
+                //マネージャーの所属しているプロジェクトのリスト（参照用）を作成
+                var managerprojects = _context.userproject.Where(x => x.UserId.Equals(manager.Id)).ToList();
+
+                //マネージャーの所属しているプロジェクトを参照リストから特定してviewmodelのProjectsに追加
+                foreach (var project in managerprojects)
+                {
+                    foreach (var allproject in allprojects)
+                    {
+                        if (project.ProjectId == allproject.ProjectId)
+                        {
+                            Project pj = new Project();
+                            pj.ProjectId = allproject.ProjectId;
+                            pj.Name = allproject.Name;
+                            todoIndex.Projects.Add(pj);
+                        }
+                    }
+                }
+
+                //全ユーザーの所属しているプロジェクトのリスト（参照用）を作成
+                var alluserprojects = _context.userproject.ToList();
+
+                //全ユーザーのプロジェクトの参照リストからマネージャーのプロジェクトと一致するものを持つユーザーをviewmodelのusersに追加
+                foreach (var userproject in alluserprojects)
+                {
+                    foreach (var managerproject in todoIndex.Projects)
+                    {
+                        if (userproject.ProjectId == managerproject.ProjectId)
+                        {
+                            ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
+                            //マネージャ自身がリストに入らないように条件分岐
+                            if (!user.Id.Equals(loginUserId))
+                            {
+                                todoIndex.Users.Add(user);
+                            }
+                        }
+                    }
+                }
+
+                //全ユーザーのリストを作成
+                var allusers = _userManager.Users.ToList();
+
+                //全Todoのリストを作成
+                var alltodos = _context.todo.ToList();
+
+                //全todoからログインマネージャーと同じプロジェクトのユーザーのtodoを検索し、viewmodelのtodosに追加
+                foreach (var todo in alltodos)
+                {
+                    foreach (var user in todoIndex.Users)
+                    {
+                        if (todo.UserId.Equals(user.Id))
+                        {
+                            todoIndex.Todos.Add(todo);
+                        }
+                    }
+
+                }
+
+
+                //-------------------------------------------------------------------------------------------------------------------------------------
+                var users = todoIndex.Users/*_context.user.ToList()*/;
                 var members = users.Select(user => new SelectListItem
                 {
                     Value = user.Id,
