@@ -67,8 +67,6 @@ namespace 業務報告システム.Controllers
             }
             else {
 
-                ViewBag.Projectnames = loginUser.Projects;
-
                 return View(users);
             }
 

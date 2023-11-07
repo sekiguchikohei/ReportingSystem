@@ -39,12 +39,12 @@
         <p>@item.LastName @item.FirstName</p>
         <p>@item.Email</p>
 
-        @if (item.Projects != null)
+        @if (item.UserProjects != null)
         {
-            @foreach (var project in item.Projects)
+            @foreach (var project in item.UserProjects)
             {
                 <p>@project.ProjectId</p>
-                <p>@project.Name</p>
+                <p>@project.UserId</p>
             }
         }
         
@@ -56,9 +56,9 @@
         <p>---------------------</p>
     }
 
-    else if (User.IsInRole("Manager"))
+    @* else if (User.IsInRole("Manager"))
     {
-        if (ViewBag.Projectnames.Contains(item.Projects))
+        if (ViewBag.Projectnames.Contains(item.UserProjects))
         {
             if (item.Email.Equals(User.Identity.Name))
             {
@@ -88,7 +88,7 @@
 
             <p>---------------------</p>
 
-        }
+        } *@
 
     }
 }
