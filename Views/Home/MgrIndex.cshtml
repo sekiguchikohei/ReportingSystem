@@ -1,0 +1,21 @@
+﻿@model 業務報告システム.ViewModels.UserIndex;
+
+@{
+}
+
+<p>ログイン中マネージャー：　@Model.User.LastName @Model.User.FirstName</p>
+
+<p>所属プロジェクト一覧</p>
+
+@foreach (var project in Model.Projects)
+{
+    <p>@project.Name</p>
+}
+
+<p>管理下のユーザー一覧</p>
+
+@foreach (var user in Model.Users)
+{
+    <p>@user.LastName @user.FirstName</p>
+    <p>report indexへのリンクは今後作成予定</p>
+}
