@@ -125,25 +125,6 @@ namespace 業務報告システム.Controllers
             return View(feedback);
         }
 
-        // GET: Feedbacks/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.feedback == null)
-            {
-                return NotFound();
-            }
-
-            var feedback = await _context.feedback
-                .Include(f => f.Report)
-                .FirstOrDefaultAsync(m => m.FeedbackId == id);
-            if (feedback == null)
-            {
-                return NotFound();
-            }
-
-            return View(feedback);
-        }
-
         // POST: Feedbacks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -154,13 +135,14 @@ namespace 業務報告システム.Controllers
                 return Problem("Entity set 'ApplicationDbContext.feedback'  is null.");
             }
             var feedback = await _context.feedback.FindAsync(id);
+            string url = $"/Reports/Details/{feedback.ReportId}";
             if (feedback != null)
             {
                 _context.feedback.Remove(feedback);
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Redirect(url);
         }
 
         private bool FeedbackExists(int id)
