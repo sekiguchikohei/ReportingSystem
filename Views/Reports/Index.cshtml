@@ -1,10 +1,14 @@
-﻿@model IEnumerable<業務報告システム.Models.Report>
+﻿@using System.Security.Claims;
+@model IEnumerable<業務報告システム.Models.Report>
 
 @{
     ViewData["Title"] = "Index";
+    var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
 <h1>Index</h1>
+
+
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -24,10 +28,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.User)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
+
 @foreach (var item in Model) {
         <tr>
             <td>

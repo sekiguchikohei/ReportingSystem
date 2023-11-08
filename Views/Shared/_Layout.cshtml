@@ -40,6 +40,9 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="MemMain">メインページ</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Create">報告提出</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Todos" asp-action="Index">Todoリスト</a>
                             </li>
                         } else if (User.IsInRole("Manager")){

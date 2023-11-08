@@ -28,7 +28,8 @@ namespace 業務報告システム.Controllers
             _roleManager = roleManager;
         }
 
-        // GET: Reports
+        // GET: Reports/index
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.report.Include(r => r.User);
@@ -139,17 +140,38 @@ namespace 業務報告システム.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(string[]values)
+        public async Task<IActionResult> Create([Bind("ReportId,Date,Comment,TommorowComment,UserId")] Report report)
         {
-            ModelState.Remove("User");
-            if (ModelState.IsValid)
+
+            var today = DateTime.Today;
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            DateTime startTime = new DateTime(today.Year, today.Month, today.Day, int.Parse(values[1]), int.Parse(values[2]), 0);
+            DateTime endTime = new DateTime(today.Year, today.Month, today.Day, int.Parse(values[3]), int.Parse(values[4]), 0);
+
+            Attendance attendance = new Attendance()
             {
-                _context.Add(report);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", report.UserId);
-            return View(report);
+                Date = today,
+                Status = values[0],
+                StartTime = startTime,
+                EndTime = endTime,
+                HealthRating = int.Parse(values[5]),
+                HealthComment = values[6],
+                UserId = loginUserId,
+            };
+
+            Report report = new Report() { 
+                Date = today,
+                Comment = values[7],
+                TommorowComment = values[8],
+                UserId = loginUserId
+            };
+
+            _context.Add(attendance);
+            _context.Add(report);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+
         }
 
         // GET: Reports/Edit/5
