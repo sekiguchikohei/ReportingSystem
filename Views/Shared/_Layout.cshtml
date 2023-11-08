@@ -30,6 +30,9 @@
                         } else if (User.IsInRole("Manager"))
                         {
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="MgrMain">メインページ</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="MgrIndex">ユーザー一覧</a>
                             </li>
                             <li class="nav-item">
