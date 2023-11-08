@@ -32,9 +32,13 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="MgrIndex">ユーザー一覧</a>
                             </li>
-                        }
-
-                        @if (User.IsInRole("Member"))
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Todos" asp-action="MgrCreate">Todo作成</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Todos" asp-action="MgrIndex">Todo一覧</a>
+                            </li>
+                        } else if (User.IsInRole("Member"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="MemMain">メインページ</a>
@@ -45,12 +49,7 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Todos" asp-action="Index">Todoリスト</a>
                             </li>
-                        } else if (User.IsInRole("Manager")){
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Todos" asp-action="MgrIndex">Todo Index</a>
-                            </li>
-                            
-                        }
+                        } 
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
