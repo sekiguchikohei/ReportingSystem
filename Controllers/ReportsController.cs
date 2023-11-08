@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using 業務報告システム.Data;
 using 業務報告システム.Models;
+using 業務報告システム.ViewModels;
 
 
 namespace 業務報告システム.Controllers
@@ -140,7 +141,7 @@ namespace 業務報告システム.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReportId,Date,Comment,TommorowComment,UserId")] Report report)
+        public async Task<IActionResult> Create(string[]values)
         {
 
             var today = DateTime.Today;
@@ -162,7 +163,7 @@ namespace 業務報告システム.Controllers
             Report report = new Report() { 
                 Date = today,
                 Comment = values[7],
-                TommorowComment = values[8],
+                TomorrowComment = values[8],
                 UserId = loginUserId
             };
 
