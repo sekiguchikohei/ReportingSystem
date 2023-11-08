@@ -110,8 +110,15 @@ namespace 業務報告システム.Controllers
 
 
         // GET: Reports/Details/5
+        [Authorize(Roles ="Manager, Member")]
         public async Task<IActionResult> Details(int? id)
         {
+            ReportDetail reportDetail = new ReportDetail();
+            reportDetail.Projects = new List<Project>();
+
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            reportDetail.User = await _userManager.FindByIdAsync(loginUserId);
+
             if (id == null || _context.report == null)
             {
                 return NotFound();
@@ -125,7 +132,55 @@ namespace 業務報告システム.Controllers
                 return NotFound();
             }
 
-            return View(report);
+            var allprojects = _context.project.ToList();
+            var userprojects = _context.userproject.Where(x => x.UserId.Equals(reportDetail.User.Id)).ToList();
+
+            foreach (var project in userprojects)
+            {
+                foreach (var allproject in allprojects)
+                {
+                    if (project.ProjectId == allproject.ProjectId)
+                    {
+                        Project pj = new Project();
+                        pj.ProjectId = allproject.ProjectId;
+                        pj.Name = allproject.Name;
+                        reportDetail.Projects.Add(pj);
+                    }
+                }
+            }
+
+            var alluserprojects = _context.userproject.ToList();
+
+            foreach (var userproject in alluserprojects)
+            {
+                foreach (var loginuserproject in reportDetail.Projects)
+                {
+                    if (userproject.ProjectId == loginuserproject.ProjectId)
+                    {
+                        ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
+
+                        if (await _userManager.IsInRoleAsync(user, "Manager"))
+                        {
+                            reportDetail.Manager = user;
+                        }
+                    }
+                }
+            }
+
+            //if (report.UserId != loginUserId || loginUserId != reportDetail.Manager.Id)
+            //{
+            //    return NotFound("アクセス権がありません。");
+            //}
+
+            reportDetail.Report = report;
+            var allattendance = _context.attendance.ToList();
+            foreach (var attendance in allattendance) {
+                if (attendance.ReportId == report.ReportId) {
+                    reportDetail.Attendance = attendance;
+                }
+            }
+            
+            return View(reportDetail);
         }
 
         // GET: Reports/Create
@@ -144,32 +199,36 @@ namespace 業務報告システム.Controllers
         public async Task<IActionResult> Create(string[]values)
         {
 
-            var today = DateTime.Today;
+            var submitDay = DateTime.Parse(values[0]);
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            DateTime startTime = new DateTime(today.Year, today.Month, today.Day, int.Parse(values[1]), int.Parse(values[2]), 0);
-            DateTime endTime = new DateTime(today.Year, today.Month, today.Day, int.Parse(values[3]), int.Parse(values[4]), 0);
+            DateTime startTime = new DateTime(submitDay.Year, submitDay.Month, submitDay.Day, int.Parse(values[2]), int.Parse(values[3]), 0);
+            DateTime endTime = new DateTime(submitDay.Year, submitDay.Month, submitDay.Day, int.Parse(values[4]), int.Parse(values[5]), 0);
 
-            Attendance attendance = new Attendance()
+            Report report = new Report()
             {
-                Date = today,
-                Status = values[0],
-                StartTime = startTime,
-                EndTime = endTime,
-                HealthRating = int.Parse(values[5]),
-                HealthComment = values[6],
-                UserId = loginUserId,
-            };
-
-            Report report = new Report() { 
-                Date = today,
-                Comment = values[7],
-                TomorrowComment = values[8],
+                Date = submitDay,
+                Comment = values[8],
+                TomorrowComment = values[9],
                 UserId = loginUserId
             };
 
-            _context.Add(attendance);
             _context.Add(report);
             await _context.SaveChangesAsync();
+
+            Attendance attendance = new Attendance()
+            {
+                Date = submitDay,
+                Status = values[1],
+                StartTime = startTime,
+                EndTime = endTime,
+                HealthRating = int.Parse(values[6]),
+                HealthComment = values[7],
+                ReportId = report.ReportId,
+            };
+
+            _context.Add(attendance);
+            await _context.SaveChangesAsync();
+
 
             return RedirectToAction(nameof(Index));
 
