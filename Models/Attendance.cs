@@ -30,10 +30,13 @@ namespace 業務報告システム.Models
         public string HealthComment { get; set; }
 
         //FK
-        [ForeignKey("UesrId")]
-        public string UserId { get; set; }
+        //[ForeignKey("UesrId")]
+        //public string UserId { get; set; }
 
-        //NP
-        public ApplicationUser User { get; set; }
+        ////NP
+        //public ApplicationUser User { get; set; }
+
+        public int ReportId { get; set; }
+        public Report Report { get; set; }
     }
 }

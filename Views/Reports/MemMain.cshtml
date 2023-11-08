@@ -6,23 +6,51 @@
 <h1>Member Mainページ</h1>
 
 <p>所属プロジェクト</p>
-@foreach (var item in Model.Projects)
+@if (Model.Projects != null)
 {
-    <p>@item.Name</p>
-    
+    @foreach (var item in Model.Projects)
+    {
+        <p>@item.Name</p>
+
+    }
+}else
+{
+<p>所属プロジェクトはありません。</p>    
 }
+
 
 <p>報告先マネージャー</p>
-<p>@Model.Manager.LastName @Model.Manager.FirstName</p>
+@if (Model.Manager != null)
+{
+    <p>@Model.Manager.LastName @Model.Manager.FirstName</p>
+} else
+{
+  <p>マネージャーの登録がありません。</p>  
+}
+
 
 <p>前日提出したReport tomorrow comment入力(今日のやること)</p>
-<p>@Model.Report.TomorrowComment</p>
+@if (Model.Report != null)
+{
+    <p>@Model.Report.TomorrowComment</p>
+} else
+{
+    <p>昨日提出したレポートが無いため表示できません。</p>
+}
 
 <p>未達成Todo一覧</p>
-@foreach(var todo in Model.Todos){
-    <p>@todo.TaskName</p>
-    <p>@todo.Progress</p>
-    <p>目標開始日：@todo.StartDate</p>
-    <p>目標終了日：@todo.EndDate</p>
+@if(Model.Todos != null)
+{
+    @foreach (var todo in Model.Todos)
+    {
+        <p>@todo.TaskName</p>
+        <p>@todo.Progress</p>
+        <p>目標開始日：@todo.StartDate</p>
+        <p>目標終了日：@todo.EndDate</p>
+    }
+} else
+{
+<p>完了していないTodoはありません。</p>
 }
+
 

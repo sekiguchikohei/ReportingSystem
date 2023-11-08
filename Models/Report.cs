@@ -24,6 +24,8 @@ namespace 業務報告システム.Models
         //User_NP
         public ApplicationUser User { get; set; }
 
+        public Attendance Attendance { get; set; }
+
         //Todo_FK
         //public int TodoId { get; set; }
 
