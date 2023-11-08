@@ -139,7 +139,7 @@ namespace 業務報告システム.Controllers
 
             //viewmodelのtodosリストを初期化
             todoIndex.Todos = new List<Todo>();
-            //-------------------------------------------------------------------------------------------------------------------------------------
+
             //ログインしているマネージャーのIDを取得して全ユーザーから特定し、viewmodelのuserに追加
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             ApplicationUser manager = await _userManager.FindByIdAsync(loginUserId);
@@ -243,7 +243,7 @@ namespace 業務報告システム.Controllers
             //return Redirect("/Todos/Index");
         }
 
-        //Manager用************************************
+        //Manager用TodoCreate************************************
         //*********************************************
 
         // GET: Todos/MgrCreate
@@ -252,7 +252,6 @@ namespace 業務報告システム.Controllers
         {
             if (User.IsInRole("Manager"))
             {
-                //-------------------------------------------------------------------------------------------------------------------------------------
                 //viewmodelの呼び出し
                 TodoIndex todoIndex = new TodoIndex();
 
@@ -327,11 +326,7 @@ namespace 業務報告システム.Controllers
                             todoIndex.Todos.Add(todo);
                         }
                     }
-
                 }
-
-
-                //-------------------------------------------------------------------------------------------------------------------------------------
                 var users = todoIndex.Users/*_context.user.ToList()*/;
                 var members = users.Select(user => new SelectListItem
                 {
@@ -346,27 +341,25 @@ namespace 業務報告システム.Controllers
             return NotFound("アクセス権が有りません");
         }
 
-
         // POST: Todos/MgrCreate
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> MgrCreate([Bind("TodoId,TaskName,Progress,StartDate,EndDate,Comment,UserId")] Todo todo)
+        public async Task<IActionResult> MgrCreate([Bind("TodoId,TaskName,Progress,StartDate,EndDate,Comment,UserId") ] Todo todo)
         {
-            //ModelState.Remove("User");
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(todo);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
+            ModelState.Remove("User");
+            if (ModelState.IsValid)
+            {
+                _context.Add(todo);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
             return View(todo);
         }
 
-
-
         //************************************************
+        //Manager用TodoCreate************************************
 
         private bool TodoExists(int id)
         {
