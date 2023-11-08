@@ -39,21 +39,16 @@
                 <span asp-validation-for="Comment" class="text-danger"></span>
             </div>
             
-            @* 同じプロジェクトのMemberをプルダウン表示する *@
+            @* 同じプロジェクトのMemberをプルダウン表示して選択したMemberのIdをControllerに返す *@
             <div class="form-group">
-            <label asp-for="User" class="control-label"></label>
-                <select asp-for="User" asp-items="ViewBag.Members" class="form-control">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" asp-items="ViewBag.Members" class="form-control">
             <option value="">選択してください</option>
             </select>
-            <span asp-validation-for="User" class="text-danger"></span>
+                <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
-            @* 同じプロジェクトのMemberをプルダウン表示する *@
+            @* 同じプロジェクトのMemberをプルダウン表示したMemberのIdをControllerに返す *@
 
-           @* 選択したMemberのUserIdをControllerに返す *@
-            <div class="form-group">
-                <input asp-for="UserId" type="hidden" value="@loginUserId"/>
-            </div>
-            @* 選択したMemberのUserIdをControllerに返す *@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
