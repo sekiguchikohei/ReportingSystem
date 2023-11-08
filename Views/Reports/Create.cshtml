@@ -1,40 +1,80 @@
-﻿@using System.Security.Claims;
 @model 業務報告システム.Models.Report
 
 @{
     ViewData["Title"] = "Create";
-        var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
 <h1>Create</h1>
-
 <h4>Report</h4>
+
+<p>※後で未達成のタスク一覧を選択して代入する選択肢も追加必要あり？要検討</p>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            @*attendanceの入力フォームを追加する*@
-
+        <form method="post" action="">
             <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
+                <label class="control-label">勤怠</label>
+                <select name="values" class="form-control">
+                    <option value="出勤">出勤</option>
+                    <option value="有給">有給</option>
+                    <option value="早退">早退</option>
+                    <option value="遅刻">遅刻</option>
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="Comment" class="control-label"></label>
-                <input asp-for="Comment" class="form-control" />
-                <span asp-validation-for="Comment" class="text-danger"></span>
+                <label class="control-label">出社時間</label>
+                <label class="control-label">時間</label>
+                <select name="values" class="form-control" type="time">
+                    @for (int i = 0; i <= 23; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+                <label class="control-label">分</label>
+                <select name="values" class="form-control" type="time">
+                    <option value="0">0</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="TommorowComment" class="control-label"></label>
-                <input asp-for="TommorowComment" class="form-control" />
-                <span asp-validation-for="TommorowComment" class="text-danger"></span>
+                <label class="control-label">退勤時間</label>
+                <label class="control-label">時間</label>
+                <select name="values" class="form-control" type="time">
+                    @for (int i = 0; i <= 23; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+                <label class="control-label">分</label>
+                <select name="values" class="form-control" type="time">
+                    <option value="0">0</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                </select>
             </div>
             <div class="form-group">
-                <input asp-for="UserId" type="hidden" value="@loginUserId" />
+            <label class="control-label">体調</label>
+            <input name="values" type="radio" value="1" /> <img class="select-icon" src="/images/bad.png" />
+            <input name="values" type="radio" value="2" /> <img class="select-icon" src="/images/soso.png" />
+            <input name="values" type="radio" value="3" checked /> <img class="select-icon" src="/images/fine.png">
+            <input name="values" type="radio" value="4" /> <img class="select-icon" src="/images/good.png" />
+            <input name="values" type="radio" value="5" /> <img class="select-icon" src="/images/great.png" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">体調コメント</label>
+                <input name="values" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label class="control-label">報告内容</label>
+                <textarea name="values" class="form-control" ></textarea>
+            </div>
+            <div class="form-group">
+                <label class="control-label">明日やること</label>
+                <textarea name="values" class="form-control"></textarea>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
