@@ -33,8 +33,39 @@ namespace 業務報告システム.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
+            ReportIndex reportIndex = new ReportIndex();
+            reportIndex.Reports = new List<Report>();
+            reportIndex.Attendances = new List<Attendance>();
+
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            reportIndex.User = await _userManager.FindByEmailAsync(loginUserId);
+
+            //Reportsにデータを格納
+            var allReports = _context.report.Where(x => x.UserId.Equals(loginUserId)).ToList();
+            var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(loginUserId)).ToList();
+
+            foreach(var report in allReports)
+            {
+                Report re = new Report();
+                re.Date = report.Date;
+                re.Comment = report.Comment;
+                reportIndex.Reports.Add(re);
+            }
+
+            foreach (var attendance in allAttendance)
+            {
+                Attendance at = new Attendance();
+                at.Status = attendance.Status;
+                at.HealthRating = attendance.HealthRating;
+                reportIndex.Attendances.Add(at);
+            }
+
+
+
+
+
             var applicationDbContext = _context.report.Include(r => r.User);
-            return View(await applicationDbContext.ToListAsync());
+            return View(reportIndex);
         }
 
         [Authorize(Roles ="Member")]
@@ -103,14 +134,50 @@ namespace 業務報告システム.Controllers
                     memberMain.Report = report;
                 } 
             }
-
-
             return View(memberMain);
         }
 
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> MgrMain()
+        { 
+            ManagerMain managerMain = new ManagerMain();
+            managerMain.Projects = new List<Project>();
+            managerMain.Reports = new List<Report>();
+            managerMain.Attendances = new List<Attendance>();
+            managerMain.Todos = new List<Todo>();
+            managerMain.Members = new List<ApplicationUser>();
 
-        // GET: Reports/Details/5
-        [Authorize(Roles ="Manager, Member")]
+            var loginManagerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            managerMain.Manager = await _userManager.FindByIdAsync(loginManagerId);
+
+            var allprojects = _context.project.ToList();
+            var managerprojects = _context.userproject.Where(x => x.UserId.Equals(managerMain.Manager.Id)).ToList();
+
+            foreach (var project in managerprojects)
+            {
+                foreach (var allproject in allprojects)
+                {
+                    if (project.ProjectId == allproject.ProjectId)
+                    {
+                        Project pj = new Project();
+                        pj.ProjectId = allproject.ProjectId;
+                        pj.Name = allproject.Name;
+                        managerMain.Projects.Add(pj);
+                    }
+                }
+            }
+
+
+            //自分のプロジェクト名表示
+            //自分のチームメンバーの前日のレポート未提出者リストを表示
+            //自分のチームメンバーの未達成Todoリスト、期日が近い順
+            //今日提出されたレポートの一覧
+
+            return View(managerMain);
+        }
+
+            // GET: Reports/Details/5
+            [Authorize(Roles ="Manager, Member")]
         public async Task<IActionResult> Details(int? id)
         {
             ReportDetail reportDetail = new ReportDetail();
@@ -167,10 +234,17 @@ namespace 業務報告システム.Controllers
                 }
             }
 
-            //if (report.UserId != loginUserId || loginUserId != reportDetail.Manager.Id)
-            //{
-            //    return NotFound("アクセス権がありません。");
-            //}
+            if (User.IsInRole("Member"))
+            {
+                if (!(report.UserId.Equals(loginUserId)))
+                {
+                    return NotFound("アクセス権がありません。");
+                }
+            }
+            else if (User.IsInRole("Manager") && !(loginUserId.Equals(reportDetail.Manager.Id)))
+            {
+                return NotFound("アクセス権がありません。");
+            }
 
             reportDetail.Report = report;
             var allattendance = _context.attendance.ToList();
@@ -180,14 +254,119 @@ namespace 業務報告システム.Controllers
                 }
             }
             
+            var feedbacks = _context.feedback.ToList();
+
+            foreach (var feedback in feedbacks) {
+                if (feedback.ReportId == report.ReportId) { 
+                reportDetail.Feedback = feedback;
+                }
+            }
+
+            
             return View(reportDetail);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Details(int? id, string[] values) 
+        {
+            ReportDetail reportDetail = new ReportDetail();
+            reportDetail.Projects = new List<Project>();
+
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            reportDetail.User = await _userManager.FindByIdAsync(loginUserId);
+
+            if (id == null || _context.report == null)
+            {
+                return NotFound();
+            }
+
+            var report = await _context.report
+                .Include(r => r.User)
+                .FirstOrDefaultAsync(m => m.ReportId == id);
+            if (report == null)
+            {
+                return NotFound();
+            }
+
+            var allprojects = _context.project.ToList();
+            var userprojects = _context.userproject.Where(x => x.UserId.Equals(reportDetail.User.Id)).ToList();
+
+            foreach (var project in userprojects)
+            {
+                foreach (var allproject in allprojects)
+                {
+                    if (project.ProjectId == allproject.ProjectId)
+                    {
+                        Project pj = new Project();
+                        pj.ProjectId = allproject.ProjectId;
+                        pj.Name = allproject.Name;
+                        reportDetail.Projects.Add(pj);
+                    }
+                }
+            }
+
+            var alluserprojects = _context.userproject.ToList();
+
+            foreach (var userproject in alluserprojects)
+            {
+                foreach (var loginuserproject in reportDetail.Projects)
+                {
+                    if (userproject.ProjectId == loginuserproject.ProjectId)
+                    {
+                        ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
+
+                        if (await _userManager.IsInRoleAsync(user, "Manager"))
+                        {
+                            reportDetail.Manager = user;
+                        }
+                    }
+                }
+            }
+
+            if (User.IsInRole("Member"))
+            {
+                if (!(report.UserId.Equals(loginUserId)))
+                {
+                    return NotFound("アクセス権がありません。");
+                }
+            }
+            else if (User.IsInRole("Manager") && !(loginUserId.Equals(reportDetail.Manager.Id)))
+            {
+                return NotFound("アクセス権がありません。");
+            }
+
+            reportDetail.Report = report;
+            var allattendance = _context.attendance.ToList();
+            foreach (var attendance in allattendance)
+            {
+                if (attendance.ReportId == report.ReportId)
+                {
+                    reportDetail.Attendance = attendance;
+                }
+            }
+
+            Feedback feedback = new Feedback() {
+                ReportId = report.ReportId,
+                Confirm = true,
+                Rating = int.Parse(values[0]),
+                Comment = values[1],
+                Name = $"{reportDetail.Manager.LastName} {reportDetail.Manager.FirstName}"
+            };
+
+            _context.Add(feedback);
+            await _context.SaveChangesAsync();
+
+            reportDetail.Feedback = feedback;
+
+            return View(reportDetail);
+        }
+
 
         // GET: Reports/Create
         [Authorize(Roles = "Member")]
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id");
             return View();
         }
 
