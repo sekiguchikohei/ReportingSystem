@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using 業務報告システム.Data;
 using 業務報告システム.Models;
+using 業務報告システム.ViewModels;
 
 namespace 業務報告システム.Controllers
 {
@@ -16,11 +19,13 @@ namespace 業務報告システム.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public ReportsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public ReportsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // GET: Reports
@@ -29,6 +34,78 @@ namespace 業務報告システム.Controllers
             var applicationDbContext = _context.report.Include(r => r.User);
             return View(await applicationDbContext.ToListAsync());
         }
+
+        [Authorize(Roles ="Member")]
+        public async Task<IActionResult> MemMain()
+        {
+            MemberMain memberMain = new MemberMain();
+            memberMain.Projects = new List<Project>();
+            memberMain.Todos = new List<Todo>();
+
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            memberMain.LoginMember = await _userManager.FindByIdAsync(loginUserId);
+
+            var allprojects = _context.project.ToList();
+            var userprojects = _context.userproject.Where(x => x.UserId.Equals(memberMain.LoginMember.Id)).ToList();
+
+            foreach (var project in userprojects)
+            {
+                foreach (var allproject in allprojects)
+                {
+                    if (project.ProjectId == allproject.ProjectId)
+                    {
+                        Project pj = new Project();
+                        pj.ProjectId = allproject.ProjectId;
+                        pj.Name = allproject.Name;
+                        memberMain.Projects.Add(pj);
+                    }
+                }
+            }
+        
+            var alluserprojects = _context.userproject.ToList();
+
+            //マネージャー特定（単体）
+            foreach (var userproject in alluserprojects)
+            {
+                foreach (var loginuserproject in memberMain.Projects)
+                {
+                    if (userproject.ProjectId == loginuserproject.ProjectId)
+                    {
+                        ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
+
+                        if (await _userManager.IsInRoleAsync(user, "Manager")) {
+                            memberMain.Manager = user;         
+                        }
+                    }
+                }
+            }
+
+            //todoリスト（未達成のみ）（複数）
+            var userTodos = _context.todo.Where(x => x.UserId.Equals(memberMain.LoginMember.Id)).ToList();
+
+            foreach (var todo in userTodos)
+            {
+                if (todo.Progress != 10) { 
+                memberMain.Todos.Add(todo);
+                }
+            }
+
+            //昨日提出したreportのtommorowコメント抽出（単体）
+            var userReports = _context.report.Where(x => x.UserId.Equals(memberMain.LoginMember.Id)).ToList();
+
+            var yesterday = DateTime.Today.AddDays(-1);
+
+            foreach (var report in userReports) {
+                if (report.Date.Year == yesterday.Year && report.Date.Month == yesterday.Month && report.Date.Day == yesterday.Day)
+                { 
+                    memberMain.Report = report;
+                } 
+            }
+
+
+            return View(memberMain);
+        }
+
 
         // GET: Reports/Details/5
         public async Task<IActionResult> Details(int? id)
