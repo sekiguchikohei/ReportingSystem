@@ -13,6 +13,7 @@ using 業務報告システム.Data;
 using 業務報告システム.Models;
 using 業務報告システム.ViewModels;
 
+
 namespace 業務報告システム.Controllers
 {
     public class ReportsController : Controller
@@ -139,7 +140,7 @@ namespace 業務報告システム.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReportId,Date,Comment,TommorowComment,UserId")] Report report)
+        public async Task<IActionResult> Create(string[]values)
         {
             ModelState.Remove("User");
             if (ModelState.IsValid)
