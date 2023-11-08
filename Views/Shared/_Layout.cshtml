@@ -37,7 +37,10 @@
                         @if (User.IsInRole("Member"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Todos" asp-action="Index">Todo Index</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="MemMain">メインページ</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Todos" asp-action="Index">Todoリスト</a>
                             </li>
                         } else if (User.IsInRole("Manager")){
                             <li class="nav-item">
@@ -45,11 +48,6 @@
                             </li>
                             
                         }
-   
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

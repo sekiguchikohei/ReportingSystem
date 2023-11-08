@@ -4,13 +4,11 @@ namespace 業務報告システム.ViewModels
 {
     public class ManagerMain
     {
-        // 複数==========================================
+        public ApplicationUser Manager { get; set; }
+        public List<Project> Projects { get; set; }
         public List<Report> Reports { get; set; }
-
         public List<Attendance> Attendances { get; set; }
-
         public List<Todo> Todos { get; set; }
-
-        public List<ApplicationUser>Users { get; set; }
+        public List<ApplicationUser> Members { get; set; }
     }
 }
