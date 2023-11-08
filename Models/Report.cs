@@ -15,7 +15,7 @@ namespace 業務報告システム.Models
         public string Comment { get; set; }
 
         //明日の予定
-        public string TommorowComment { get; set; }
+        public string TomorrowComment { get; set; }
 
         //User_FK
         [ForeignKey("UesrId")]

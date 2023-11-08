@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using 業務報告システム.Data;
 using 業務報告システム.Models;
-using 業務報告システム.ViewModels;
 
 
 namespace 業務報告システム.Controllers
@@ -92,7 +91,7 @@ namespace 業務報告システム.Controllers
                 }
             }
 
-            //昨日提出したreportのtommorowコメント抽出（単体）
+            //昨日提出したreportのtomorrowコメント抽出（単体）
             var userReports = _context.report.Where(x => x.UserId.Equals(memberMain.LoginMember.Id)).ToList();
 
             var yesterday = DateTime.Today.AddDays(-1);
@@ -176,6 +175,7 @@ namespace 業務報告システム.Controllers
         }
 
         // GET: Reports/Edit/5
+        [Authorize(Roles = "Member")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.report == null)
@@ -197,7 +197,7 @@ namespace 業務報告システム.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReportId,Date,Comment,TommorowComment,UserId")] Report report)
+        public async Task<IActionResult> Edit(int id, [Bind("ReportId,Date,Comment,TomorrowComment,UserId")] Report report)
         {
             if (id != report.ReportId)
             {
