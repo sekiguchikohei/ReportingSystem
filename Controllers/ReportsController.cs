@@ -29,7 +29,8 @@ namespace 業務報告システム.Controllers
             _roleManager = roleManager;
         }
 
-        // GET: Reports
+        // GET: Reports/index
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.report.Include(r => r.User);
@@ -140,7 +141,7 @@ namespace 業務報告システム.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(string[]values)
+        public async Task<IActionResult> Create([Bind("ReportId,Date,Comment,TommorowComment,UserId")] Report report)
         {
             ModelState.Remove("User");
             if (ModelState.IsValid)
