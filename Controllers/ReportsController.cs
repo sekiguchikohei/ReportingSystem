@@ -143,6 +143,7 @@ namespace 業務報告システム.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string[]values)
         {
+
             var today = DateTime.Today;
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             DateTime startTime = new DateTime(today.Year, today.Month, today.Day, int.Parse(values[1]), int.Parse(values[2]), 0);
@@ -188,14 +189,6 @@ namespace 業務報告システム.Controllers
             {
                 return NotFound();
             }
-
-            //Report Edit画面でタスクIDとログインユーザーIDが一致していない場合は「アクセス権がありません」と表示する。
-            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!report.UserId.Equals(loginUserId))
-            {
-                return NotFound("アクセス権がありません");
-            }
-
             ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", report.UserId);
             return View(report);
         }
@@ -205,9 +198,9 @@ namespace 業務報告システム.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string[] values)
+        public async Task<IActionResult> Edit(int id, [Bind("ReportId,Date,Comment,TomorrowComment,UserId")] Report report)
         {
-            /*if (id != report.ReportId)
+            if (id != report.ReportId)
             {
                 return NotFound();
             }
@@ -232,8 +225,8 @@ namespace 業務報告システム.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", report.UserId);*/
-            return View();
+            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", report.UserId);
+            return View(report);
         }
 
         // GET: Reports/Delete/5
