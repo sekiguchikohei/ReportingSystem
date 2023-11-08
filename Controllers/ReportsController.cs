@@ -33,8 +33,39 @@ namespace 業務報告システム.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
+            ReportIndex reportIndex = new ReportIndex();
+            reportIndex.Reports = new List<Report>();
+            reportIndex.Attendances = new List<Attendance>();
+
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            reportIndex.User = await _userManager.FindByEmailAsync(loginUserId);
+
+            //Reportsにデータを格納
+            var allReports = _context.report.Where(x => x.UserId.Equals(loginUserId)).ToList();
+            var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(loginUserId)).ToList();
+
+            foreach(var report in allReports)
+            {
+                Report re = new Report();
+                re.Date = report.Date;
+                re.Comment = report.Comment;
+                reportIndex.Reports.Add(re);
+            }
+
+            foreach (var attendance in allAttendance)
+            {
+                Attendance at = new Attendance();
+                at.Status = attendance.Status;
+                at.HealthRating = attendance.HealthRating;
+                reportIndex.Attendances.Add(at);
+            }
+
+
+
+
+
             var applicationDbContext = _context.report.Include(r => r.User);
-            return View(await applicationDbContext.ToListAsync());
+            return View(reportIndex);
         }
 
         [Authorize(Roles ="Member")]

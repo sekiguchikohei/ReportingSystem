@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims;
-@model IEnumerable<業務報告システム.Models.Report>
+@model 業務報告システム.ViewModels.ReportIndex;
 @{
     ViewData["Title"] = "Index";
     var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -16,13 +16,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Comment)
+                Comment
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User.Attendances.First().HealthRating)
+                HealthRating
             </th>
             @* Attendanceの出勤上表と健康状態を表示 *@
             
@@ -38,31 +38,38 @@
     </thead>
     <tbody>
 
-        @foreach (var item in Model) {
-            @if (loginUserId.Equals(item.UserId))
-            {
+        @foreach (var item in Model.Reports)
+        {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Date)
+                        @item.Date
+                        @* @Html.DisplayFor(modelItem => item.Date) *@
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Comment)
-                    </td>
-                    
-                    @* Indexの表示には不要
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TomorrowComment)
+                        @item.Comment
+                        @* @Html.DisplayFor(modelItem => item.Comment) *@
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.User.Id)
+                        @foreach (var itemA in Model.Attendances)
+                        {
+                            @if (item.ReportId.Equals(itemA.ReportId))
+                            {
+                                @itemA.HealthRating
+                            }
+                         }
+                    </td>
+                    @* <td>
+                        @foreach (var itemA in Model.Attendances)
+                        {
+                            @if (item.ReportId.Equals(itemA.ReportId))
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.ReportId">Edit</a> 
+                                <a asp-action = "Details" asp-route-id = "@item.ReportId" > Details </a >
+                                <a asp-action = "Delete" asp-route-id = "@item.ReportId" > Delete </a >
+                               }
+                        }
                     </td> *@
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ReportId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ReportId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ReportId">Delete</a>
-                    </td>
                 </tr>
-            }
         }
     </tbody>
 </table>
