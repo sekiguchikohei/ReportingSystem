@@ -74,6 +74,7 @@ using (var scope = app.Services.CreateScope())
 
         user.FirstName = "Admin";
         user.LastName = "Super";
+        user.Role = "Admin";
 
         await userManager.CreateAsync(user, password);
 

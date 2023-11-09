@@ -19,9 +19,9 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Home">Home</a>
-                        </li>
+@*                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Home">ホーム</a>
+                        </li> *@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
@@ -36,9 +36,6 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="MgrIndex">ユーザー一覧</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Todos" asp-action="MgrCreate">Todo作成</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Todos" asp-action="MgrIndex">Todo一覧</a>
                             </li>
                         } else if (User.IsInRole("Member"))
@@ -50,7 +47,10 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Create">報告提出</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Todos" asp-action="Index">Todoリスト</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="MemIndex">報告一覧</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Todos" asp-action="Index">Todo一覧</a>
                             </li>
                         } 
                     </ul>

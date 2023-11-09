@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -41,35 +42,26 @@ namespace 業務報告システム.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index() {
 
-            var users = _userManager.Users.ToList();
-            
-            //現在ログインしているユーザーのログインＩＤ取得の変数
+            AdminIndex adminIndex = new AdminIndex();
+            adminIndex.Projects = new List<Project>();
+            adminIndex.Projects = _context.project.ToList();
+            adminIndex.UserProjects = new List<UserProject>();
+            adminIndex.UserProjects = _context.userproject.ToList();
+            adminIndex.Users = new List<ApplicationUser>();
+            adminIndex.Users = _userManager.Users.ToList();
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            adminIndex.User = await _userManager.FindByIdAsync(loginUserId);
 
-            ApplicationUser loginUser = await _userManager.FindByIdAsync(loginUserId);
-
-            var projects = _context.project;
-            var listProject = await projects.ToListAsync();
-            int projectCount = listProject.Count;
+            int projectCount = adminIndex.Projects.Count;
 
             if (projectCount == 0)
             {
-
-                if (User.IsInRole("Admin"))
-                {
                     TempData["AlertProjectCreate"] = "一つ目のプロジェクトを登録してください。";
                     return Redirect("/Projects/Create");
-                }
-                else
-                {
-                    TempData["AlertError"] = "サービスの利用前に、Adminユーザーにプロジェクト作成の初期設定を依頼してください。";
-                    return Redirect("/Home/Home");
-                }
-
             }
             else {
 
-                return View(users);
+                return View(adminIndex);
             }
         }
 
@@ -122,6 +114,57 @@ namespace 業務報告システム.Controllers
                 return View(userIndex);
 
         }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null || _userManager == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Projects"] = new SelectList(_context.project, "ProjectId", "Name");
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, string[] values)
+        {
+            ApplicationUser user = new ApplicationUser();
+            user.Id = id;
+            user.LastName = values[0];
+            user.FirstName = values[1];
+            user.Email = values[2];
+            user.Role = values[3];
+            UserProject userProject = new UserProject();
+            userProject.UserId = id;
+            userProject.ProjectId = int.Parse(values[4]);
+            user.UserProjects.Add(userProject);
+
+
+            //try
+            //{
+            //    _userManager.UpdateAsync(user);
+            //    await _userManager.UpdateRoleAsync(user, user.Role);
+            //    TempData["AlertProject"] = "ユーザーを編集しました。";
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //        return NotFound();
+            //}
+            return RedirectToAction(nameof(Index));
+
+        }
+
+
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
