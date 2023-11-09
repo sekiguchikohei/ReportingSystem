@@ -37,7 +37,7 @@
     <div class="col-md-4">
         <form method="post" action="">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @* <input type="hidden" asp-for="ReportId" /> *@
+            <input type="hidden" name="values" value="@Model.Report.ReportId" />
 
             @* Attendance追記 *@
             <div class="form-group">
@@ -107,7 +107,7 @@
                 <label class="control-label">明日やること</label>
                 <textarea name="values" class="form-control">@Model.Report.TomorrowComment</textarea>
             </div>
-
+            <input type="hidden" name="values" value="@Model.Attendance.ReportId" />
             @* ここまで追記 *@
 
             @* 
