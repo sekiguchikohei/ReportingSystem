@@ -49,21 +49,17 @@ namespace 業務報告システム.Controllers
                 Report re = new Report();
                 re.Date = report.Date;
                 re.Comment = report.Comment;
+                re.ReportId = report.ReportId;
                 reportIndex.Reports.Add(re);
             }
-
             foreach (var attendance in allAttendance)
             {
                 Attendance at = new Attendance();
                 at.Status = attendance.Status;
                 at.HealthRating = attendance.HealthRating;
+                at.ReportId = attendance.ReportId;
                 reportIndex.Attendances.Add(at);
             }
-
-
-
-
-
             var applicationDbContext = _context.report.Include(r => r.User);
             return View(reportIndex);
         }
@@ -417,18 +413,40 @@ namespace 業務報告システム.Controllers
         [Authorize(Roles = "Member")]
         public async Task<IActionResult> Edit(int? id)
         {
+            ReportCRUD reportCRUD = new ReportCRUD();
+
+
             if (id == null || _context.report == null)
             {
                 return NotFound();
             }
 
             var report = await _context.report.FindAsync(id);
+            reportCRUD.Report = report;
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (report == null)
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", report.UserId);
-            return View(report);
+
+            if (!(report.UserId.Equals(loginUserId))) {
+
+                return NotFound("アクセス権がありません。");
+            }
+
+
+            reportCRUD.User = await _userManager.FindByIdAsync(report.UserId);
+
+            var allAttendances = _context.attendance.ToList();
+
+            foreach (var attendance in allAttendances) {
+                if (attendance.ReportId == report.ReportId) {
+                reportCRUD.Attendance = attendance;
+                }
+            }
+
+            return View(reportCRUD);
         }
 
         // POST: Reports/Edit/5
