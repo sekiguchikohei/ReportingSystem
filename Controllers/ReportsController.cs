@@ -39,14 +39,54 @@ namespace 業務報告システム.Controllers
             }
 
             ReportIndex reportIndex = new ReportIndex();
+            reportIndex.User = new ApplicationUser();
             reportIndex.Reports = new List<Report>();
             reportIndex.Attendances = new List<Attendance>();
 
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            reportIndex.User = await _userManager.FindByEmailAsync(Id);
+            reportIndex.User = (ApplicationUser)_context.Users.FirstOrDefault(x => x.Id == Id);
 
             var allReports = _context.report.Where(x => x.UserId.Equals(Id)).ToList();
             var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(Id)).ToList();
+
+            foreach (var report in allReports)
+            {
+                Report re = new Report();
+                re.Date = report.Date;
+                re.Comment = report.Comment;
+                re.ReportId = report.ReportId;
+                re.User = report.User;
+                reportIndex.Reports.Add(re);
+            }
+            foreach (var attendance in allAttendance)
+            {
+                Attendance at = new Attendance();
+                at.Status = attendance.Status;
+                at.HealthRating = attendance.HealthRating;
+                at.ReportId = attendance.ReportId;
+                reportIndex.Attendances.Add(at);
+            }
+
+            ViewBag.MemberName = $"{reportIndex.User.LastName} {reportIndex.User.FirstName}";
+
+            var applicationDbContext = _context.report.Include(r => r.User);
+            return View(reportIndex);
+        }
+
+        // GET: Reports/memindex　メンバー用
+        [Authorize(Roles = "Member")]
+        public async Task<IActionResult> MemIndex()
+        {
+            ReportIndex reportIndex = new ReportIndex();
+            reportIndex.Reports = new List<Report>();
+            reportIndex.Attendances = new List<Attendance>();
+
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            reportIndex.User = await _userManager.FindByEmailAsync(loginUserId);
+
+            //Reportsにデータを格納
+            var allReports = _context.report.Where(x => x.UserId.Equals(loginUserId)).ToList();
+            var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(loginUserId)).ToList();
 
             foreach (var report in allReports)
             {
@@ -64,54 +104,11 @@ namespace 業務報告システム.Controllers
                 at.ReportId = attendance.ReportId;
                 reportIndex.Attendances.Add(at);
             }
-
-            //-------------------------------------
-            //誰のレポートか分かるようにしたい
-            
-
-            ViewBag.MemberName = $"{reportIndex.User.LastName} {reportIndex.User.FirstName}";
-
-            //---------------------------------------
             var applicationDbContext = _context.report.Include(r => r.User);
             return View(reportIndex);
         }
 
-            // GET: Reports/memindex　メンバー用
-            [Authorize(Roles = "Member")]
-        public async Task<IActionResult> MemIndex()
-        {
-            ReportIndex reportIndex = new ReportIndex();
-            reportIndex.Reports = new List<Report>();
-            reportIndex.Attendances = new List<Attendance>();
-
-            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            reportIndex.User = await _userManager.FindByEmailAsync(loginUserId);
-
-            //Reportsにデータを格納
-            var allReports = _context.report.Where(x => x.UserId.Equals(loginUserId)).ToList();
-            var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(loginUserId)).ToList();
-
-            foreach(var report in allReports)
-            {
-                Report re = new Report();
-                re.Date = report.Date;
-                re.Comment = report.Comment;
-                re.ReportId = report.ReportId;
-                reportIndex.Reports.Add(re);
-            }
-            foreach (var attendance in allAttendance)
-            {
-                Attendance at = new Attendance();
-                at.Status = attendance.Status;
-                at.HealthRating = attendance.HealthRating;
-                at.ReportId = attendance.ReportId;
-                reportIndex.Attendances.Add(at);
-            }
-            var applicationDbContext = _context.report.Include(r => r.User);
-            return View(reportIndex);
-        }
-
-        [Authorize(Roles ="Member")]
+        [Authorize(Roles = "Member")]
         public async Task<IActionResult> MemMain()
         {
             MemberMain memberMain = new MemberMain();
@@ -137,7 +134,7 @@ namespace 業務報告システム.Controllers
                     }
                 }
             }
-        
+
             var alluserprojects = _context.userproject.ToList();
 
             //マネージャー特定（単体）
@@ -149,8 +146,9 @@ namespace 業務報告システム.Controllers
                     {
                         ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
 
-                        if (await _userManager.IsInRoleAsync(user, "Manager")) {
-                            memberMain.Manager = user;         
+                        if (await _userManager.IsInRoleAsync(user, "Manager"))
+                        {
+                            memberMain.Manager = user;
                         }
                     }
                 }
@@ -161,8 +159,9 @@ namespace 業務報告システム.Controllers
 
             foreach (var todo in userTodos)
             {
-                if (todo.Progress != 10) { 
-                memberMain.Todos.Add(todo);
+                if (todo.Progress != 10)
+                {
+                    memberMain.Todos.Add(todo);
                 }
             }
 
@@ -171,18 +170,19 @@ namespace 業務報告システム.Controllers
 
             var yesterday = DateTime.Today.AddDays(-1);
 
-            foreach (var report in userReports) {
+            foreach (var report in userReports)
+            {
                 if (report.Date.Year == yesterday.Year && report.Date.Month == yesterday.Month && report.Date.Day == yesterday.Day)
-                { 
+                {
                     memberMain.Report = report;
-                } 
+                }
             }
             return View(memberMain);
         }
 
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> MgrMain()
-        { 
+        {
             ManagerMain managerMain = new ManagerMain();
             managerMain.Projects = new List<Project>();
             managerMain.Reports = new List<Report>();
@@ -235,15 +235,13 @@ namespace 業務報告システム.Controllers
             managerMain.Members.Remove(managerMain.Manager);
             managerMain.ReportNotSubmit.Remove(managerMain.Manager);
 
-
             var alltodos = _context.todo.ToList();
 
-            //要修正
             foreach (var todo in alltodos)
             {
                 foreach (var user in managerMain.Members)
                 {
-                    if (todo.UserId.Equals(user.Id) && todo.Progress != 10)
+                    if (todo.UserId.Equals(user.Id) && todo.Progress < 10)
                     {
                         //マネージャー配下のメンバーの未提出Todoリスト作成
                         managerMain.Todos.Add(todo);
@@ -256,9 +254,12 @@ namespace 業務報告システム.Controllers
             var allTodayReports = _context.report.Where(x => x.Date.Year == today.Year && x.Date.Month == today.Month && x.Date.Day == today.Day).ToList();
             var allTodayAttendances = _context.attendance.Where(x => x.Date.Year == today.Year && x.Date.Month == today.Month && x.Date.Day == today.Day).ToList();
 
-            foreach (var report in allTodayReports) {
-                foreach (var member in managerMain.Members) {
-                    if (report.UserId.Equals(member.Id)) { 
+            foreach (var report in allTodayReports)
+            {
+                foreach (var member in managerMain.Members)
+                {
+                    if (report.UserId.Equals(member.Id))
+                    {
                         //今日提出のreportリスト作成
                         managerMain.Reports.Add(report);
                     }
@@ -277,114 +278,27 @@ namespace 業務報告システム.Controllers
                 }
             }
 
+            DateTime yesterday = DateTime.Today.AddDays(-1);
+            var allYesterdayReports = _context.report.Where(x => x.Date.Year == yesterday.Year && x.Date.Month == yesterday.Month && x.Date.Day == yesterday.Day).ToList();
+            var allYesterdayAttendances = _context.attendance.Where(x => x.Date.Year == yesterday.Year && x.Date.Month == yesterday.Month && x.Date.Day == yesterday.Day).ToList();
 
-           　//要修正
+
             foreach (var member in managerMain.Members) {
-                foreach (var report in allTodayReports)
+                foreach (var report in allYesterdayReports)
                 {
                     if (member.Id.Equals(report.UserId)) { 
-                        //今日のレポート未提出メンバーリスト作成
+                        //前日のレポート未提出メンバーリスト作成
                         managerMain.ReportNotSubmit.Remove(member);
                     }
                 }
-                }
+            }
 
             return View(managerMain);
         }
 
-            // GET: Reports/Details/5
-            [Authorize(Roles ="Manager, Member")]
+        // GET: Reports/Details/5
+        [Authorize(Roles = "Manager, Member")]
         public async Task<IActionResult> Details(int? id)
-        {
-            ReportDetail reportDetail = new ReportDetail();
-            reportDetail.Projects = new List<Project>();
-
-            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            reportDetail.User = await _userManager.FindByIdAsync(loginUserId);
-
-            if (id == null || _context.report == null)
-            {
-                return NotFound();
-            }
-
-            var report = await _context.report
-                .Include(r => r.User)
-                .FirstOrDefaultAsync(m => m.ReportId == id);
-            if (report == null)
-            {
-                return NotFound();
-            }
-
-            var allprojects = _context.project.ToList();
-            var userprojects = _context.userproject.Where(x => x.UserId.Equals(reportDetail.User.Id)).ToList();
-
-            foreach (var project in userprojects)
-            {
-                foreach (var allproject in allprojects)
-                {
-                    if (project.ProjectId == allproject.ProjectId)
-                    {
-                        Project pj = new Project();
-                        pj.ProjectId = allproject.ProjectId;
-                        pj.Name = allproject.Name;
-                        reportDetail.Projects.Add(pj);
-                    }
-                }
-            }
-
-            var alluserprojects = _context.userproject.ToList();
-
-            foreach (var userproject in alluserprojects)
-            {
-                foreach (var loginuserproject in reportDetail.Projects)
-                {
-                    if (userproject.ProjectId == loginuserproject.ProjectId)
-                    {
-                        ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
-
-                        if (await _userManager.IsInRoleAsync(user, "Manager"))
-                        {
-                            reportDetail.Manager = user;
-                        }
-                    }
-                }
-            }
-
-            if (User.IsInRole("Member"))
-            {
-                if (!(report.UserId.Equals(loginUserId)))
-                {
-                    return NotFound("アクセス権がありません。");
-                }
-            }
-            else if (User.IsInRole("Manager") && !(loginUserId.Equals(reportDetail.Manager.Id)))
-            {
-                return NotFound("アクセス権がありません。");
-            }
-
-            reportDetail.Report = report;
-            var allattendance = _context.attendance.ToList();
-            foreach (var attendance in allattendance) {
-                if (attendance.ReportId == report.ReportId) {
-                    reportDetail.Attendance = attendance;
-                }
-            }
-            
-            var feedbacks = _context.feedback.ToList();
-
-            foreach (var feedback in feedbacks) {
-                if (feedback.ReportId == report.ReportId) { 
-                reportDetail.Feedback = feedback;
-                }
-            }
-
-            
-            return View(reportDetail);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Details(int? id, string[] values) 
         {
             ReportDetail reportDetail = new ReportDetail();
             reportDetail.Projects = new List<Project>();
@@ -462,7 +376,102 @@ namespace 業務報告システム.Controllers
                 }
             }
 
-            Feedback feedback = new Feedback() {
+            var feedbacks = _context.feedback.ToList();
+
+            foreach (var feedback in feedbacks)
+            {
+                if (feedback.ReportId == report.ReportId)
+                {
+                    reportDetail.Feedback = feedback;
+                }
+            }
+
+
+            return View(reportDetail);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Details(int? id, string[] values)
+        {
+            ReportDetail reportDetail = new ReportDetail();
+            reportDetail.Projects = new List<Project>();
+
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            reportDetail.User = await _userManager.FindByIdAsync(loginUserId);
+
+            if (id == null || _context.report == null)
+            {
+                return NotFound();
+            }
+
+            var report = await _context.report
+                .Include(r => r.User)
+                .FirstOrDefaultAsync(m => m.ReportId == id);
+            if (report == null)
+            {
+                return NotFound();
+            }
+
+            var allprojects = _context.project.ToList();
+            var userprojects = _context.userproject.Where(x => x.UserId.Equals(reportDetail.User.Id)).ToList();
+
+            foreach (var project in userprojects)
+            {
+                foreach (var allproject in allprojects)
+                {
+                    if (project.ProjectId == allproject.ProjectId)
+                    {
+                        Project pj = new Project();
+                        pj.ProjectId = allproject.ProjectId;
+                        pj.Name = allproject.Name;
+                        reportDetail.Projects.Add(pj);
+                    }
+                }
+            }
+
+            var alluserprojects = _context.userproject.ToList();
+
+            foreach (var userproject in alluserprojects)
+            {
+                foreach (var loginuserproject in reportDetail.Projects)
+                {
+                    if (userproject.ProjectId == loginuserproject.ProjectId)
+                    {
+                        ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
+
+                        if (await _userManager.IsInRoleAsync(user, "Manager"))
+                        {
+                            reportDetail.Manager = user;
+                        }
+                    }
+                }
+            }
+
+            if (User.IsInRole("Member"))
+            {
+                if (!(report.UserId.Equals(loginUserId)))
+                {
+                    return NotFound("アクセス権がありません。");
+                }
+            }
+            else if (User.IsInRole("Manager") && !(loginUserId.Equals(reportDetail.Manager.Id)))
+            {
+                return NotFound("アクセス権がありません。");
+            }
+
+            reportDetail.Report = report;
+            var allattendance = _context.attendance.ToList();
+            foreach (var attendance in allattendance)
+            {
+                if (attendance.ReportId == report.ReportId)
+                {
+                    reportDetail.Attendance = attendance;
+                }
+            }
+
+            Feedback feedback = new Feedback()
+            {
                 ReportId = report.ReportId,
                 Confirm = true,
                 Rating = int.Parse(values[0]),
@@ -491,7 +500,7 @@ namespace 業務報告システム.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(string[]values)
+        public async Task<IActionResult> Create(string[] values)
         {
 
             var submitDay = DateTime.Parse(values[0]);
@@ -550,35 +559,12 @@ namespace 業務報告システム.Controllers
                 return NotFound();
             }
 
-            if (!(report.UserId.Equals(loginUserId))) {
+            if (!(report.UserId.Equals(loginUserId)))
+            {
 
                 return NotFound("アクセス権がありません。");
             }
 
-
-            reportCRUD.User = await _userManager.FindByIdAsync(report.UserId);
-
-            var allAttendances = _context.attendance.ToList();
-
-            foreach (var attendance in allAttendances) {
-                if (attendance.ReportId == report.ReportId) {
-                reportCRUD.Attendance = attendance;
-                }
-            }
-
-            return View(reportCRUD);
-        }
-
-        // POST: Reports/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string[] values)
-        {
-            ReportCRUD reportCRUD = new ReportCRUD();
-
-            /*
 
             reportCRUD.User = await _userManager.FindByIdAsync(report.UserId);
 
@@ -592,35 +578,63 @@ namespace 業務報告システム.Controllers
                 }
             }
 
-            if (id != report.ReportId)
+           
+
+            return View(reportCRUD);
+        }
+
+        // POST: Reports/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string[] values)
+        {
+            ReportCRUD reportCRUD = new ReportCRUD();
+
+            var submitDay = DateTime.Parse(values[1]);
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            DateTime startTime = new DateTime(submitDay.Year, submitDay.Month, submitDay.Day, int.Parse(values[3]), int.Parse(values[4]), 0);
+            DateTime endTime = new DateTime(submitDay.Year, submitDay.Month, submitDay.Day, int.Parse(values[5]), int.Parse(values[6]), 0);
+
+            Report report = new Report()
             {
-                return NotFound();
-            }
+                ReportId = int.Parse(values[0]),
+                Date = submitDay,
+                Comment = values[9],
+                TomorrowComment = values[10],
+                UserId = loginUserId
+            };
+
+            Attendance attendance = new Attendance()
+            {
+                AttendanceId = int.Parse(values[11]),
+                Date = submitDay,
+                Status = values[2],
+                StartTime = startTime,
+                EndTime = endTime,
+                HealthRating = int.Parse(values[7]),
+                HealthComment = values[8],
+                ReportId = report.ReportId,
+            };
 
             ModelState.Remove("User");
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(report);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReportExists(report.ReportId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(report);
+                await _context.SaveChangesAsync();
+                _context.Update(attendance);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(MemIndex));
             }
-            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", report.UserId);*/
-            return View();
+
+            reportCRUD.Report = report;
+            reportCRUD.Attendance = attendance;
+            reportCRUD.User = await _userManager.FindByIdAsync(report.UserId);
+
+            return View(reportCRUD);
         }
+
 
         // GET: Reports/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -655,14 +669,15 @@ namespace 業務報告システム.Controllers
             {
                 _context.report.Remove(report);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ReportExists(int id)
         {
-          return (_context.report?.Any(e => e.ReportId == id)).GetValueOrDefault();
+            return (_context.report?.Any(e => e.ReportId == id)).GetValueOrDefault();
         }
     }
+
 }
