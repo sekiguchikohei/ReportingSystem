@@ -29,9 +29,56 @@ namespace 業務報告システム.Controllers
             _roleManager = roleManager;
         }
 
-        // GET: Reports/index
-        [Authorize]
-        public async Task<IActionResult> Index()
+        // GET: Reports/memindex　メンバー用
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> MgrIndex(string? Id)
+        {
+            if (Id == null || _context.todo == null)
+            {
+                return NotFound("存在しません");
+            }
+
+            ReportIndex reportIndex = new ReportIndex();
+            reportIndex.Reports = new List<Report>();
+            reportIndex.Attendances = new List<Attendance>();
+
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            reportIndex.User = await _userManager.FindByEmailAsync(Id);
+
+            var allReports = _context.report.Where(x => x.UserId.Equals(Id)).ToList();
+            var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(Id)).ToList();
+
+            foreach (var report in allReports)
+            {
+                Report re = new Report();
+                re.Date = report.Date;
+                re.Comment = report.Comment;
+                re.ReportId = report.ReportId;
+                reportIndex.Reports.Add(re);
+            }
+            foreach (var attendance in allAttendance)
+            {
+                Attendance at = new Attendance();
+                at.Status = attendance.Status;
+                at.HealthRating = attendance.HealthRating;
+                at.ReportId = attendance.ReportId;
+                reportIndex.Attendances.Add(at);
+            }
+
+            //-------------------------------------
+            //誰のレポートか分かるようにしたい
+            
+
+            ViewBag.MemberName = $"{reportIndex.User.LastName} {reportIndex.User.FirstName}";
+
+            //---------------------------------------
+            var applicationDbContext = _context.report.Include(r => r.User);
+            return View(reportIndex);
+        }
+
+            // GET: Reports/memindex　メンバー用
+            [Authorize(Roles = "Member")]
+        public async Task<IActionResult> MemIndex()
         {
             ReportIndex reportIndex = new ReportIndex();
             reportIndex.Reports = new List<Report>();
