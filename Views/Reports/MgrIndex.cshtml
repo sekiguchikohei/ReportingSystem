@@ -1,0 +1,91 @@
+﻿@using System.Security.Claims;
+@model 業務報告システム.ViewModels.ReportIndex;
+@{
+    ViewData["Title"] = "MgrIndex";
+    var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+<h1>MgrIndex</h1>
+
+
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Comment
+            </th>
+            <th>
+                HealthRating
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Reports)
+        {
+            <tr>
+                <td>
+                    @item.Date.ToString("yyyy/M/d")
+                </td>
+                <td>
+                    @item.Comment
+                </td>
+                <td>
+                    @foreach (var itemA in Model.Attendances)
+                    {
+                        @if (item.ReportId.Equals(itemA.ReportId))
+                        {
+                            @switch (itemA.HealthRating)
+                            {
+                                case 1:
+                                    <img class="select-icon" src="/images/bad.png" />
+                                    break;
+                                case 2:
+                                    <img class="select-icon" src="/images/soso.png" />
+                                    break;
+                                case 3:
+                                    <img class="select-icon" src="/images/fine.png">
+                                    break;
+                                case 4:
+                                    <img class="select-icon" src="/images/good.png" />
+                                    break;
+                                case 5:
+                                    <img class="select-icon" src="/images/great.png" />
+                                    break;
+                            }
+                        }
+                    }
+                </td>
+                <td>
+                    @foreach (var itemA in Model.Attendances)
+                    {
+                        @if (item.ReportId.Equals(itemA.ReportId))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.ReportId">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.ReportId"> Details </a>
+                            <form asp-action="Delete" onsubmit="return check()">
+                                <input type="hidden" name="id" value="@item.ReportId" />
+                                <input type="submit" value="削除" class="btn btn-danger" />
+                            </form>
+                        }
+                    }
+                    <script>
+                        function check() {
+                            if (window.confirm('このレポートを削除しますか？')) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    </script>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

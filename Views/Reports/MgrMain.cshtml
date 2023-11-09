@@ -5,8 +5,51 @@
 
 <h1>Manager Main ページ</h1>
 
-<p>自分のプロジェクト名表示</p>
+<h1>自分のプロジェクト名表示</h1>
+@foreach(var project in Model.Projects)
+{
+<p>@project.Name</p>    
 
-<p>自分のチームメンバーの前日のレポート未提出者リストを表示</p>
-<p>自分のチームメンバーの未達成Todoリスト、期日が近い順</p>
-<p>今日提出されたレポートの一覧</p>
+}
+
+<h1>自分のチームメンバーの前日のレポート未提出者リストを表示</h1>
+@if (Model.ReportNotSubmit != null)
+{
+    @foreach (var user in Model.ReportNotSubmit)
+    {
+        <p>@user.LastName @user.FirstName</p>
+
+    }
+}
+
+
+<h1>自分のチームメンバーの未達成Todoリスト、期日が近い順</h1>
+
+@if (Model.Todos != null)
+{
+    @foreach (var todo in Model.Todos)
+    {
+        <p>@todo.TaskName</p>
+        <p>progress: @todo.Progress</p>
+    }
+}
+
+
+<h1>今日提出されたレポートの一覧</h1>
+
+@if (Model.Reports != null)
+{
+    @foreach (var report in Model.Reports)
+    {
+        <p>@report.Comment</p>
+
+        @foreach (var attendance in Model.Attendances)
+        {
+            <p>HealthRating : @attendance.HealthRating</p>
+
+        }
+
+    }
+
+}
+

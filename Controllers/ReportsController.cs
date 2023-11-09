@@ -29,9 +29,56 @@ namespace 業務報告システム.Controllers
             _roleManager = roleManager;
         }
 
-        // GET: Reports/index
-        [Authorize]
-        public async Task<IActionResult> Index()
+        // GET: Reports/memindex　メンバー用
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> MgrIndex(string? Id)
+        {
+            if (Id == null || _context.todo == null)
+            {
+                return NotFound("存在しません");
+            }
+
+            ReportIndex reportIndex = new ReportIndex();
+            reportIndex.Reports = new List<Report>();
+            reportIndex.Attendances = new List<Attendance>();
+
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            reportIndex.User = await _userManager.FindByEmailAsync(Id);
+
+            var allReports = _context.report.Where(x => x.UserId.Equals(Id)).ToList();
+            var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(Id)).ToList();
+
+            foreach (var report in allReports)
+            {
+                Report re = new Report();
+                re.Date = report.Date;
+                re.Comment = report.Comment;
+                re.ReportId = report.ReportId;
+                reportIndex.Reports.Add(re);
+            }
+            foreach (var attendance in allAttendance)
+            {
+                Attendance at = new Attendance();
+                at.Status = attendance.Status;
+                at.HealthRating = attendance.HealthRating;
+                at.ReportId = attendance.ReportId;
+                reportIndex.Attendances.Add(at);
+            }
+
+            //-------------------------------------
+            //誰のレポートか分かるようにしたい
+            
+
+            ViewBag.MemberName = $"{reportIndex.User.LastName} {reportIndex.User.FirstName}";
+
+            //---------------------------------------
+            var applicationDbContext = _context.report.Include(r => r.User);
+            return View(reportIndex);
+        }
+
+            // GET: Reports/memindex　メンバー用
+            [Authorize(Roles = "Member")]
+        public async Task<IActionResult> MemIndex()
         {
             ReportIndex reportIndex = new ReportIndex();
             reportIndex.Reports = new List<Report>();
@@ -142,6 +189,7 @@ namespace 業務報告システム.Controllers
             managerMain.Attendances = new List<Attendance>();
             managerMain.Todos = new List<Todo>();
             managerMain.Members = new List<ApplicationUser>();
+            managerMain.ReportNotSubmit = new List<ApplicationUser>();
 
             var loginManagerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             managerMain.Manager = await _userManager.FindByIdAsync(loginManagerId);
@@ -158,16 +206,88 @@ namespace 業務報告システム.Controllers
                         Project pj = new Project();
                         pj.ProjectId = allproject.ProjectId;
                         pj.Name = allproject.Name;
+                        //マネージャーのプロジェクト一覧作成
                         managerMain.Projects.Add(pj);
                     }
                 }
             }
 
+            var alluserprojects = _context.userproject.ToList();
 
-            //自分のプロジェクト名表示
-            //自分のチームメンバーの前日のレポート未提出者リストを表示
-            //自分のチームメンバーの未達成Todoリスト、期日が近い順
-            //今日提出されたレポートの一覧
+            foreach (var userproject in alluserprojects)
+            {
+                foreach (var managerproject in managerMain.Projects)
+                {
+                    if (userproject.ProjectId == managerproject.ProjectId)
+                    {
+                        ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
+                        // マネージャー配下のメンバーリスト作成
+                        managerMain.Members.Add(user);
+
+                        managerMain.ReportNotSubmit.Add(user);
+
+
+                    }
+                }
+
+            }
+
+            managerMain.Members.Remove(managerMain.Manager);
+            managerMain.ReportNotSubmit.Remove(managerMain.Manager);
+
+
+            var alltodos = _context.todo.ToList();
+
+            //要修正
+            foreach (var todo in alltodos)
+            {
+                foreach (var user in managerMain.Members)
+                {
+                    if (todo.UserId.Equals(user.Id) && todo.Progress != 10)
+                    {
+                        //マネージャー配下のメンバーの未提出Todoリスト作成
+                        managerMain.Todos.Add(todo);
+                    }
+                }
+
+            }
+
+            DateTime today = DateTime.Today;
+            var allTodayReports = _context.report.Where(x => x.Date.Year == today.Year && x.Date.Month == today.Month && x.Date.Day == today.Day).ToList();
+            var allTodayAttendances = _context.attendance.Where(x => x.Date.Year == today.Year && x.Date.Month == today.Month && x.Date.Day == today.Day).ToList();
+
+            foreach (var report in allTodayReports) {
+                foreach (var member in managerMain.Members) {
+                    if (report.UserId.Equals(member.Id)) { 
+                        //今日提出のreportリスト作成
+                        managerMain.Reports.Add(report);
+                    }
+                }
+            }
+
+            foreach (var attendance in allTodayAttendances)
+            {
+                foreach (var report in managerMain.Reports)
+                {
+                    if (attendance.ReportId == report.ReportId)
+                    {
+                        // 今日提出のattendanceリスト作成
+                        managerMain.Attendances.Add(attendance);
+                    }
+                }
+            }
+
+
+           　//要修正
+            foreach (var member in managerMain.Members) {
+                foreach (var report in allTodayReports)
+                {
+                    if (member.Id.Equals(report.UserId)) { 
+                        //今日のレポート未提出メンバーリスト作成
+                        managerMain.ReportNotSubmit.Remove(member);
+                    }
+                }
+                }
 
             return View(managerMain);
         }
@@ -454,13 +574,30 @@ namespace 業務報告システム.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReportId,Date,Comment,TomorrowComment,UserId")] Report report)
+        public async Task<IActionResult> Edit(string[] values)
         {
+            ReportCRUD reportCRUD = new ReportCRUD();
+
+            /*
+
+            reportCRUD.User = await _userManager.FindByIdAsync(report.UserId);
+
+            var allAttendances = _context.attendance.ToList();
+
+            foreach (var attendance in allAttendances)
+            {
+                if (attendance.ReportId == report.ReportId)
+                {
+                    reportCRUD.Attendance = attendance;
+                }
+            }
+
             if (id != report.ReportId)
             {
                 return NotFound();
             }
 
+            ModelState.Remove("User");
             if (ModelState.IsValid)
             {
                 try
@@ -481,8 +618,8 @@ namespace 業務報告システム.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", report.UserId);
-            return View(report);
+            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", report.UserId);*/
+            return View();
         }
 
         // GET: Reports/Delete/5
