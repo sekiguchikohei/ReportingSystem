@@ -142,6 +142,7 @@ namespace 業務報告システム.Controllers
             managerMain.Attendances = new List<Attendance>();
             managerMain.Todos = new List<Todo>();
             managerMain.Members = new List<ApplicationUser>();
+            managerMain.ReportNotSubmit = new List<ApplicationUser>();
 
             var loginManagerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             managerMain.Manager = await _userManager.FindByIdAsync(loginManagerId);
@@ -158,16 +159,88 @@ namespace 業務報告システム.Controllers
                         Project pj = new Project();
                         pj.ProjectId = allproject.ProjectId;
                         pj.Name = allproject.Name;
+                        //マネージャーのプロジェクト一覧作成
                         managerMain.Projects.Add(pj);
                     }
                 }
             }
 
+            var alluserprojects = _context.userproject.ToList();
 
-            //自分のプロジェクト名表示
-            //自分のチームメンバーの前日のレポート未提出者リストを表示
-            //自分のチームメンバーの未達成Todoリスト、期日が近い順
-            //今日提出されたレポートの一覧
+            foreach (var userproject in alluserprojects)
+            {
+                foreach (var managerproject in managerMain.Projects)
+                {
+                    if (userproject.ProjectId == managerproject.ProjectId)
+                    {
+                        ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
+                        // マネージャー配下のメンバーリスト作成
+                        managerMain.Members.Add(user);
+
+                        managerMain.ReportNotSubmit.Add(user);
+
+
+                    }
+                }
+
+            }
+
+            managerMain.Members.Remove(managerMain.Manager);
+            managerMain.ReportNotSubmit.Remove(managerMain.Manager);
+
+
+            var alltodos = _context.todo.ToList();
+
+            //要修正
+            foreach (var todo in alltodos)
+            {
+                foreach (var user in managerMain.Members)
+                {
+                    if (todo.UserId.Equals(user.Id) && todo.Progress != 10)
+                    {
+                        //マネージャー配下のメンバーの未提出Todoリスト作成
+                        managerMain.Todos.Add(todo);
+                    }
+                }
+
+            }
+
+            DateTime today = DateTime.Today;
+            var allTodayReports = _context.report.Where(x => x.Date.Year == today.Year && x.Date.Month == today.Month && x.Date.Day == today.Day).ToList();
+            var allTodayAttendances = _context.attendance.Where(x => x.Date.Year == today.Year && x.Date.Month == today.Month && x.Date.Day == today.Day).ToList();
+
+            foreach (var report in allTodayReports) {
+                foreach (var member in managerMain.Members) {
+                    if (report.UserId.Equals(member.Id)) { 
+                        //今日提出のreportリスト作成
+                        managerMain.Reports.Add(report);
+                    }
+                }
+            }
+
+            foreach (var attendance in allTodayAttendances)
+            {
+                foreach (var report in managerMain.Reports)
+                {
+                    if (attendance.ReportId == report.ReportId)
+                    {
+                        // 今日提出のattendanceリスト作成
+                        managerMain.Attendances.Add(attendance);
+                    }
+                }
+            }
+
+
+           　//要修正
+            foreach (var member in managerMain.Members) {
+                foreach (var report in allTodayReports)
+                {
+                    if (member.Id.Equals(report.UserId)) { 
+                        //今日のレポート未提出メンバーリスト作成
+                        managerMain.ReportNotSubmit.Remove(member);
+                    }
+                }
+                }
 
             return View(managerMain);
         }

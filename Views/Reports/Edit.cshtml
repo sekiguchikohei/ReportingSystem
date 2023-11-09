@@ -3,6 +3,29 @@
 
 @{
     ViewData["Title"] = "Edit";
+    string status1 = "";
+    string status2 = "";
+    string status3 = "";
+    string status4 = "";
+
+    switch (Model.Attendance.Status)
+    {
+        case "出勤":
+            status1 = "selected";
+            break;
+        case "有給":
+            status2 = "selected";
+            break;
+        case "早退":
+            status3 = "selected";
+            break;
+        case "遅刻":
+            status4 = "selected";
+            break;
+
+    }
+
+
 
 }
 
@@ -19,15 +42,15 @@
             @* Attendance追記 *@
             <div class="form-group">
                 <label class="control-label">日付</label>
-                <input name="values" class="form-control" type="datetime-local" value="@Model.Report.Date"/>
+                <input name="values" class="form-control" type="datetime-local" value="@Model.Report.Date.Year-@Model.Report.Date.Month}-@Model.Report.Date.Day"+"T@Model.Report.Date.Hour:@Model.Report.Date.Minute"/>
             </div>
             <div class="form-group">
                 <label class="control-label">勤怠</label>
                 <select name="values" class="form-control" value="@Model.Attendance.Status">
-                    <option value="出勤">出勤</option>
-                    <option value="有給">有給</option>
-                    <option value="早退">早退</option>
-                    <option value="遅刻">遅刻</option>
+                    <option value="出勤" status1>出勤</option>
+                    <option value="有給" status2>有給</option>
+                    <option value="早退" status3>早退</option>
+                    <option value="遅刻" status4>遅刻</option>
                 </select>
             </div>
             <div class="form-group">
