@@ -91,7 +91,26 @@
         {
             @if (attendance.ReportId == report.ReportId)
             {
-                <p>HealthRating : @attendance.HealthRating</p>
+                <p>HealthRating : 
+                @switch (@attendance.HealthRating)
+                    {
+                        case 1:
+                            <img class="select-icon" src="/images/bad.png" />
+                            break;
+                        case 2:
+                            <img class="select-icon" src="/images/soso.png" />
+                            break;
+                        case 3:
+                            <img class="select-icon" src="/images/fine.png">
+                            break;
+                        case 4:
+                            <img class="select-icon" src="/images/good.png" />
+                            break;
+                        case 5:
+                            <img class="select-icon" src="/images/great.png" />
+                            break;
+                    }
+                </p>
             }
 
         }
