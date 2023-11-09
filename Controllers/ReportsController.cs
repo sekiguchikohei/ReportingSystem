@@ -417,18 +417,40 @@ namespace 業務報告システム.Controllers
         [Authorize(Roles = "Member")]
         public async Task<IActionResult> Edit(int? id)
         {
+            ReportCRUD reportCRUD = new ReportCRUD();
+
+
             if (id == null || _context.report == null)
             {
                 return NotFound();
             }
 
             var report = await _context.report.FindAsync(id);
+            reportCRUD.Report = report;
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (report == null)
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", report.UserId);
-            return View(report);
+
+            if (!(report.UserId.Equals(loginUserId))) {
+
+                return NotFound("アクセス権がありません。");
+            }
+
+
+            reportCRUD.User = await _userManager.FindByIdAsync(report.UserId);
+
+            var allAttendances = _context.attendance.ToList();
+
+            foreach (var attendance in allAttendances) {
+                if (attendance.ReportId == report.ReportId) {
+                reportCRUD.Attendance = attendance;
+                }
+            }
+
+            return View(reportCRUD);
         }
 
         // POST: Reports/Edit/5
