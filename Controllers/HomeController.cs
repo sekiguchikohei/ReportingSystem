@@ -146,20 +146,21 @@ namespace 業務報告システム.Controllers
             UserProject userProject = new UserProject();
             userProject.UserId = id;
             userProject.ProjectId = int.Parse(values[4]);
+            user.UserProjects = new List<UserProject>();
             user.UserProjects.Add(userProject);
 
 
-            //try
-            //{
-            //    _userManager.UpdateAsync(user);
-            //    await _userManager.UpdateRoleAsync(user, user.Role);
-            //    TempData["AlertProject"] = "ユーザーを編集しました。";
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //        return NotFound();
-            //}
+            try
+            {
+                await _userManager.RemoveFromRoleAsync(user, values[5]);
+                await _userManager.AddToRoleAsync(user, user.Role);
+                TempData["AlertProject"] = "ユーザーを編集しました。";
+                await _userManager.UpdateAsync(user);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+            }
             return RedirectToAction(nameof(Index));
 
         }
