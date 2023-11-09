@@ -527,13 +527,30 @@ namespace 業務報告システム.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReportId,Date,Comment,TomorrowComment,UserId")] Report report)
+        public async Task<IActionResult> Edit(string[] values)
         {
+            ReportCRUD reportCRUD = new ReportCRUD();
+
+            /*
+
+            reportCRUD.User = await _userManager.FindByIdAsync(report.UserId);
+
+            var allAttendances = _context.attendance.ToList();
+
+            foreach (var attendance in allAttendances)
+            {
+                if (attendance.ReportId == report.ReportId)
+                {
+                    reportCRUD.Attendance = attendance;
+                }
+            }
+
             if (id != report.ReportId)
             {
                 return NotFound();
             }
 
+            ModelState.Remove("User");
             if (ModelState.IsValid)
             {
                 try
@@ -554,8 +571,8 @@ namespace 業務報告システム.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", report.UserId);
-            return View(report);
+            ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", report.UserId);*/
+            return View();
         }
 
         // GET: Reports/Delete/5
