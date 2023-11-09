@@ -39,11 +39,12 @@ namespace 業務報告システム.Controllers
             }
 
             ReportIndex reportIndex = new ReportIndex();
+            reportIndex.User = new ApplicationUser();
             reportIndex.Reports = new List<Report>();
             reportIndex.Attendances = new List<Attendance>();
 
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            reportIndex.User = await _userManager.FindByEmailAsync(Id);
+            reportIndex.User = (ApplicationUser)_context.Users.FirstOrDefault(x => x.Id == Id);
 
             var allReports = _context.report.Where(x => x.UserId.Equals(Id)).ToList();
             var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(Id)).ToList();
@@ -54,6 +55,7 @@ namespace 業務報告システム.Controllers
                 re.Date = report.Date;
                 re.Comment = report.Comment;
                 re.ReportId = report.ReportId;
+                re.User = report.User;
                 reportIndex.Reports.Add(re);
             }
             foreach (var attendance in allAttendance)
@@ -65,13 +67,8 @@ namespace 業務報告システム.Controllers
                 reportIndex.Attendances.Add(at);
             }
 
-            //-------------------------------------
-            //誰のレポートか分かるようにしたい
-
-
             ViewBag.MemberName = $"{reportIndex.User.LastName} {reportIndex.User.FirstName}";
 
-            //---------------------------------------
             var applicationDbContext = _context.report.Include(r => r.User);
             return View(reportIndex);
         }
@@ -238,15 +235,13 @@ namespace 業務報告システム.Controllers
             managerMain.Members.Remove(managerMain.Manager);
             managerMain.ReportNotSubmit.Remove(managerMain.Manager);
 
-
             var alltodos = _context.todo.ToList();
 
-            //要修正
             foreach (var todo in alltodos)
             {
                 foreach (var user in managerMain.Members)
                 {
-                    if (todo.UserId.Equals(user.Id) && todo.Progress != 10)
+                    if (todo.UserId.Equals(user.Id) && todo.Progress < 10)
                     {
                         //マネージャー配下のメンバーの未提出Todoリスト作成
                         managerMain.Todos.Add(todo);
@@ -283,15 +278,16 @@ namespace 業務報告システム.Controllers
                 }
             }
 
+            DateTime yesterday = DateTime.Today.AddDays(-1);
+            var allYesterdayReports = _context.report.Where(x => x.Date.Year == yesterday.Year && x.Date.Month == yesterday.Month && x.Date.Day == yesterday.Day).ToList();
+            var allYesterdayAttendances = _context.attendance.Where(x => x.Date.Year == yesterday.Year && x.Date.Month == yesterday.Month && x.Date.Day == yesterday.Day).ToList();
 
-            //要修正
-            foreach (var member in managerMain.Members)
-            {
-                foreach (var report in allTodayReports)
+
+            foreach (var member in managerMain.Members) {
+                foreach (var report in allYesterdayReports)
                 {
-                    if (member.Id.Equals(report.UserId))
-                    {
-                        //今日のレポート未提出メンバーリスト作成
+                    if (member.Id.Equals(report.UserId)) { 
+                        //前日のレポート未提出メンバーリスト作成
                         managerMain.ReportNotSubmit.Remove(member);
                     }
                 }
