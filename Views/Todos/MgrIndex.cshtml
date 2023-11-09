@@ -15,13 +15,51 @@
 
 @foreach (var user in Model.Users)
 {
-    <p>@user.LastName @user.FirstName</p>
+    <p>Member: @user.LastName @user.FirstName</p>
 
     @foreach (var todo in Model.Todos)
     {
+        <p>@user.LastName @user.FirstName のTask: </p>
+
         @if (todo.UserId.Equals(user.Id))
         {
             <p>@todo.TaskName</p>
-        }  
+        }
+        <p>Progress: @switch (@todo.Progress)
+        {
+            case 0:
+                <p>0%</p>
+                break;
+            case 1:
+                <p>10%</p>
+                break;
+            case 2:
+                <p>20%</p>
+                break;
+            case 3:
+                <p>30%</p>
+                break;
+            case 4:
+                <p>40%</p>
+                break;
+            case 5:
+                <p>50%</p>
+                break;
+            case 6:
+                <p>60%</p>
+                break;
+            case 7:
+                <p>70%</p>
+                break;
+            case 8:
+                <p>80%</p>
+                break;
+            case 9:
+                <p>90%</p>
+                break;
+            case 10:
+                <p>100%</p>
+                break;
+        } </P>
     }
 }
