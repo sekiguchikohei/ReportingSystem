@@ -1,13 +1,11 @@
 ﻿@using System.Security.Claims;
 @model 業務報告システム.ViewModels.ReportIndex;
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "MemIndex";
     var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
-<h1>Index</h1>
-
-
+<h1>MemIndex</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -60,7 +58,7 @@
                                     break;
                             }
                         }
-                        }
+                    }
                 </td>
                 <td>
                     @foreach (var itemA in Model.Attendances)
