@@ -16,6 +16,6 @@
 
 @foreach (var user in Model.Users)
 {
-    <p>@user.LastName @user.FirstName</p>
+    <a asp-controller="Reports" asp-action="mgrIndex" asp-route-id="@user.Id">@user.LastName @user.FirstName</a>
     <p>report indexへのリンクは今後作成予定</p>
 }

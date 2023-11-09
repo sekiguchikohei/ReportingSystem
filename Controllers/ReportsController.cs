@@ -29,7 +29,7 @@ namespace 業務報告システム.Controllers
             _roleManager = roleManager;
         }
 
-        // GET: Reports/memindex　メンバー用
+        // GET: Reports/mgrindex　マネージャー用
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> MgrIndex(string? Id)
         {
@@ -534,7 +534,7 @@ namespace 業務報告システム.Controllers
             await _context.SaveChangesAsync();
 
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MemIndex));
 
         }
 
@@ -671,7 +671,7 @@ namespace 業務報告システム.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MemIndex));
         }
 
         private bool ReportExists(int id)

@@ -45,10 +45,9 @@
         {
             @if (report.UserId.Equals(user.Id))
             {
-                <p>@user.LastName @user.FirstName</p>
+                <a asp-action="Details" asp-route-id="@user.Reports.First().ReportId">@user.LastName @user.FirstName</a>
             }
-
-}
+        }       
         <p>@report.Comment</p>
 
         @foreach (var attendance in Model.Attendances)
