@@ -353,7 +353,7 @@ namespace 業務報告システム.Controllers
             {
                 _context.Add(todo);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(MgrIndex));
             }
             return View(todo);
         }

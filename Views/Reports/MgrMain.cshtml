@@ -30,7 +30,44 @@
     @foreach (var todo in Model.Todos)
     {
         <p>@todo.TaskName</p>
-        <p>progress: @todo.Progress</p>
+        <p>progress: 
+            @switch (@todo.Progress)
+            {
+                case 0:
+                    <p>0%</p>
+                    break;
+                case 1:
+                    <p>10%</p>
+                    break;
+                case 2:
+                    <p>20%</p>
+                    break;
+                case 3:
+                    <p>30%</p>
+                    break;
+                case 4:
+                    <p>40%</p>
+                    break;
+                case 5:
+                    <p>50%</p>
+                    break;
+                case 6:
+                    <p>60%</p>
+                    break;
+                case 7:
+                    <p>70%</p>
+                    break;
+                case 8:
+                    <p>80%</p>
+                    break;
+                case 9:
+                    <p>90%</p>
+                    break;
+                case 10:
+                    <p>100%</p>
+                    break;
+            }
+                    </p>
     }
 }
 
@@ -45,10 +82,9 @@
         {
             @if (report.UserId.Equals(user.Id))
             {
-                <p>@user.LastName @user.FirstName</p>
+                <a asp-action="Details" asp-route-id="@user.Reports.First().ReportId">@user.LastName @user.FirstName</a>
             }
-
-}
+        }       
         <p>@report.Comment</p>
 
         @foreach (var attendance in Model.Attendances)

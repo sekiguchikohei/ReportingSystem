@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using 業務報告システム.Models;
+using System.Security.Policy;
+using 業務報告システム.Controllers;
 
 namespace 業務報告システム.Areas.Identity.Pages.Account
 {
@@ -120,7 +122,7 @@ namespace 業務報告システム.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return LocalRedirect("/Home/Home");
                 }
                 if (result.RequiresTwoFactor)
                 {

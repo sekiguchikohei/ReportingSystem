@@ -13,6 +13,8 @@ namespace 業務報告システム.Models
         [Required]
         public string LastName { get; set; }
 
+        public string? Role {  get; set; }
+
         //public List<Project> Projects { get; set; } = new List<Project>();
 
         //public List<Project>? Projects { get; set; }

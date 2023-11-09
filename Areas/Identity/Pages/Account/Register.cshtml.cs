@@ -132,6 +132,7 @@ namespace 業務報告システム.Areas.Identity.Pages.Account
                 var user = CreateUser();
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
+                user.Role = Input.Role;
 
                 user.UserProjects = new List<UserProject>();
                 UserProject userProject = new UserProject() { 
