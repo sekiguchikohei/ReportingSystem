@@ -7,6 +7,10 @@
     string status2 = "";
     string status3 = "";
     string status4 = "";
+    var shour = Model.Attendance.StartTime.Hour;
+    var ehour = Model.Attendance.EndTime.Hour;
+    var sminute = Model.Attendance.StartTime.Minute;
+    var eminute = Model.Attendance.EndTime.Minute;
 
     switch (Model.Attendance.Status)
     {
@@ -56,35 +60,52 @@
             <div class="form-group">
                 <label class="control-label">出社時間</label>
                 <label class="control-label">時間</label>
-                <select name="values" class="form-control" type="time" value="@Model.Attendance.StartTime.Hour">
+                <select name="values" class="form-control">
                     @for (int i = 0; i <= 23; i++)
                     {
+                        @if (i == shour)
+                        {
+                            <option value="@i" selected>@i</option>
+                        }
                         <option value="@i">@i</option>
                     }
                 </select>
                 <label class="control-label">分</label>
-                <select name="values" class="form-control" type="time" value="@Model.Attendance.StartTime.Minute">
-                    <option value="0">0</option>
-                    <option value="15">15</option>
-                    <option value="30">30</option>
-                    <option value="45">45</option>
+                <select name="values" class="form-control" type="time" >
+                    @for(int i = 0; i <= 45; i += 15)
+                    {
+                        @if(i == sminute)
+                        {
+                            <option value="@i" selected>@i</option>
+                        }
+                        <option value="@i">@i</option>
+                    }
+
                 </select>
             </div>
             <div class="form-group">
                 <label class="control-label">退勤時間</label>
                 <label class="control-label">時間</label>
-                <select name="values" class="form-control" type="time" value="@Model.Attendance.EndTime.Hour">
+                <select name="values" class="form-control" type="time" >
                     @for (int i = 0; i <= 23; i++)
                     {
+                        if (i == ehour)
+                        {
+                            <option value="@i" selected>@i</option>
+                        }
                         <option value="@i">@i</option>
                     }
                 </select>
                 <label class="control-label">分</label>
-                <select name="values" class="form-control" type="time" value="@Model.Attendance.EndTime.Minute"">
-                    <option value="0">0</option>
-                    <option value="15">15</option>
-                    <option value="30">30</option>
-                    <option value="45">45</option>
+                <select name="values" class="form-control" type="time" >
+                    @for (int i = 0; i <= 45; i += 15)
+                    {
+                        @if (i == eminute)
+                        {
+                                <option value="@i" selected>@i</option>
+                        }
+                            <option value="@i">@i</option>
+                    }
                 </select>
             </div>
             <div class="form-group">

@@ -39,11 +39,12 @@ namespace 業務報告システム.Controllers
             }
 
             ReportIndex reportIndex = new ReportIndex();
+            reportIndex.User = new ApplicationUser();
             reportIndex.Reports = new List<Report>();
             reportIndex.Attendances = new List<Attendance>();
 
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            reportIndex.User = await _userManager.FindByEmailAsync(Id);
+            reportIndex.User = (ApplicationUser)_context.Users.FirstOrDefault(x => x.Id == Id);
 
             var allReports = _context.report.Where(x => x.UserId.Equals(Id)).ToList();
             var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(Id)).ToList();
@@ -54,6 +55,7 @@ namespace 業務報告システム.Controllers
                 re.Date = report.Date;
                 re.Comment = report.Comment;
                 re.ReportId = report.ReportId;
+                re.User = report.User;
                 reportIndex.Reports.Add(re);
             }
             foreach (var attendance in allAttendance)
@@ -65,13 +67,8 @@ namespace 業務報告システム.Controllers
                 reportIndex.Attendances.Add(at);
             }
 
-            //-------------------------------------
-            //誰のレポートか分かるようにしたい
-            
-
             ViewBag.MemberName = $"{reportIndex.User.LastName} {reportIndex.User.FirstName}";
 
-            //---------------------------------------
             var applicationDbContext = _context.report.Include(r => r.User);
             return View(reportIndex);
         }
