@@ -49,21 +49,17 @@ namespace 業務報告システム.Controllers
                 Report re = new Report();
                 re.Date = report.Date;
                 re.Comment = report.Comment;
+                re.ReportId = report.ReportId;
                 reportIndex.Reports.Add(re);
             }
-
             foreach (var attendance in allAttendance)
             {
                 Attendance at = new Attendance();
                 at.Status = attendance.Status;
                 at.HealthRating = attendance.HealthRating;
+                at.ReportId = attendance.ReportId;
                 reportIndex.Attendances.Add(at);
             }
-
-
-
-
-
             var applicationDbContext = _context.report.Include(r => r.User);
             return View(reportIndex);
         }
