@@ -1,8 +1,21 @@
-﻿/*please use the following main colors*/
+﻿@charset "UTF-8";
+/*please use the following main colors*/
+/*�ҏW���̉ӏ����R�����g�A�E�g�ň͂�*/
+/*�J���[���g���Ƃ��ɂ͉��L�̕ϐ������g�p����*/
 html {
-  height: 100%;
-  font-size: 14px;
-}
+  font-size: 14px; }
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px; } }
+
+html {
+  position: relative;
+  min-height: 100%; }
+
+body {
+  margin-bottom: 60px; }
+
 
 @media (min-width: 768px) {
   html {
@@ -37,4 +50,4 @@ body {
   border-radius: 50%;
 }
 
-/* Rika end here */
+
