@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace 業務報告システム.Models
 {
@@ -9,6 +10,7 @@ namespace 業務報告システム.Models
         public int ReportId { get; set; }
 
         //提出日時
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         //今日のコメント
