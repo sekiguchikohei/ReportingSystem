@@ -123,6 +123,7 @@ namespace 業務報告システム.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect("/Home/Home");
+                    
                 }
                 if (result.RequiresTwoFactor)
                 {

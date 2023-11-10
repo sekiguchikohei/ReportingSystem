@@ -221,10 +221,14 @@ namespace 業務報告システム.Controllers
                     if (userproject.ProjectId == managerproject.ProjectId)
                     {
                         ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
-                        // マネージャー配下のメンバーリスト作成
-                        managerMain.Members.Add(user);
 
-                        managerMain.ReportNotSubmit.Add(user);
+                        if (user.Role.Equals("Member")) {
+                            // マネージャー配下のメンバーリスト作成
+                            managerMain.Members.Add(user);
+
+                            managerMain.ReportNotSubmit.Add(user);
+                        }
+                        
 
 
                     }
@@ -232,8 +236,8 @@ namespace 業務報告システム.Controllers
 
             }
 
-            managerMain.Members.Remove(managerMain.Manager);
-            managerMain.ReportNotSubmit.Remove(managerMain.Manager);
+            //managerMain.Members.Remove(managerMain.Manager);
+            //managerMain.ReportNotSubmit.Remove(managerMain.Manager);
 
             var alltodos = _context.todo.ToList();
 
@@ -304,7 +308,7 @@ namespace 業務報告システム.Controllers
             reportDetail.Projects = new List<Project>();
 
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            reportDetail.User = await _userManager.FindByIdAsync(loginUserId);
+
 
             if (id == null || _context.report == null)
             {
@@ -314,6 +318,9 @@ namespace 業務報告システム.Controllers
             var report = await _context.report
                 .Include(r => r.User)
                 .FirstOrDefaultAsync(m => m.ReportId == id);
+
+            reportDetail.User = await _userManager.FindByIdAsync(report.UserId);
+
             if (report == null)
             {
                 return NotFound();

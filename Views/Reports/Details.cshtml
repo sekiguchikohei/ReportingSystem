@@ -6,8 +6,11 @@
 
 <h1>Details</h1>
 
-<p>@Model.User.FirstName</p>
+<p>@Model.User.LastName @Model.User.FirstName</p>
+<p>@Model.Report.Date</p>
+<p>@Model.Attendance.Status</p>
 <p>@Model.Report.Comment</p>
+<p>@Model.Report.TomorrowComment</p>
 <p>Health Rating: @Model.Attendance.HealthRating</p>
 
 @if (User.IsInRole("Manager") && Model.Feedback == null)
