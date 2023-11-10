@@ -2,6 +2,12 @@
     ViewData["Title"] = "Home Page";
 }
 
+
+
+<div class="logo-home">
+    <img src="/images/logo_tate.png"/>
+</div>
+
 @if (TempData["AlertError"] != null)
 {
     <div class="alert alert-danger alert-dismissable fade show m-1" role="alert">
@@ -10,19 +16,29 @@
     </div>
 }
 
-@if (User.IsInRole("Admin"))
-{
-    <h1>あなたはAdminユーザーです</h1>
-}
-else if (User.IsInRole("Manager"))
-{
-    <h1>あなたはManagerユーザーです</h1>
-}
-else if (User.IsInRole("Member"))
-{
-    <h1>あなたはMemberユーザーです</h1>
-}
-else
-{
-    <h1>ログインしてください。</h1>
-}
+<div class="p-3">
+    @if (User.IsInRole("Admin"))
+    {
+        <h1 class="text-center">あなたはAdminユーザーです</h1>
+    }
+    else if (User.IsInRole("Manager"))
+    {
+        <h1 class="text-center">あなたはManagerユーザーです</h1>
+    }
+    else if (User.IsInRole("Member"))
+    {
+        <h1 class="text-center">あなたはMemberユーザーです</h1>
+    }
+    else
+    {
+        <h1 class="text-center">ログインしてください。</h1>
+    }
+</div>
+
+
+<style>
+    html, body{
+        background-color: #FFDE59;
+    }
+
+</style>
