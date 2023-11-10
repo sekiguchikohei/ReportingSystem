@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Build.Evaluation;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -137,31 +138,68 @@ namespace 業務報告システム.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, string[] values)
         {
-            ApplicationUser user = new ApplicationUser();
-            user.Id = id;
+            var user = await _userManager.FindByIdAsync(id);
             user.LastName = values[0];
             user.FirstName = values[1];
             user.Email = values[2];
+            user.UserName = values[2];
             user.Role = values[3];
+
+            var userProjects = _context.userproject.Where(x => x.UserId.Equals(user.Id)).ToList();
+
+            //所属プロジェクトの削除。複数プロジェクト管理するようになったらコード変更の必要あり。
+            if (userProjects != null)
+            {
+                foreach (var project in userProjects)
+                {
+                    _context.userproject.Remove(project);
+                }
+            }
+
             UserProject userProject = new UserProject();
             userProject.UserId = id;
             userProject.ProjectId = int.Parse(values[4]);
-            user.UserProjects = new List<UserProject>();
-            user.UserProjects.Add(userProject);
 
+            var allUserproject = _context.userproject.ToList();
 
-            try
+            if (userProject != null)
             {
+                if (allUserproject.Count != 0)
+                {
+                    foreach (var pj in allUserproject)
+                    {
+
+                        if (!(pj.ProjectId == userProject.ProjectId && pj.UserId.Equals(userProject.UserId)))
+                        {
+                            user.UserProjects = new List<UserProject>();
+                            user.UserProjects.Add(userProject);
+                            _context.userproject.Add(userProject);
+                        }
+                    }
+
+                }
+                else {
+                    user.UserProjects = new List<UserProject>();
+                    user.UserProjects.Add(userProject);
+                    _context.userproject.Add(userProject);
+
+                }
+                
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                
                 await _userManager.RemoveFromRoleAsync(user, values[5]);
                 await _userManager.AddToRoleAsync(user, user.Role);
                 TempData["AlertProject"] = "ユーザーを編集しました。";
-                await _userManager.UpdateAsync(user);
+                return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                return NotFound();
-            }
-            return RedirectToAction(nameof(Index));
+
+            ViewData["Projects"] = new SelectList(_context.project, "ProjectId", "Name");
+            return View(user);
 
         }
 
