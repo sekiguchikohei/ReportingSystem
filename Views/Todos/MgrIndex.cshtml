@@ -63,6 +63,9 @@
                         <p>100%</p>
                         break;
                 }   </P>
+                <form asp-controller="Todos" asp-action="Edit" asp-route-id="@Model.Todos.First().TodoId" method="get">
+                    <input type="submit" value="編集" class="btn btn-warning" />
+                </form>
             } 
         }
     }

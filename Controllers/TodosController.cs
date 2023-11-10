@@ -75,9 +75,17 @@ namespace 業務報告システム.Controllers
             }
             //Todo Edit画面でタスクIDとログインユーザーIDが一致していない場合は「アクセス権がありません」と表示する。
             //追記=================================
+
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var mgrEdit = await _context.project.FindAsync(id);
+
             if (!todo.UserId.Equals(loginUserId))
             {
+                if (User.IsInRole("Manager"))
+                {
+                    ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", todo.UserId);
+                    return View(todo);
+                }
                 return NotFound("アクセス権がありません");
             }
             //追記=================================
@@ -115,6 +123,10 @@ namespace 業務報告システム.Controllers
                     {
                         throw;
                     }
+                }
+                if (User.IsInRole("Manager"))
+                {
+                    return RedirectToAction(nameof(MgrIndex));
                 }
                 return RedirectToAction(nameof(Index));
             }
