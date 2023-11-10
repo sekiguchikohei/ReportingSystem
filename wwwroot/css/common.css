@@ -1,23 +1,21 @@
-﻿/*please use the following main colors*/
+﻿@charset "UTF-8";
+/*please use the following main colors*/
+/*�ҏW���̉ӏ����R�����g�A�E�g�ň͂�*/
+/*�J���[���g���Ƃ��ɂ͉��L�̕ϐ������g�p����*/
 html {
-  font-size: 14px;
-}
+  font-size: 14px; }
 
 @media (min-width: 768px) {
   html {
-    font-size: 16px;
-  }
-}
+    font-size: 16px; } }
+
 html {
   position: relative;
-  min-height: 100%;
-}
+  min-height: 100%; }
 
 body {
-  margin-bottom: 60px;
-}
+  margin-bottom: 60px; }
 
 .select-icon {
   height: 50px;
-  width: 50px;
-}
+  width: 50px; }
