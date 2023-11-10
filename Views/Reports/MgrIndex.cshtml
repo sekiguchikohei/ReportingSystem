@@ -8,10 +8,6 @@
 <h1>MgrIndex</h1>
 <h2>@ViewBag.MemberName</h2>
 
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -67,23 +63,10 @@
                     {
                         @if (item.ReportId.Equals(itemA.ReportId))
                         {
-                            <a asp-action="Edit" asp-route-id="@item.ReportId">Edit</a>
                             <a asp-action="Details" asp-route-id="@item.ReportId"> Details </a>
-                            <form asp-action="Delete" onsubmit="return check()">
-                                <input type="hidden" name="id" value="@item.ReportId" />
-                                <input type="submit" value="削除" class="btn btn-danger" />
-                            </form>
                         }
                     }
-                    <script>
-                        function check() {
-                            if (window.confirm('このレポートを削除しますか？')) {
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                    </script>
+                    
                 </td>
             </tr>
         }
