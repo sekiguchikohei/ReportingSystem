@@ -6,8 +6,11 @@
 
 <h1>Details</h1>
 
-<p>@Model.User.FirstName</p>
+<p>@Model.User.LastName @Model.User.FirstName</p>
+<p>@Model.Report.Date</p>
+<p>@Model.Attendance.Status</p>
 <p>@Model.Report.Comment</p>
+<p>@Model.Report.TomorrowComment</p>
 <p>Health Rating: </p>
 
 @switch (Model.Attendance.HealthRating)
@@ -28,7 +31,6 @@
         <img class="select-icon" src="/images/great.png" />
         break;
 }
-
 
 
 
@@ -85,5 +87,12 @@ else if (Model.Feedback != null)
             <input type="submit" value="削除" class="btn btn-warning" />
         </form>
 
+    }
+    @if (User.IsInRole("Member"))
+    {
+        <form asp-controller="Reports" asp-action="Edit" method="get">
+            <input type="hidden" name="id" value="@Model.Report.ReportId" />
+            <input type="submit" value="編集" class="btn btn-warning" />
+        </form>
     }
 }

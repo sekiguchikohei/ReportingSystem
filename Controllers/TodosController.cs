@@ -171,7 +171,11 @@ namespace 業務報告システム.Controllers
                 foreach (var managerproject in todoIndex.Projects) {
                     if (userproject.ProjectId == managerproject.ProjectId) {
                         ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
-                        todoIndex.Users.Add(user);
+
+                        if (user.Role.Equals("Member")) {
+                            todoIndex.Users.Add(user);
+                        }
+                        
                     }
                 }
               
@@ -196,7 +200,7 @@ namespace 業務報告システム.Controllers
 
             }
 
-            todoIndex.Users.Remove(manager);
+            //todoIndex.Users.Remove(manager);
 
             return View(todoIndex);
         }
