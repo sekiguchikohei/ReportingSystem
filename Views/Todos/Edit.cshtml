@@ -64,13 +64,28 @@
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div> *@
             @* 編集後 *@
-            <div class="form-group">
-                <input asp-for="UserId" type="hidden" asp-items="@loginUserId"/>
-            </div>
+            @if (User.IsInRole("Member"))
+            {
+                <div class="form-group">
+                    <input asp-for="UserId" type="hidden" asp-items="@loginUserId" />
+                </div>
+                <div class="form-group">
+                    <input type = "submit" value="Save" class="btn btn-primary" />
+                </div>
+            }
+            @if (User.IsInRole("Manager"))
+            {
+                   
+                <div class="form-group">
+                    <input asp-for="UserId" type="hidden" asp-items="@Model.UserId" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            }
+            
             @* 追記======================= *@
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+            
         </form>
     </div>
 </div>
