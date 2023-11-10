@@ -11,6 +11,7 @@
     var ehour = Model.Attendance.EndTime.Hour;
     var sminute = Model.Attendance.StartTime.Minute;
     var eminute = Model.Attendance.EndTime.Minute;
+    var atd = Model.Attendance.Status;
 
     switch (Model.Attendance.Status)
     {
@@ -46,15 +47,38 @@
             @* Attendance追記 *@
             <div class="form-group">
                 <label class="control-label">日付</label>
-                <input name="values" class="form-control" type="datetime-local" value="@Model.Report.Date.Year-@Model.Report.Date.Month}-@Model.Report.Date.Day"+"T@Model.Report.Date.Hour:@Model.Report.Date.Minute"/>
+                <input name="values" class="form-control" type="date-local" value="@Model.Report.Date.Year-@Model.Report.Date.Month-@Model.Report.Date.Day"/>
             </div>
             <div class="form-group">
                 <label class="control-label">勤怠</label>
-                <select name="values" class="form-control" value="@Model.Attendance.Status">
-                    <option value="出勤" status1>出勤</option>
-                    <option value="有給" status2>有給</option>
-                    <option value="早退" status3>早退</option>
-                    <option value="遅刻" status4>遅刻</option>
+                <select name="values" class="form-control" >
+                    @switch (Model.Attendance.Status)
+                    {
+                        case "出勤":
+                            <option value="出勤" selected>出勤</option>
+                            <option value="有給" >有給</option>
+                            <option value="早退" >早退</option>
+                            <option value="遅刻" >遅刻</option>
+                            break;
+                        case "有給":
+                            <option value="出勤" >出勤</option>
+                            <option value="有給" selected>有給</option>
+                            <option value="早退" >早退</option>
+                            <option value="遅刻" >遅刻</option>
+                            break;
+                        case "早退":
+                            <option value="出勤" >出勤</option>
+                            <option value="有給" >有給</option>
+                            <option value="早退" selected>早退</option>
+                            <option value="遅刻" >遅刻</option>
+                            break;
+                        case "遅刻":
+                            <option value="出勤" >出勤</option>
+                            <option value="有給" >有給</option>
+                            <option value="早退" >早退</option>
+                            <option value="遅刻" selected>遅刻</option>
+                            break;
+                    }
                 </select>
             </div>
             <div class="form-group">
@@ -110,11 +134,44 @@
             </div>
             <div class="form-group">
                 <label class="control-label">体調</label>
-                <input name="values" type="radio" value="1" /> <img class="select-icon" src="/images/bad.png" />
-                <input name="values" type="radio" value="2" /> <img class="select-icon" src="/images/soso.png" />
-                <input name="values" type="radio" value="3" checked /> <img class="select-icon" src="/images/fine.png">
-                <input name="values" type="radio" value="4" /> <img class="select-icon" src="/images/good.png" />
-                <input name="values" type="radio" value="5" /> <img class="select-icon" src="/images/great.png" />
+                @switch (Model.Attendance.HealthRating)
+                {
+                    case 1:
+                        <input name="values" type="radio" value="1" checked /> <img class="select-icon" src="/images/bad.png" />
+                        <input name="values" type="radio" value="2" /> <img class="select-icon" src="/images/soso.png" />
+                        <input name="values" type="radio" value="3"  /> <img class="select-icon" src="/images/fine.png">
+                        <input name="values" type="radio" value="4" /> <img class="select-icon" src="/images/good.png" />
+                        <input name="values" type="radio" value="5" /> <img class="select-icon" src="/images/great.png" />
+                        break;
+                    case 2:
+                        <input name="values" type="radio" value="1" /> <img class="select-icon" src="/images/bad.png" />
+                        <input name="values" type="radio" value="2" checked /> <img class="select-icon" src="/images/soso.png" />
+                        <input name="values" type="radio" value="3"  /> <img class="select-icon" src="/images/fine.png">
+                        <input name="values" type="radio" value="4" /> <img class="select-icon" src="/images/good.png" />
+                        <input name="values" type="radio" value="5" /> <img class="select-icon" src="/images/great.png" />
+                        break;
+                    case 3:
+                        <input name="values" type="radio" value="1" /> <img class="select-icon" src="/images/bad.png" />
+                        <input name="values" type="radio" value="2" /> <img class="select-icon" src="/images/soso.png" />
+                        <input name="values" type="radio" value="3" checked /> <img class="select-icon" src="/images/fine.png">
+                        <input name="values" type="radio" value="4" /> <img class="select-icon" src="/images/good.png" />
+                        <input name="values" type="radio" value="5" /> <img class="select-icon" src="/images/great.png" />
+                        break;
+                    case 4:
+                        <input name="values" type="radio" value="1" /> <img class="select-icon" src="/images/bad.png" />
+                        <input name="values" type="radio" value="2" /> <img class="select-icon" src="/images/soso.png" />
+                        <input name="values" type="radio" value="3"  /> <img class="select-icon" src="/images/fine.png">
+                        <input name="values" type="radio" value="4" checked /> <img class="select-icon" src="/images/good.png" />
+                        <input name="values" type="radio" value="5" /> <img class="select-icon" src="/images/great.png" />
+                        break;
+                    case 5:
+                        <input name="values" type="radio" value="1" /> <img class="select-icon" src="/images/bad.png" />
+                        <input name="values" type="radio" value="2" /> <img class="select-icon" src="/images/soso.png" />
+                        <input name="values" type="radio" value="3"  /> <img class="select-icon" src="/images/fine.png">
+                        <input name="values" type="radio" value="4" /> <img class="select-icon" src="/images/good.png" />
+                        <input name="values" type="radio" value="5" checked /> <img class="select-icon" src="/images/great.png" />
+                        break;
+                }
             </div>
             <div class="form-group">
                 <label class="control-label">体調コメント</label>

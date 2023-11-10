@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace 業務報告システム.Models
 {
@@ -9,13 +10,14 @@ namespace 業務報告システム.Models
         public int ReportId { get; set; }
 
         //提出日時
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         //今日のコメント
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
         //明日の予定
-        public string TomorrowComment { get; set; }
+        public string? TomorrowComment { get; set; }
 
         //User_FK
         [ForeignKey("UesrId")]
