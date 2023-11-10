@@ -14,118 +14,36 @@
 }
 
 
-<h1>Index</h1>
+<h1>TodoIndex</h1>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 
-@foreach (var item in @Model)
-{
-    @if (loginUserId.Equals(item.UserId))
-    {
-}
-    else if (loginUserId.Equals(item.UserId) == null)
-    {
-        <p>タスクはありません</p>
-    }
-}
-
-<table class="table">
-    <thead>
-        <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TaskName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Progress)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StartDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EndDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Comment)
-        </th>
-        </tr>
-    </thead>
-    <tbody>
-
-    @foreach (var item in Model) {
-        @if (loginUserId.Equals(item.UserId))
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
         {
-        <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.TaskName)
-        </td>
-        <td>
-            @switch (item.Progress)
+            @if (loginUserId.Equals(item.UserId))
             {
-                case 0:
-                    <p>0%</p>
-                    break;
-                case 1:
-                    <p>10%</p>
-                    break;
-                case 2:
-                    <p>20%</p>
-                    break;
-                case 3:
-                    <p>30%</p>
-                    break;
-                case 4:
-                    <p>40%</p>
-                    break;
-                case 5:
-                    <p>50%</p>
-                    break;
-                case 6:
-                    <p>60%</p>
-                    break;
-                case 7:
-                    <p>70%</p>
-                    break;
-                case 8:
-                    <p>80%</p>
-                    break;
-                case 9:
-                    <p>90%</p>
-                    break;
-                case 10:
-                    <p>100%</p>
-                    break;
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.TaskName)</h5>
+                            <p class="card-text">進捗: @item.Progress%</p>
+                            <p class="card-text">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
+                            <p class="card-text">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>
+                            <p class="card-text">コメント: @Html.DisplayFor(modelItem => item.Comment)</p>
+                            <div class="button-group">
+                                <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-primary">Edit</a>
+                                <form asp-action="Delete" onSubmit="return check()">
+                                    <input type="hidden" name="id" value="@item.TodoId" />
+                                    <button type="submit" class="btn btn-danger">削除</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StartDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EndDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Comment)
-        </td>
-        <td>
-            <a asp-action="Edit" asp-route-id="@item.TodoId">Edit</a> |
-            @* <a asp-action="Delete" asp-route-id="@item.TodoId">Delete</a> *@
-
-            <form asp-action="Delete" onSubmit="return check()">
-                <input type="hidden" name="id" value="@item.TodoId" />
-                <input type="submit" value="削除" class="btn btn-danger" />
-            </form>
-                <script>
-                    function check() {
-                        if (window.confirm('このTodoを削除しますか？')) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                </script>
-            </td>
-        </tr>
         }
-}
-    </tbody>
-</table>
+    </div>
+</div>
