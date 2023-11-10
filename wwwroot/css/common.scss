@@ -1,8 +1,8 @@
 
 /*please use the following main colors*/
 
-/*�ҏW���̉ӏ����R�����g�A�E�g�ň͂�*/
-/*�J���[���g���Ƃ��ɂ͉��L�̕ϐ������g�p����*/
+/*編集中の箇所をコメントアウトで囲う*/
+/*カラーを使うときには下記の変数名を使用する*/
 
 $main-blue : #38C3FF;
 $main-yellow : #FFDE59;
@@ -11,7 +11,7 @@ $navy : #0A4191;
 $gray : #EDF2F7;
 
 
-/*//////Yuyama�@Reports/MemIndex �ҏW��////////
+/*//////Yuyama　Reports/MemIndex 編集中////////
 
 
 */
@@ -38,6 +38,40 @@ body {
         width:50px;
 }
 
+
+//関口======================================
+.card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.card-body {
+    padding: 10px;
+}
+
+.card-text {
+    margin: 5px 0;
+}
+
+.btn {
+    margin: 5px 0;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+//関口======================================
+
 /*Rika from here*/
 
 .nav-logo {
@@ -59,3 +93,4 @@ body {
 }
 
 /* Rika end here */
+
