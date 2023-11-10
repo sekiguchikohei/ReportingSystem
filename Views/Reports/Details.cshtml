@@ -11,7 +11,28 @@
 <p>@Model.Attendance.Status</p>
 <p>@Model.Report.Comment</p>
 <p>@Model.Report.TomorrowComment</p>
-<p>Health Rating: @Model.Attendance.HealthRating</p>
+<p>Health Rating: </p>
+
+@switch (Model.Attendance.HealthRating)
+{
+    case 1:
+        <img class="select-icon" src="/images/bad.png" />
+        break;
+    case 2:
+        <img class="select-icon" src="/images/soso.png" />
+        break;
+    case 3:
+        <img class="select-icon" src="/images/fine.png">
+        break;
+    case 4:
+        <img class="select-icon" src="/images/good.png" />
+        break;
+    case 5:
+        <img class="select-icon" src="/images/great.png" />
+        break;
+}
+
+
 
 @if (User.IsInRole("Manager") && Model.Feedback == null)
 {
