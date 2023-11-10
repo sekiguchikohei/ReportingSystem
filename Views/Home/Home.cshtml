@@ -21,11 +21,8 @@ else if (User.IsInRole("Manager"))
 else if (User.IsInRole("Member"))
 {
     <h1>あなたはMemberユーザーです</h1>
-    <form id="myForm" action="/Reports/memindex" method="get">
-        <button type="submit" id="submitButton">特定のGETリクエスト</button>
-    </form>
-
-} else
+}
+else
 {
     <h1>ログインしてください。</h1>
 }

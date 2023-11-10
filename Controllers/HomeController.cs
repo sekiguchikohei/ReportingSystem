@@ -104,7 +104,11 @@ namespace 業務報告システム.Controllers
                     if (userproject.ProjectId == managerproject.ProjectId)
                     {
                         ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
-                        userIndex.Users.Add(user);
+
+                        if (user.Role.Equals("Member")) {
+                            userIndex.Users.Add(user);
+                        }
+                        
                     }
                 }
 
@@ -187,13 +191,16 @@ namespace 業務報告システム.Controllers
                 
             }
 
+            if (!(values[5].Equals(user.Role))) {
+                await _userManager.AddToRoleAsync(user, user.Role);
+                await _userManager.RemoveFromRoleAsync(user, values[5]);
+            }
+
             var result = await _userManager.UpdateAsync(user);
 
             if (result.Succeeded)
             {
-                
-                await _userManager.RemoveFromRoleAsync(user, values[5]);
-                await _userManager.AddToRoleAsync(user, user.Role);
+                    
                 TempData["AlertProject"] = "ユーザーを編集しました。";
                 return RedirectToAction(nameof(Index));
             }

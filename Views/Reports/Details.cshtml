@@ -6,9 +6,33 @@
 
 <h1>Details</h1>
 
-<p>@Model.User.FirstName</p>
+<p>@Model.User.LastName @Model.User.FirstName</p>
+<p>@Model.Report.Date</p>
+<p>@Model.Attendance.Status</p>
 <p>@Model.Report.Comment</p>
-<p>Health Rating: @Model.Attendance.HealthRating</p>
+<p>@Model.Report.TomorrowComment</p>
+<p>Health Rating: </p>
+
+@switch (Model.Attendance.HealthRating)
+{
+    case 1:
+        <img class="select-icon" src="/images/bad.png" />
+        break;
+    case 2:
+        <img class="select-icon" src="/images/soso.png" />
+        break;
+    case 3:
+        <img class="select-icon" src="/images/fine.png">
+        break;
+    case 4:
+        <img class="select-icon" src="/images/good.png" />
+        break;
+    case 5:
+        <img class="select-icon" src="/images/great.png" />
+        break;
+}
+
+
 
 @if (User.IsInRole("Manager") && Model.Feedback == null)
 {
@@ -63,5 +87,12 @@ else if (Model.Feedback != null)
             <input type="submit" value="削除" class="btn btn-warning" />
         </form>
 
+    }
+    @if (User.IsInRole("Member"))
+    {
+        <form asp-controller="Reports" asp-action="Edit" method="get">
+            <input type="hidden" name="id" value="@Model.Report.ReportId" />
+            <input type="submit" value="編集" class="btn btn-warning" />
+        </form>
     }
 }
