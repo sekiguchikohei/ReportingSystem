@@ -6,16 +6,14 @@
     var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
-<h1>ManagerCreate</h1>
+<div class="container-uindex">
+<h1 class="text-center">タスクの振り分け</h1>
 
-<h4>Todo</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="container-form">
         <form asp-action="MgrCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="TaskName" class="control-label"></label>
+                <label class="control-label">タスク名</label>
                 <input asp-for="TaskName" class="form-control" />
                 <span asp-validation-for="TaskName" class="text-danger"></span>
             </div>
@@ -24,24 +22,24 @@
                 <span  asp-validation-for="Progress" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
+                <label class="control-label">開始日</label>
                 <input asp-for="StartDate" class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
+                <label class="control-label">完了日</label>
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Comment" class="control-label"></label>
+                <label class="control-label">詳細</label>
                 <input asp-for="Comment" class="form-control" />
                 <span asp-validation-for="Comment" class="text-danger"></span>
             </div>
             
             @* 同じプロジェクトのMemberをプルダウン表示して選択したMemberのIdをControllerに返す *@
             <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
+                <label class="control-label">振り分け先</label>
                 <select asp-for="UserId" asp-items="ViewBag.Members" class="form-control">
             <option value="">選択してください</option>
             </select>
@@ -50,14 +48,13 @@
             @* 同じプロジェクトのMemberをプルダウン表示したMemberのIdをControllerに返す *@
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="作成" class="btn btn-warning" />
             </div>
         </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="MgrIndex">Back to List</a>
+    <a asp-action="MgrIndex">タスク一覧に戻る</a>
+
+    </div>
 </div>
 
 @section Scripts {

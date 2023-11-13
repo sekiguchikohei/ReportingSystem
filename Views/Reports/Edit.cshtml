@@ -34,12 +34,12 @@
 
 }
 
-<h1>Edit</h1>
 
-<h4>Report</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="container-uindex">
+<h1 class="text-center">報告の編集</h1>
+
+<div class="container-form">
+
         <form method="post" action="">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" name="values" value="@Model.Report.ReportId" />
@@ -82,57 +82,84 @@
                 </select>
             </div>
             <div class="form-group">
-                <label class="control-label">出社時間</label>
-                <label class="control-label">時間</label>
-                <select name="values" class="form-control">
-                    @for (int i = 0; i <= 23; i++)
-                    {
-                        @if (i == shour)
-                        {
-                            <option value="@i" selected>@i</option>
-                        }
-                        <option value="@i">@i</option>
-                    }
-                </select>
-                <label class="control-label">分</label>
-                <select name="values" class="form-control" type="time" >
-                    @for(int i = 0; i <= 45; i += 15)
-                    {
-                        @if(i == sminute)
-                        {
-                            <option value="@i" selected>@i</option>
-                        }
-                        <option value="@i">@i</option>
-                    }
+                <label class="control-label pt-2 pb-2">出社時間</label>
+                <div class="d-flex">
 
-                </select>
+                    <div>
+                        <label class="control-label">時間</label>
+                        <select name="values" class="form-control">
+                            @for (int i = 0; i <= 23; i++)
+                            {
+                                @if (i == shour)
+                                {
+                                    <option value="@i" selected>@i</option>
+                                }
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                   
+                    <div>
+                        <label class="control-label">分</label>
+                        <select name="values" class="form-control" type="time">
+                            @for (int i = 0; i <= 45; i += 15)
+                            {
+                                @if (i == sminute)
+                                {
+                                    <option value="@i" selected>@i</option>
+                                }
+                                <option value="@i">@i</option>
+                            }
+
+                        </select>
+
+
+                    </div>
+
+                </div>
+
+                
             </div>
             <div class="form-group">
-                <label class="control-label">退勤時間</label>
-                <label class="control-label">時間</label>
-                <select name="values" class="form-control" type="time" >
-                    @for (int i = 0; i <= 23; i++)
-                    {
-                        if (i == ehour)
-                        {
-                            <option value="@i" selected>@i</option>
-                        }
-                        <option value="@i">@i</option>
-                    }
-                </select>
-                <label class="control-label">分</label>
-                <select name="values" class="form-control" type="time" >
-                    @for (int i = 0; i <= 45; i += 15)
-                    {
-                        @if (i == eminute)
-                        {
-                                <option value="@i" selected>@i</option>
-                        }
-                            <option value="@i">@i</option>
-                    }
-                </select>
+                <label class="control-label pt-2 pb-2">退勤時間</label>
+
+                <div class="d-flex">
+
+                    <div>
+                        <label class="control-label">時間</label>
+                        <select name="values" class="form-control" type="time">
+                            @for (int i = 0; i <= 23; i++)
+                            {
+                                if (i == ehour)
+                                {
+                                    <option value="@i" selected>@i</option>
+                                }
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                        
+                    </div>
+
+                    <div>
+                        <label class="control-label">分</label>
+                        <select name="values" class="form-control" type="time">
+                            @for (int i = 0; i <= 45; i += 15)
+                            {
+                                @if (i == eminute)
+                                {
+                                    <option value="@i" selected>@i</option>
+                                }
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+
+                    </div>
+
+                </div>
+
+               
             </div>
-            <div class="form-group">
+            <div class="form-group pt-2 pb-2">
                 <label class="control-label">体調</label>
                 @switch (Model.Attendance.HealthRating)
                 {
@@ -209,16 +236,15 @@
             </div>
             *@
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="編集を保存" class="btn btn-warning" />
             </div>
         </form>
+        <a asp-action="MemIndex">報告一覧に戻る</a>
     </div>
-</div>
+   
 
-<div>
-    <a asp-action="MemIndex">Back to List</a>
-</div>
 
+</div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

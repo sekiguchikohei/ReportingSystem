@@ -4,95 +4,176 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
 
-<p>@Model.User.LastName @Model.User.FirstName</p>
-<p>@Model.Report.Date</p>
-<p>@Model.Attendance.Status</p>
-<p>@Model.Report.Comment</p>
-<p>@Model.Report.TomorrowComment</p>
-<p>Health Rating: </p>
+<h1 class="text-center">報告の詳細 : @Model.User.LastName @Model.User.FirstName</h1>
 
-@switch (Model.Attendance.HealthRating)
-{
-    case 1:
-        <img class="select-icon" src="/images/bad.png" />
-        break;
-    case 2:
-        <img class="select-icon" src="/images/soso.png" />
-        break;
-    case 3:
-        <img class="select-icon" src="/images/fine.png">
-        break;
-    case 4:
-        <img class="select-icon" src="/images/good.png" />
-        break;
-    case 5:
-        <img class="select-icon" src="/images/great.png" />
-        break;
-}
+<div class="container-rdetail fadeInR">
+    <p>報告日：@Model.Report.Date.Year 年 @Model.Report.Date.Month 月 @Model.Report.Date.Day 日</p>
+    <p>勤怠 : @Model.Attendance.Status</p>
+    <div class="d-flex">
+        <p>今日の体調 :  </p>
 
+        @switch (Model.Attendance.HealthRating)
+        {
+            case 1:
+                <img class="select-icon" src="/images/bad.png" />
+                break;
+            case 2:
+                <img class="select-icon" src="/images/soso.png" />
+                break;
+            case 3:
+                <img class="select-icon" src="/images/fine.png">
+                break;
+            case 4:
+                <img class="select-icon" src="/images/good.png" />
+                break;
+            case 5:
+                <img class="select-icon" src="/images/great.png" />
+                break;
+        }
 
+    </div>
+    
 
-@if (User.IsInRole("Manager") && Model.Feedback == null)
-{
-    <form method="POST" action="">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label name="values" class="control-label">印象</label>
-            <input name="values" type="radio" value="1" /> <img class="select-icon" src="/images/bad.png" />
-            <input name="values" type="radio" value="2" checked /> <img class="select-icon" src="/images/fine.png">
-            <input name="values" type="radio" value="3" /> <img class="select-icon" src="/images/great.png" />
-        </div>
-        <div class="form-group">
-            <label name="Comment" class="control-label">Comment</label>
-            <input name="values" class="form-control" placeholder="コメント"/>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="確認済み" class="btn btn-success" />
-        </div>
-    </form>
-}
-else if (User.IsInRole("Member") && Model.Feedback == null)
-{
-    <p>マネージャー未読です</p>
+    @{
+        string sTime;
+        if (Model.Attendance.StartTime.Minute == 0)
+        {
+            sTime = "00";
+        }
+        else
+        {
+            sTime = Model.Attendance.StartTime.Minute.ToString();
+        }
 
-}
-else if (Model.Feedback != null)
-{
-<p>チェックしたマネージャー：@Model.Feedback.Name</p>    
+        string eTime;
+        if (Model.Attendance.EndTime.Minute == 0)
+        {
+            eTime = "00";
+        }
+        else
+        {
+            eTime = Model.Attendance.EndTime.Minute.ToString();
+        }
 
-    @switch (Model.Feedback.Rating)
-    {
-        case 1:
-            <img class="select-icon" src="/images/bad.png" />
-            break;
-        case 2:
-            <img class="select-icon" src="/images/fine.png" />
-            break;
-        case 3:
-            <img class="select-icon" src="/images/great.png" />
-            break;
     }
 
-    @if (Model.Feedback.Comment != null)
-    {
-    <p>@Model.Feedback.Comment</p>    
-    }
+    <p>出社時間 : @Model.Attendance.StartTime.Hour : @sTime </p>
+    <p>退勤時間 : @Model.Attendance.EndTime.Hour : @eTime</p>
+    <p class="fw-bold pt-2 pb-2">報告内容</p>
+    <p>@Model.Report.Comment</p>
+    <p class="fw-bold pt-2 pb-2">明日やること</p>
+    <p>@Model.Report.TomorrowComment</p>
 
-    @if (User.IsInRole("Manager"))
+        <div class="d-flex flex-row-reverse">
+        @if (User.IsInRole("Member"))
+        {
+            <div class="p-2">
+                    <form asp-controller="Reports" asp-action="Edit" method="get">
+                        <input type="hidden" name="id" value="@Model.Report.ReportId" />
+                        <input type="submit" value="報告の編集" class="btn btn-warning" />
+                    </form>
+
+            </div>
+            
+            <div class="p-2">
+                    <form asp-action="Delete" onsubmit="return checkR()">
+                        <input type="hidden" name="id" value="@Model.Report.ReportId" />
+                        <input type="submit" value="削除" class="btn btn-danger" />
+                    </form>
+
+            </div>
+            
+        }
+    </div>
+
+</div>
+
+
+<div class="container-rdetail fadeInR">
+
+    
+    <div class="container-form">
+
+        <h3 class="text-center pt-2 pb-2">マネージャー確認欄</h3>
+    
+    @if (User.IsInRole("Manager") && Model.Feedback == null)
     {
-        <form asp-controller="Feedbacks" asp-action="Delete" onSubmit="return check()">
-            <input type="hidden" name="id" value="@Model.Feedback.FeedbackId" />
-            <input type="submit" value="削除" class="btn btn-warning" />
+        <p>報告の印象とコメントがあれば入力しましょう。</p>
+        <form method="POST" action="">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label name="values" class="control-label">印象</label>
+                <input name="values" type="radio" value="1" /> <img class="select-icon" src="/images/bad.png" />
+                <input name="values" type="radio" value="2" checked /> <img class="select-icon" src="/images/fine.png">
+                <input name="values" type="radio" value="3" /> <img class="select-icon" src="/images/great.png" />
+            </div>
+            <div class="form-group">
+                <label name="Comment" class="control-label">コメント</label>
+                <input name="values" class="form-control" placeholder="コメントがあれば入力" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="保存" class="btn btn-warning" />
+            </div>
         </form>
+    }
+    else if (User.IsInRole("Member") && Model.Feedback == null)
+    {
+        <p class="text-center pb-2">マネージャー未読です</p>
 
     }
-}
-@if (User.IsInRole("Member"))
-{
-    <form asp-controller="Reports" asp-action="Edit" method="get">
-        <input type="hidden" name="id" value="@Model.Report.ReportId" />
-        <input type="submit" value="編集" class="btn btn-warning" />
-    </form>
-}
+    else if (Model.Feedback != null)
+    {
+        <p>チェックしたマネージャー：@Model.Feedback.Name</p>
+
+        @switch (Model.Feedback.Rating)
+        {
+            case 1:
+                <img class="select-icon" src="/images/bad.png" />
+                break;
+            case 2:
+                <img class="select-icon" src="/images/fine.png" />
+                break;
+            case 3:
+                <img class="select-icon" src="/images/great.png" />
+                break;
+        }
+
+        @if (Model.Feedback.Comment != null)
+        {
+            <p>コメント : @Model.Feedback.Comment</p>
+        }
+
+        @if (User.IsInRole("Manager"))
+        {
+            <div class="text-end">
+            <form asp-controller="Feedbacks" asp-action="Delete" onSubmit="return check()">
+                <input type="hidden" name="id" value="@Model.Feedback.FeedbackId" />
+                <input type="submit" value="フィードバック削除" class="btn btn-danger" />
+            </form>
+                </div>
+        }
+    }
+    </div>
+</div>
+
+<script>
+    function check() {
+        if (window.confirm('このフィードバックを削除しますか？')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    <script>
+        function checkR() {
+            if (window.confirm('この報告を削除しますか？')) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+</script>
+
+</script>
