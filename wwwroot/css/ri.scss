@@ -4,6 +4,8 @@ $orange: #FF914D;
 $navy: #0A4191;
 $gray: #EDF2F7;
 
+
+//rika from here//
 .home-message{
     color:white;
     text-shadow:1px 1px 1px black;
@@ -133,3 +135,20 @@ $gray: #EDF2F7;
         }
     }
 }
+
+.container-form {
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 24px;
+    width: 600px;
+    height: auto;
+
+    @media (min-width: 100px) and (max-width: 767px) {
+        padding:12px;
+        width: 400px;
+        height: auto;
+    }
+}
+
+
+//rika end here//

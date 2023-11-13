@@ -36,11 +36,11 @@
        
         <div class="u-button">
 
-        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a>
+        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.ProjectId">編集</a>
 
         <form asp-controller="Projects" asp-action="Delete" onSubmit="return check()">
             <input type="hidden" name="id" value="@item.ProjectId" />
-            <input type="submit" value="Delete" class="btn btn-danger" />
+            <input type="submit" value="削除" class="btn btn-danger" />
         </form>
         </div>
             </div>

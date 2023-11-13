@@ -2,16 +2,16 @@
 
 @{
 }
-<h1>User Edit</h1>
 
 @if (User.IsInRole("Admin"))
 {
 
-    <div class="row">
-        <div class="col-md-4">
+    <div class="container-uindex">
+    <h1 class="text-center">ユーザー編集</h1>
+
+    <div class="container-form">
             <form method="post" action="">
-                <h2>Edit account.</h2>
-                <hr />
+
                 @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
                 <div class="form-floating">
                     <input name="values" class="form-control" aria-required="true" value="@Model.LastName"/>
@@ -57,11 +57,10 @@
                     <label asp-for="Input.ConfirmPassword"></label>
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                 </div> *@
-                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-warning">Register</button>
             </form>
         </div>
     </div>
-
 }
 else
 {
