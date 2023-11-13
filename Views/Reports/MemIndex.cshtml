@@ -14,16 +14,17 @@
 
 
 <div class="rmi-card-container">
+    <div class="row">
 
      @foreach (var item in Model.Reports)
         {
+        <div class="col-md-4">
         <div class="rmi-card">
-            <div class="col-md-4">
             <div class="rmi-card-body">
-            <h5 class="rmi-card-title">レポート作成日：　@item.Date.ToString("yyyy/M/d")</h5>
-            <p class ="rmi-card-text">報告内容：　@item.Comment</p>
+            <h5 class="rmi-card-title">レポート作成日：@item.Date.ToString("yyyy/M/d")</h5>
+            <p class ="rmi-card-text">報告内容：@item.Comment</p>
             <p class="rmi-card-text">
-                体調：　@foreach (var itemA in Model.Attendances)
+                体調：@foreach (var itemA in Model.Attendances)
                 {
                     @if (item.ReportId.Equals(itemA.ReportId))
                     {
@@ -54,7 +55,7 @@
                     {
                         <div class="rmi-button-group">
                         <a asp-action="Edit" asp-route-id="@item.ReportId" class="btn btn-primary">編集</a>
-                        <a asp-action="Details" asp-route-id="@item.ReportId" class="btn btn-primary"> 削除 </a>
+                        <a asp-action="Details" asp-route-id="@item.ReportId" class="btn btn-primary">詳細</a>
                         <form asp-action="Delete" onsubmit="return check()">
                             <input type="hidden" name="id" value="@item.ReportId" />
                             <input type="submit" value="削除" class="btn btn-danger" />
@@ -66,6 +67,7 @@
         </div>
         </div>
         }
+    </div>
 </div>
 
 <script>
