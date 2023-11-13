@@ -3,76 +3,17 @@
 @{
 }
 
-<h1>Manager Main ページ</h1>
+<h3>管理中のプロジェクト</h3>
+<ul>
 
-<h1>自分のプロジェクト名表示</h1>
 @foreach(var project in Model.Projects)
 {
-<p>@project.Name</p>    
+        <li>@project.Name</li>  
 
 }
+</ul>
 
-<h1>自分のチームメンバーの前日のレポート未提出者リストを表示</h1>
-@if (Model.ReportNotSubmit != null)
-{
-    @foreach (var user in Model.ReportNotSubmit)
-    {
-        <p>@user.LastName @user.FirstName</p>
-
-    }
-}
-
-
-<h1>自分のチームメンバーの未達成Todoリスト</h1>
-
-@if (Model.Todos != null)
-{
-    @foreach (var todo in Model.Todos)
-    {
-        <p>@todo.TaskName</p>
-        <p>progress: 
-            @switch (@todo.Progress)
-            {
-                case 0:
-                    <p>0%</p>
-                    break;
-                case 1:
-                    <p>10%</p>
-                    break;
-                case 2:
-                    <p>20%</p>
-                    break;
-                case 3:
-                    <p>30%</p>
-                    break;
-                case 4:
-                    <p>40%</p>
-                    break;
-                case 5:
-                    <p>50%</p>
-                    break;
-                case 6:
-                    <p>60%</p>
-                    break;
-                case 7:
-                    <p>70%</p>
-                    break;
-                case 8:
-                    <p>80%</p>
-                    break;
-                case 9:
-                    <p>90%</p>
-                    break;
-                case 10:
-                    <p>100%</p>
-                    break;
-            }
-                    </p>
-    }
-}
-
-
-<h1>今日提出されたレポートの一覧</h1>
+<h3>今日提出された報告一覧</h3>
 
 @if (Model.Reports != null)
 {
@@ -84,15 +25,16 @@
             {
                 <a asp-action="Details" asp-route-id="@user.Reports.First().ReportId">@user.LastName @user.FirstName</a>
             }
-        }       
+        }
         <p>@report.Comment</p>
 
         @foreach (var attendance in Model.Attendances)
         {
             @if (attendance.ReportId == report.ReportId)
             {
-                <p>HealthRating : 
-                @switch (@attendance.HealthRating)
+                <p>
+                    HealthRating :
+                    @switch (@attendance.HealthRating)
                     {
                         case 1:
                             <img class="select-icon" src="/images/bad.png" />
@@ -118,4 +60,79 @@
     }
 
 }
+
+
+<div class="mgr-main-contents">
+
+
+
+
+    <div class="mgrmain-flexcontents">
+        <h3>昨日の報告未提出者一覧</h3>
+        <ul>
+            @if (Model.ReportNotSubmit != null)
+            {
+                @foreach (var user in Model.ReportNotSubmit)
+                {
+                    <li>@user.LastName @user.FirstName</li>
+
+                }
+            }
+        </ul>
+    </div>
+
+    <div class="mgrmain-flexcontents">
+    <h3>メンバーの未達成タスク一覧</h3>
+
+    @if (Model.Todos != null)
+    {
+        @foreach (var todo in Model.Todos)
+        {
+            <p>@todo.TaskName</p>
+                @switch (@todo.Progress)
+                {
+                    case 0:
+                    <p>進捗 : 0%</p>
+                        break;
+                    case 1:
+                        <p>進捗 : 10%</p>
+                        break;
+                    case 2:
+                        <p>進捗 : 20%</p>
+                        break;
+                    case 3:
+                        <p>進捗 : 30%</p>
+                        break;
+                    case 4:
+                        <p>進捗 : 40%</p>
+                        break;
+                    case 5:
+                        <p>進捗 : 50%</p>
+                        break;
+                    case 6:
+                        <p>進捗 : 60%</p>
+                        break;
+                    case 7:
+                        <p>進捗 : 70%</p>
+                        break;
+                    case 8:
+                        <p>進捗 : 80%</p>
+                        break;
+                    case 9:
+                        <p>進捗 : 90%</p>
+                        break;
+                    case 10:
+                        <p>進捗 : 100%</p>
+                        break;
+                }
+                <p>目標完了日 : @todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日</p>
+        }
+    }
+    </div>
+
+</div>
+
+
+
+
 

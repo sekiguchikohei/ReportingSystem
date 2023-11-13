@@ -2,64 +2,71 @@
 
 @{
     ViewData["Title"] = "Details";
+
+    string sTime;
+    if (Model.Attendance.StartTime.Minute == 0)
+    {
+        sTime = "00";
+    }
+    else
+    {
+        sTime = Model.Attendance.StartTime.Minute.ToString();
+    }
+
+    string eTime;
+    if (Model.Attendance.EndTime.Minute == 0)
+    {
+        eTime = "00";
+    }
+    else
+    {
+        eTime = Model.Attendance.EndTime.Minute.ToString();
+    }
+
 }
 
 
 <h1 class="text-center">報告の詳細 : @Model.User.LastName @Model.User.FirstName</h1>
 
 <div class="container-rdetail fadeInR">
-    <p>報告日：@Model.Report.Date.Year 年 @Model.Report.Date.Month 月 @Model.Report.Date.Day 日</p>
-    <p>勤怠 : @Model.Attendance.Status</p>
-    <div class="d-flex">
-        <p>今日の体調 :  </p>
+    <div class="container-form">
+    <h4 class="pt-3 text-center">報告日：@Model.Report.Date.Year 年 @Model.Report.Date.Month 月 @Model.Report.Date.Day 日</h4>
+        
+    <div class="d-flex justify-content-center">
+            <p class="text-center fw-bold pt-2 pe-3">勤怠 : @Model.Attendance.Status</p>
 
-        @switch (Model.Attendance.HealthRating)
-        {
-            case 1:
-                <img class="select-icon" src="/images/bad.png" />
-                break;
-            case 2:
-                <img class="select-icon" src="/images/soso.png" />
-                break;
-            case 3:
-                <img class="select-icon" src="/images/fine.png">
-                break;
-            case 4:
-                <img class="select-icon" src="/images/good.png" />
-                break;
-            case 5:
-                <img class="select-icon" src="/images/great.png" />
-                break;
-        }
+            <div class="d-flex">
+                <p class="fw-bold pt-2 pe-1">体調 :</p>
 
+                @switch (Model.Attendance.HealthRating)
+                {
+                    case 1:
+                        <img class="select-icon" src="/images/bad.png" />
+                        break;
+                    case 2:
+                        <img class="select-icon" src="/images/soso.png" />
+                        break;
+                    case 3:
+                        <img class="select-icon" src="/images/fine.png">
+                        break;
+                    case 4:
+                        <img class="select-icon" src="/images/good.png" />
+                        break;
+                    case 5:
+                        <img class="select-icon" src="/images/great.png" />
+                        break;
+                }
+
+            </div>
     </div>
-    
+    <p class="text-center">体調コメント : @Model.Attendance.HealthComment</p>
+       
+        <div class="d-flex justify-content-center">
+            <p class="fw-bold pt-2 pb-2 pe-3">出勤時間 : @Model.Attendance.StartTime.Hour : @sTime </p>
+            <p class="fw-bold pt-2 pb-2">退勤時間 : @Model.Attendance.EndTime.Hour : @eTime</p>
 
-    @{
-        string sTime;
-        if (Model.Attendance.StartTime.Minute == 0)
-        {
-            sTime = "00";
-        }
-        else
-        {
-            sTime = Model.Attendance.StartTime.Minute.ToString();
-        }
-
-        string eTime;
-        if (Model.Attendance.EndTime.Minute == 0)
-        {
-            eTime = "00";
-        }
-        else
-        {
-            eTime = Model.Attendance.EndTime.Minute.ToString();
-        }
-
-    }
-
-    <p>出社時間 : @Model.Attendance.StartTime.Hour : @sTime </p>
-    <p>退勤時間 : @Model.Attendance.EndTime.Hour : @eTime</p>
+        </div>
+     
     <p class="fw-bold pt-2 pb-2">報告内容</p>
     <p>@Model.Report.Comment</p>
     <p class="fw-bold pt-2 pb-2">明日やること</p>
@@ -69,33 +76,32 @@
         @if (User.IsInRole("Member"))
         {
             <div class="p-2">
+                <form asp-action="Delete" onsubmit="return checkR()">
+                    <input type="hidden" name="id" value="@Model.Report.ReportId" />
+                    <input type="submit" value="削除" class="btn btn-danger" />
+                </form>
+
+            </div>
+            <div class="p-2">
                     <form asp-controller="Reports" asp-action="Edit" method="get">
                         <input type="hidden" name="id" value="@Model.Report.ReportId" />
-                        <input type="submit" value="報告の編集" class="btn btn-warning" />
+                        <input type="submit" value="編集" class="btn btn-warning" />
                     </form>
 
-            </div>
-            
-            <div class="p-2">
-                    <form asp-action="Delete" onsubmit="return checkR()">
-                        <input type="hidden" name="id" value="@Model.Report.ReportId" />
-                        <input type="submit" value="削除" class="btn btn-danger" />
-                    </form>
-
-            </div>
+            </div>       
             
         }
     </div>
 
 </div>
-
+</div>
 
 <div class="container-rdetail fadeInR">
 
     
     <div class="container-form">
 
-        <h3 class="text-center pt-2 pb-2">マネージャー確認欄</h3>
+        <h3 class="text-center pt-3 pb-2">マネージャー確認欄</h3>
     
     @if (User.IsInRole("Manager") && Model.Feedback == null)
     {
@@ -124,8 +130,9 @@
     }
     else if (Model.Feedback != null)
     {
-        <p>チェックしたマネージャー：@Model.Feedback.Name</p>
+        <p class="text-center fw-bold">チェックしたマネージャー：@Model.Feedback.Name</p>
 
+        <div class="text-center">
         @switch (Model.Feedback.Rating)
         {
             case 1:
@@ -138,10 +145,12 @@
                 <img class="select-icon" src="/images/great.png" />
                 break;
         }
+            </div>
 
         @if (Model.Feedback.Comment != null)
         {
-            <p>コメント : @Model.Feedback.Comment</p>
+            <p class="fw-bold pt-3">コメント</p>
+            <p class="pb-2">@Model.Feedback.Comment</p>
         }
 
         @if (User.IsInRole("Manager"))
@@ -166,7 +175,7 @@
         }
     }
 
-    <script>
+
         function checkR() {
             if (window.confirm('この報告を削除しますか？')) {
                 return true;
@@ -174,6 +183,4 @@
                 return false;
             }
         }
-</script>
-
 </script>
