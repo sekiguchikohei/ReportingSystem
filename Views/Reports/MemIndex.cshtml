@@ -5,122 +5,77 @@
     var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
+<div class="container-uindex">
+
 <h1>MemIndex</h1>
 
-<p>
     <a asp-action="Create">Create New</a>
-</p>
 
-@* 見本 *@
-@* <div class="card" style="width: 18rem;">
-    <img src="..." class="card-img-top" alt="...">
-    <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">An item</li>
-        <li class="list-group-item">A second item</li>
-        <li class="list-group-item">A third item</li>
-    </ul>
-    <div class="card-body">
-        <a href="#" class="card-link">Card link</a>
-        <a href="#" class="card-link">Another link</a>
-    </div>
-</div>
- *@
 @* 編集中 *@
 
-<div class="card-RMemIndex" style="width: 18rem;">
-    @foreach (var item in Model.Reports)
-    {
-    <div class="card-body-RMemIndex">
-        <h5 class="card-title-RMemIndex">@item.Date.ToString("yyyy/M/d")</h5>
-    </div>
-    <ul class="list-group list-group-flush">
-            <li class="list-group-item">Comment: @item.Comment</li>
-            <li class="list-group-item">HealthRating: 
+
+     @foreach (var item in Model.Reports)
+        {
+        <div class="rmi-card">
+            <div class="rmi-card-body">
+
+            <h5 class="rmi-card-title">Date: @item.Date.ToString("yyyy/M/d")</h5>
+            <p class ="rmi-card-text">Comment:@item.Comment</p>
+            <p class="rmi-card-text">
+                HealthRating: @foreach (var itemA in Model.Attendances)
+            {
+                @if (item.ReportId.Equals(itemA.ReportId))
+                {
+                    @switch (itemA.HealthRating)
+                    {
+                        case 1:
+                            <img class="select-icon" src="/images/bad.png" />
+                            break;
+                        case 2:
+                            <img class="select-icon" src="/images/soso.png" />
+                            break;
+                        case 3:
+                            <img class="select-icon" src="/images/fine.png">
+                            break;
+                        case 4:
+                            <img class="select-icon" src="/images/good.png" />
+                            break;
+                        case 5:
+                            <img class="select-icon" src="/images/great.png" />
+                            break;
+                    }
+                }
+            }
+            </p>
                 @foreach (var itemA in Model.Attendances)
                 {
                     @if (item.ReportId.Equals(itemA.ReportId))
                     {
-                        @switch (itemA.HealthRating)
-                        {
-                            case 1:
-                                <img class="select-icon" src="/images/bad.png" />
-                                break;
-                            case 2:
-                                <img class="select-icon" src="/images/soso.png" />
-                                break;
-                            case 3:
-                                <img class="select-icon" src="/images/fine.png">
-                                break;
-                            case 4:
-                                <img class="select-icon" src="/images/good.png" />
-                                break;
-                            case 5:
-                                <img class="select-icon" src="/images/great.png" />
-                                break;
-                        }
+                        <div class="rmi-button-group">
+                        <a asp-action="Edit" asp-route-id="@item.ReportId" class="btn btn-primary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.ReportId" class="btn btn-primary"> Details </a>
+                        <form asp-action="Delete" onsubmit="return check()">
+                            <input type="hidden" name="id" value="@item.ReportId" />
+                            <input type="submit" value="削除" class="btn btn-danger" />
+                        </form>
+                        </div>
                     }
                 }
-            </li>
-    </ul>
-
-
-
-                <td>
-                    HealthRating: @foreach (var itemA in Model.Attendances)
-                    {
-                        @if (item.ReportId.Equals(itemA.ReportId))
-                        {
-                            @switch (itemA.HealthRating)
-                            {
-                                case 1:
-                                    <img class="select-icon" src="/images/bad.png" />
-                                    break;
-                                case 2:
-                                    <img class="select-icon" src="/images/soso.png" />
-                                    break;
-                                case 3:
-                                    <img class="select-icon" src="/images/fine.png">
-                                    break;
-                                case 4:
-                                    <img class="select-icon" src="/images/good.png" />
-                                    break;
-                                case 5:
-                                    <img class="select-icon" src="/images/great.png" />
-                                    break;
-                            }
-                        }
-                    }
-                </td>
-                <td>
-                    @foreach (var itemA in Model.Attendances)
-                    {
-                        @if (item.ReportId.Equals(itemA.ReportId))
-                        {
-                            <a asp-action="Edit" asp-route-id="@item.ReportId">Edit</a>
-                            <a asp-action = "Details" asp-route-id = "@item.ReportId" > Details </a >
-                            <form asp-action="Delete" onsubmit="return check()">
-                                <input type="hidden" name="id" value="@item.ReportId"/>
-                                <input type="submit" value="削除" class="btn btn-danger" />
-                            </form>
-                            }
-                    }
-                    <script>
-                        function check() {
-                            if (window.confirm('このレポートを削除しますか？')) {
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                    </script>
-                </td>
+            </div>
+        </div>
         }
-    </tbody>
-</div>
+<script>
+    function check() {
+        if (window.confirm('このレポートを削除しますか？')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
+
+
+
 
 
 @* 編集前　ここから
@@ -201,4 +156,4 @@
         }
     </tbody>
 </table>
-編集前　ここから *@
+編集前　ここまで*@
