@@ -1,4 +1,8 @@
-﻿@charset "UTF-8";
+@charset "UTF-8";
+@use "ri";
+@use "yu";
+@use "se";
+
 .home-message {
   color: white;
   text-shadow: 1px 1px 1px black;
@@ -117,31 +121,25 @@
 }
 
 /*please use the following main colors*/
+
 /*編集中の箇所をコメントアウトで囲う*/
+/*please use the following main colors*/
 /*カラーを使うときには下記の変数名を使用する*/
-/*//////Yuyama　Reports/MemIndex 編集中////////
-
-
-*/
 html {
   height: 100%;
-  font-size: 14px;
-}
+  font-size: 14px; }
 
 @media (min-width: 768px) {
   html {
-    font-size: 16px;
-  }
-}
+    font-size: 16px; } }
+
 body {
   height: 100%;
-  margin-bottom: 60px;
-}
+  margin-bottom: 60px; }
 
 .select-icon {
   height: 50px;
-  width: 50px;
-}
+  width: 50px; }
 
 .card {
   border: 1px solid #ccc;
@@ -149,27 +147,22 @@ body {
   padding: 10px;
   margin: 10px;
   background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
 
 .card-title {
-  font-weight: bold;
-}
+  font-weight: bold; }
 
 .card-body {
-  padding: 10px;
-}
+  padding: 10px; }
 
 .card-text {
-  margin: 5px 0;
-}
+  margin: 5px 0; }
 
 .btn {
-  margin: 5px 0;
-}
+  margin: 5px 0; }
 
 .button-group {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-top: 10px; }
 }
