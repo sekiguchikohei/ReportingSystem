@@ -4,11 +4,9 @@
     ViewData["Title"] = "Index";
 }
 
-@if (User.IsInRole("Admin"))
-{
-    <a class="btn btn-primary" asp-controller="Projects" asp-action="Index">プロジェクト管理</a>
 
-}
+
+
 
 @if (TempData["AlertUser"] != null)
 {
@@ -26,19 +24,25 @@
     </div>
 }
 
-<h1>メンバーリスト</h1>
+<div class="container-uindex">
 
-<a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">ユーザー作成</a>
+<h1 class="text-center">ユーザー一覧</h1>
 
-<p>ユーザー一覧</p>
+    <div class="button-container">
+            <a class="btn btn-warning" asp-controller="Projects" asp-action="Index">プロジェクト管理</a>
+
+            <a class="btn btn-warning" asp-area="Identity" asp-page="/Account/Register">ユーザー作成</a>
+    </div>
+
 
 @foreach (var user in Model.Users)
 {
-
-        <p>名前：@user.LastName @user.FirstName</p>
+    <div class="u-card fadeIn">
+        <div class="u-info">
+        <h3>名前：@user.LastName @user.FirstName</h3>
         <p>メールアドレス：@user.Email</p>
         <p>ロール：@user.Role</p>
-    <p>参加中プロジェクト</p>
+    <p>参加中プロジェクト:</p>
     @if (Model.UserProjects != null)
     {
         @foreach (var up in Model.UserProjects)
@@ -62,19 +66,24 @@
     {
         <p>参加中プロジェクトはありません</p>
     }
-
+            </div>
+            <div class="u-button">
     @if (!(user.Role.Equals("Admin")))
     {
-        <a asp-controller="Home" asp-action="Edit" asp-route-id="@user.Id" class="btn btn-primary">編集</a>
+        <a asp-controller="Home" asp-action="Edit" asp-route-id="@user.Id" class="btn btn-warning">編集</a>
     }
 
         <form asp-action="Delete" onSubmit="return check()">
             <input type="hidden" name="id" value="@user.Id" />
             <input type="submit" value="削除" class="btn btn-danger" />
         </form>
-        <p>---------------------</p>
+            </div>
+
+        </div>
     
 }
+       
+</div>
 
 <script>
     function check() {
