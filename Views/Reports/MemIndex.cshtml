@@ -5,55 +5,56 @@
     var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
-<div class="container-uindex">
 
-<h1>MemIndex</h1>
+<h1>報告書一覧</h1>
 
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">報告書を新規作成する</a>
 
 @* 編集中 *@
 
 
+<div class="rmi-card-container">
+
      @foreach (var item in Model.Reports)
         {
         <div class="rmi-card">
+            <div class="col-md-4">
             <div class="rmi-card-body">
-
-            <h5 class="rmi-card-title">Date: @item.Date.ToString("yyyy/M/d")</h5>
-            <p class ="rmi-card-text">Comment:@item.Comment</p>
+            <h5 class="rmi-card-title">レポート作成日：　@item.Date.ToString("yyyy/M/d")</h5>
+            <p class ="rmi-card-text">報告内容：　@item.Comment</p>
             <p class="rmi-card-text">
-                HealthRating: @foreach (var itemA in Model.Attendances)
-            {
-                @if (item.ReportId.Equals(itemA.ReportId))
+                体調：　@foreach (var itemA in Model.Attendances)
                 {
-                    @switch (itemA.HealthRating)
+                    @if (item.ReportId.Equals(itemA.ReportId))
                     {
-                        case 1:
-                            <img class="select-icon" src="/images/bad.png" />
-                            break;
-                        case 2:
-                            <img class="select-icon" src="/images/soso.png" />
-                            break;
-                        case 3:
-                            <img class="select-icon" src="/images/fine.png">
-                            break;
-                        case 4:
-                            <img class="select-icon" src="/images/good.png" />
-                            break;
-                        case 5:
-                            <img class="select-icon" src="/images/great.png" />
-                            break;
+                        @switch (itemA.HealthRating)
+                        {
+                            case 1:
+                                <img class="select-icon" src="/images/bad.png" />
+                                break;
+                            case 2:
+                                <img class="select-icon" src="/images/soso.png" />
+                                break;
+                            case 3:
+                                <img class="select-icon" src="/images/fine.png">
+                                break;
+                            case 4:
+                                <img class="select-icon" src="/images/good.png" />
+                                break;
+                            case 5:
+                                <img class="select-icon" src="/images/great.png" />
+                                break;
+                        }
                     }
                 }
-            }
             </p>
                 @foreach (var itemA in Model.Attendances)
                 {
                     @if (item.ReportId.Equals(itemA.ReportId))
                     {
                         <div class="rmi-button-group">
-                        <a asp-action="Edit" asp-route-id="@item.ReportId" class="btn btn-primary">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.ReportId" class="btn btn-primary"> Details </a>
+                        <a asp-action="Edit" asp-route-id="@item.ReportId" class="btn btn-primary">編集</a>
+                        <a asp-action="Details" asp-route-id="@item.ReportId" class="btn btn-primary"> 削除 </a>
                         <form asp-action="Delete" onsubmit="return check()">
                             <input type="hidden" name="id" value="@item.ReportId" />
                             <input type="submit" value="削除" class="btn btn-danger" />
@@ -63,7 +64,10 @@
                 }
             </div>
         </div>
+        </div>
         }
+</div>
+
 <script>
     function check() {
         if (window.confirm('このレポートを削除しますか？')) {
