@@ -15,12 +15,12 @@
                 @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
                 <div class="form-floating">
                     <input name="values" class="form-control" aria-required="true" value="@Model.LastName"/>
-                    <label>LastName</label>
+                    <label>姓</label>
                     @* <span asp-validation-for="Input.LastName" class="text-danger"></span> *@
                 </div>
                 <div class="form-floating">
                     <input name="values" class="form-control" aria-required="true" value="@Model.FirstName" />
-                    <label>FirstName</label>
+                    <label>名</label>
                     @* <span asp-validation-for="Input.FirstName" class="text-danger"></span> *@
                 </div>
                 @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
@@ -29,6 +29,7 @@
                     <label >Email</label>
                     @* <span asp-validation-for="Input.Email" class="text-danger"></span> *@
                 </div>
+                <label class="control-label">ロール</label>
                 <select name="values" class="form-control" aria-required="true">
                     @switch (Model.Role)
                     {
@@ -43,7 +44,7 @@
                     }
                 </select>
                 <div class="form-group">
-                    <label class="control-label">Project</label>
+                    <label class="control-label">プロジェクト</label>
                     <select class="form-control" asp-items="ViewBag.Projects" name="values"></select>
                 </div>
                 <input type="hidden" name="values" value="@Model.Role"/>
@@ -57,7 +58,7 @@
                     <label asp-for="Input.ConfirmPassword"></label>
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                 </div> *@
-                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-warning">Register</button>
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-warning">編集情報を保存</button>
             </form>
         </div>
     </div>
