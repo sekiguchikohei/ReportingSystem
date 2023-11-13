@@ -1,6 +1,119 @@
 ﻿@charset "UTF-8";
 .home-message {
   color: white;
+  text-shadow: 1px 1px 1px black;
+  margin-bottom: 24px;
+}
+
+.nav-logo {
+  width: 110px;
+  height: 50px;
+  border-radius: 24px;
+}
+
+.logo-home {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 70px;
+  text-align: center;
+}
+.logo-home img {
+  margin: auto;
+  border-radius: 50%;
+}
+@media (min-width: 100px) and (max-width: 767px) {
+  .logo-home img {
+    height: 250px;
+    width: auto;
+  }
+}
+
+.footer-container {
+  width: 100%;
+  height: 77px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: #38C3FF;
+}
+.footer-container p {
+  color: white;
+  margin-left: 12px;
+  margin-top: 28px;
+  margin-bottom: auto;
+}
+
+.purun {
+  animation: purun 0.8s linear 0s 1;
+}
+
+@keyframes purun {
+  0% {
+    transform: scale(1, 1) translate(0%, 0%);
+  }
+  15% {
+    transform: scale(0.9, 0.9) translate(0%, 5%);
+  }
+  30% {
+    transform: scale(1.3, 0.8) translate(0%, 10%);
+  }
+  50% {
+    transform: scale(0.8, 1.3) translate(0%, -10%);
+  }
+  70% {
+    transform: scale(1.1, 0.9) translate(0%, 5%);
+  }
+  100% {
+    transform: scale(1, 1) translate(0%, 0%);
+  }
+}
+.container-uindex {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 24px;
+}
+.container-uindex .button-container {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  width: 300px;
+  display: flex;
+  gap: 24px;
+}
+.container-uindex .u-card {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 24px;
+  background: #EDF2F7;
+  border-radius: 24px;
+  width: 500px;
+  min-height: 212px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0.9;
+  animation: fadeIn 0.5s ease 0.1s 0.5 normal backwards;
+}
+.container-uindex .u-card .u-info {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 12px;
+}
+.container-uindex .u-card .u-button {
+  margin-right: auto;
+  margin-left: auto;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateX(0);
+  }
 }
 
 /*please use the following main colors*/
@@ -60,23 +173,3 @@ body {
   justify-content: space-between;
   margin-top: 10px;
 }
-
-/*Rika from here*/
-.nav-logo {
-  width: 110px;
-  height: 50px;
-  border-radius: 24px;
-}
-
-.logo-home {
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 80px;
-  text-align: center;
-}
-.logo-home img {
-  margin: auto;
-  border-radius: 50%;
-}
-
-/* Rika end here */
