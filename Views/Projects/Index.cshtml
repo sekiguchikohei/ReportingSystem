@@ -10,15 +10,20 @@
     </div>
 }
 
-<h1>Project Index</h1>
+<div class="container-uindex">
+<h1 class="text-center">プロジェクト一覧</h1>
 
-<a class="btn btn-primary" asp-action="Create">Create new Project</a>
+<div class="text-center">
+<a class="btn btn-warning" asp-action="Create">プロジェクト作成</a>
+    </div>
 
 @if (Model != null)
 {
     @foreach (var item in Model)
     {
-        <p>@item.Name</p>
+        <div class="u-card">
+            <div class="u-info">
+        <h3>@item.Name</h3>
 
         @if (item.UserProjects != null)
         {
@@ -27,19 +32,22 @@
                 <p>ユーザーID : @user.UserId</p>
             }
         }
+                </div>
        
-       
-        
+        <div class="u-button">
 
-        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a>
+        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a>
 
         <form asp-controller="Projects" asp-action="Delete" onSubmit="return check()">
             <input type="hidden" name="id" value="@item.ProjectId" />
-            <input type="submit" value="Delete" class="btn btn-warning" />
+            <input type="submit" value="Delete" class="btn btn-danger" />
         </form>
+        </div>
+            </div>
     }
     
 }
+</div>
 
 <script>
     function check() {
