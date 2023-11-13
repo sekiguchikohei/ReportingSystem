@@ -20,15 +20,15 @@
 <div class="p-3">
     @if (User.IsInRole("Admin"))
     {
-        <h1 class="text-center">あなたはAdminユーザーです</h1>
+        <h1 class="text-center">あなたはAdminです</h1>
     }
     else if (User.IsInRole("Manager"))
     {
-        <h1 class="text-center">あなたはManagerユーザーです</h1>
+        <h1 class="text-center">あなたはManagerです</h1>
     }
     else if (User.IsInRole("Member"))
     {
-        <h1 class="text-center">あなたはMemberユーザーです</h1>
+        <h1 class="text-center">あなたはMemberです</h1>
     }
     else
     {
