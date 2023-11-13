@@ -8,17 +8,16 @@ $gray: #EDF2F7;
 //////Yuyama　Reports/MemIndex 編集中////////
 
 .rmi-card-container {
-    max-height: 100px;
+    //max-height: 100px;
 
 
     .rmi-card {
         border-radius: 24px;
-        //padding: 10px;
+        padding: 10px;
         margin: 10px;
         background-color: $gray;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    /*.u-card {
+        display: flex;
+        /*.u-card {
     margin-right: auto;
     margin-left: auto;
     margin-top: 24px;
@@ -34,29 +33,36 @@ $gray: #EDF2F7;
 */
 
 
-    .rmi-card-title {
-        font-weight: bold;
-    }
+        .rmi-card-title {
+            font-weight: bold;
+        }
 
-    .rmi-card-body {
-    }
+        .rmi-card-body {
+            padding: 10px;
+            margin: 10px;
+        }
 
-    .rmi-card-text {
+        .rmi-card-text {
+            margin: 5px 0;
+            display: flex;
+            /*overflow: auto;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;*/ /* 任意の行数を指定 */
+        }
 
+        .rmi-btn {
+            margin: 5px 0;
+        }
 
-    }
-
-    .rmi-btn {
-        margin: 5px 0;
-    }
-
-    .rmi-button-group {
-        /*    display: flex;
+        .rmi-button-group {
+            /*    display: flex;
     justify-content: space-between;
     margin-top: 10px;
 */
-        margin-right: auto;
-        margin-left: auto;
+            margin-right: auto;
+            margin-left: auto;
+        }
     }
 }
 
