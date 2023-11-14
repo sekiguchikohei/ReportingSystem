@@ -5,6 +5,8 @@ namespace 業務報告システム.ViewModels
     public class MemberMain
     {
         // 単数==========================================
+
+        public Report? TodayReport { get; set; }
         public Report? Report { get; set; }
 
         public ApplicationUser LoginMember { get; set; }

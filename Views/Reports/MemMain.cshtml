@@ -1,13 +1,24 @@
 ﻿@model 業務報告システム.ViewModels.MemberMain;
 
 @{
-    // DateTime alertTime = DateTime.Now;
+    DateTime alertTime = DateTime.Now;
+    if (alertTime.Hour <= 15 && Model.Report == null)
+    {
+        TempData["AlertReportError"] = "昨日の報告がまだ提出されていません。";
+    }
+    else if (alertTime.Hour >= 16 && Model.TodayReport == null && Model.Report == null)
+    {
+        TempData["AlertReportError"] = "昨日と本日の報告がまだ提出されていません。";
+    }
+    if (alertTime.Hour >= 16 && Model.TodayReport == null)
+    {
+        TempData["AlertReportError"] = "本日の報告がまだ提出されていません。";
+    }
+    else if (alertTime.Hour >= 16 && Model.Report == null)
+    {
+        TempData["AlertReportError"] = "昨日の報告がまだ提出されていません。";
+    }
 
-    // if (alertTime.Hour > 16 && )
-    // {
-
-    //     TempData["AlertReportError"] = "本日の報告がまだ提出されていません。";
-    // }
 }
 
 @if (TempData["AlertReportError"] != null)
@@ -115,7 +126,7 @@
     }
 } else
 {
-<p>完了していないTodoはありません。</p>
+<p>完了していないタスクはありません。</p>
 }
 
 </div>

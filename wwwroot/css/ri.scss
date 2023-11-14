@@ -6,6 +6,7 @@ $gray: #EDF2F7;
 
 
 //rika from here//
+
 .home-message{
     color:white;
     text-shadow:1px 1px 1px black;
@@ -105,6 +106,19 @@ $gray: #EDF2F7;
     @media (min-width: 100px) and (max-width: 767px) {
         grid-template-columns: 1fr;
     }
+
+    a {
+        text-decoration: none;
+        color: $orange;
+        text-shadow: 1px 1px 1px white;
+    }
+
+    a:hover {
+        text-decoration: none;
+        color: $main-yellow;
+        text-shadow: 1px 1px 1px white;
+        transition:0.5s;
+    }
 }
 
 .mem-card {
@@ -116,178 +130,231 @@ $gray: #EDF2F7;
     width: 250px;
     min-height: 100px;
     align-items: center;
+    justify-content: center;
     text-align: center;
+    display: flex;
+    align-items: center;
+    animation: fadeIn 0.5s ease 0.1s 0.5 normal backwards;
 
-    h2 {
-        vertical-align: middle;
-    }
-
-    a .mgrlink {
-        text-decoration: none;
-    }
-
-    a .mgrlink:hover {
-        text-decoration: none;
-    }
-}
-
-
-
-    .container-uindex {
-        margin-right: auto;
-        margin-left: auto;
-        margin-top: 24px;
-        opacity: 0.9;
-        animation: fadeIn 0.5s ease 0.1s 0.5 normal backwards;
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-
-            to {
-                opacity: 0.9;
-                transform: translateX(0);
-            }
-        }
-
-        .button-container {
-            margin-right: auto;
-            margin-left: auto;
-            margin-top: 24px;
-            margin-bottom: 24px;
-            width: 300px;
-            display: flex;
-            justify-content: space-between;
-        }
-    }
-
-    .u-card {
-        margin-right: auto;
-        margin-left: auto;
-        margin-top: 24px;
-        background: $gray;
-        border-radius: 24px;
-        width: 480px;
-        min-height: 212px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .u-info {
-            margin-right: auto;
-            margin-left: auto;
-            margin-top: 12px;
-        }
-
-        .u-button {
-            margin-right: auto;
-            margin-left: auto;
-        }
-
-        @media (min-width: 100px) and (max-width: 992px) {
-            width: 95%;
-        }
-    }
-
-    .container-form {
-        margin-right: auto;
-        margin-left: auto;
-        margin-top: 24px;
-        width: 600px;
-        height: auto;
-
-
-        @media (min-width: 100px) and (max-width: 767px) {
-            padding: 12px;
-            width: 400px;
-            height: auto;
-        }
-    }
-
-    .container-rdetail {
-        width: 90%;
-        margin-right: auto;
-        margin-left: auto;
-        margin-top: 24px;
-        border-radius: 24px;
-        background: $gray;
-        opacity: 0.9;
-        animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
-    }
-
-    @keyframes fadeInR {
+    @keyframes fadeIn {
         from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateX(20px);
         }
 
         to {
             opacity: 0.9;
-            transform: translateY(0);
+            transform: translateX(0);
+        }
+    }
+}
+
+.container-uindex {
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 24px;
+    opacity: 0.9;
+    animation: fadeIn 0.5s ease 0.1s 0.5 normal backwards;
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        to {
+            opacity: 0.9;
+            transform: translateX(0);
         }
     }
 
-    .mgr-container {
-        margin-top: 12px;
-        padding: 12px;
-        border-radius: 12px;
+    .button-container {
         margin-right: auto;
         margin-left: auto;
-        min-height: 100px;
-        background: $gray;
-        opacity: 0.9;
-        animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
-    }
-
-    .mgr-container-sub {
-        margin-right: auto;
-        margin-left: auto;
-        width: 60%;
-
-        @media (min-width: 100px) and (max-width: 767px) {
-            width: 95%;
-        }
-    }
-
-    .mgr-main-contents {
+        margin-top: 24px;
+        margin-bottom: 24px;
+        width: 300px;
         display: flex;
         justify-content: space-between;
-        margin-top: 12px;
-        opacity: 0.9;
-        animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
+    }
+}
 
-        @media (min-width: 100px) and (max-width: 767px) {
-            margin-top: 0;
-            display: inline;
-        }
+.container-for-grid {
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 24px;
+    display: grid;
+    grid-gap: 12px;
+    grid-template-columns: 1fr 1fr;
 
-        .mgrmain-flexcontents {
-            padding: 12px;
-            width: 48%;
-            min-height: 80px;
-            height: auto;
-            border-radius: 12px;
-            background: $gray;
-
-            @media (min-width: 100px) and (max-width: 767px) {
-                margin-top: 12px;
-                margin-right: auto;
-                margin-left: auto;
-                width: 100%;
-            }
-        }
+    @media (min-width: 1201px) {
+        grid-template-columns: 1fr 1fr;
     }
 
-    .unfinish-todos {
-        padding: 12px;
-        border-radius: 12px;
-        /*border:1px solid gray;*/
-        background: $main-yellow;
-        margin-top: 6px;
+    @media (min-width: 993px) and (max-width: 1200px) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media (min-width: 767px) and (max-width: 992px) {
+        grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 100px) and (max-width: 767px) {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/*.r-card {
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 24px;
+    background: $gray;
+    border-radius: 24px;
+    width: 480px;
+    min-height: 212px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}*/
+
+.u-card {
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 24px;
+    background: $gray;
+    border-radius: 24px;
+    width: 480px;
+    min-height: 212px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .u-info {
         margin-right: auto;
         margin-left: auto;
-        width: 90%;
+        margin-top: 12px;
     }
+
+    .u-button {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    @media (min-width: 100px) and (max-width: 992px) {
+        width: 95%;
+    }
+}
+
+.container-form {
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 24px;
+    width: 600px;
+    height: auto;
+
+
+    @media (min-width: 100px) and (max-width: 767px) {
+        padding: 12px;
+        width: 95%;
+        height: auto;
+    }
+}
+
+.container-rdetail {
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 24px;
+    border-radius: 24px;
+    background: $gray;
+    opacity: 0.9;
+    animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
+}
+
+@keyframes fadeInR {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+}
+
+.mgr-container {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    margin-right: auto;
+    margin-left: auto;
+    min-height: 100px;
+    background: $gray;
+    opacity: 0.9;
+    animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
+}
+
+.mgr-container-sub {
+    margin-right: auto;
+    margin-left: auto;
+    width: 60%;
+
+    @media (min-width: 100px) and (max-width: 767px) {
+        width: 95%;
+    }
+}
+
+.mgr-main-contents {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    opacity: 0.9;
+    animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
+
+    @media (min-width: 100px) and (max-width: 767px) {
+        margin-top: 0;
+        display: inline;
+    }
+
+    .mgrmain-flexcontents {
+        padding: 12px;
+        width: 48%;
+        min-height: 80px;
+        height: auto;
+        border-radius: 12px;
+        background: $gray;
+
+        @media (min-width: 100px) and (max-width: 767px) {
+            margin-top: 12px;
+            margin-right: auto;
+            margin-left: auto;
+            width: 100%;
+        }
+    }
+}
+
+.unfinish-todos {
+    padding: 12px;
+    border-radius: 12px;
+    /*border:1px solid gray;*/
+    background: $main-yellow;
+    margin-top: 6px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 90%;
+
+    a {
+        text-decoration: none;
+        color: $main-blue;
+    }
+
+    a:hover {
+        text-decoration: none;
+        color: darkblue;
+        text-shadow: 1px 1px 1px white;
+        transition: 0.5s;
+    }
+}
     //rika end here//

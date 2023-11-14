@@ -24,7 +24,7 @@
     </div>
 }
 
-<div class="container-uindex">
+<div class="container-uindex fadeIn">
 
 <h1 class="text-center">ユーザー一覧</h1>
 
@@ -37,7 +37,7 @@
     <div class="container-for-grid">
 @foreach (var user in Model.Users)
 {
-    <div class="u-card fadeIn">
+    <div class="u-card">
         <div class="u-info">
         <h3>名前：@user.LastName @user.FirstName</h3>
         <p>メールアドレス：@user.Email</p>
