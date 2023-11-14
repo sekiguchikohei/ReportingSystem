@@ -16,7 +16,7 @@
 <div class="text-center">
 <a class="btn btn-warning" asp-action="Create">プロジェクト作成</a>
     </div>
-
+    <div class="container-for-grid">
 @if (Model != null)
 {
     @foreach (var item in Model)
@@ -44,9 +44,11 @@
         </form>
         </div>
             </div>
+            
     }
     
 }
+    </div>
 </div>
 
 <script>
