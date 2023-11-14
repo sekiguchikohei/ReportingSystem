@@ -1,8 +1,18 @@
+//テーマカラー
 $main-blue: #38C3FF;
-$main-yellow: #FFDE59;
 $orange: #FF914D;
-$navy: #0A4191;
-$gray: #EDF2F7;
+
+//ロゴ使用カラー
+
+$navy: #0A4191;  
+
+//入力フォーム
+$gray: #EDF2F7;             
+
+//ボタンカラー
+$main-yellow: #FFDE59;   
+
+
 //関口======================================
 .card {
     border: 1px solid #ccc;
@@ -57,7 +67,14 @@ $gray: #EDF2F7;
     display: none
 }
 
-
+.toggle-details {
+   /* background-color: #FFDE59;
+    color: #000;*/
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
 //関口======================================
 
 
