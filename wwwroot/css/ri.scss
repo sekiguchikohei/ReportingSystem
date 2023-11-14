@@ -143,6 +143,7 @@ $gray: #EDF2F7;
     width: 600px;
     height: auto;
 
+
     @media (min-width: 100px) and (max-width: 767px) {
         padding:12px;
         width: 400px;
@@ -159,37 +160,80 @@ $gray: #EDF2F7;
     background: $gray;
     opacity: 0.9;
     animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
+}
 
-    @keyframes fadeInR {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
+@keyframes fadeInR {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
-        to {
-            opacity: 0.9;
-            transform: translateY(0);
-        }
+    to {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+}
+
+.mgr-container {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    margin-right: auto;
+    margin-left: auto;
+    min-height: 100px;
+    background: $gray;
+    opacity: 0.9;
+    animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
+}
+
+.mgr-container-sub {
+    
+    margin-right:auto;
+    margin-left:auto;
+    width: 60%;
+
+    @media (min-width: 100px) and (max-width: 767px) {
+        width: 95%;
     }
 }
 
 .mgr-main-contents {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    margin-top: 12px;
+    opacity: 0.9;
+    animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
 
     @media (min-width: 100px) and (max-width: 767px) {
+        margin-top: 0;
         display: inline;
     }
 
     .mgrmain-flexcontents {
-        width: 40%;
-        height:auto;
+        padding: 12px;
+        width: 48%;
+        min-height: 80px;
+        height: auto;
         border-radius: 12px;
         background: $gray;
 
         @media (min-width: 100px) and (max-width: 767px) {
-            width: 90%;
+            margin-top: 12px;
+            margin-right: auto;
+            margin-left: auto;
+            width: 100%;
         }
     }
+}
+
+.unfinish-todos {
+    padding:12px;
+    border-radius:12px;
+    /*border:1px solid gray;*/
+    background:white;
+    margin-top: 6px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 90%;
 }
 //rika end here//
