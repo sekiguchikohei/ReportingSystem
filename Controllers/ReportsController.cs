@@ -165,10 +165,19 @@ namespace 業務報告システム.Controllers
                 }
             }
 
-            //昨日提出したreportのtomorrowコメント抽出（単体）
+            //今日と昨日提出したreportのtomorrowコメント抽出（単体）
             var userReports = _context.report.Where(x => x.UserId.Equals(memberMain.LoginMember.Id)).ToList();
 
+            var today = DateTime.Today;
             var yesterday = DateTime.Today.AddDays(-1);
+
+            foreach (var report in userReports)
+            {
+                if (report.Date.Year == today.Year && report.Date.Month == today.Month && report.Date.Day == today.Day)
+                {
+                    memberMain.TodayReport = report;
+                }
+            }
 
             foreach (var report in userReports)
             {
