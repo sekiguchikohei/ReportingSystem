@@ -13,7 +13,6 @@
     </div>
 }
 
-
 <h1>TodoIndex</h1>
 <p>
     <a asp-action="Create">Create New</a>
@@ -26,31 +25,33 @@
             @if (loginUserId.Equals(item.UserId))
             {
                 <div class="col-md-4">
-                    <div class="card">
+                    <div class="card position-relative" onmouseover="showHidden(this)" onmouseout="hideHidden(this)">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.TaskName)</h5>
-                                    <p class="card-text">進捗: @item.Progress%</p>
-                                    <p class="card-text">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
-                                    <p class="card-text">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>
-                                    <p class="card-text">コメント: @Html.DisplayFor(modelItem => item.Comment)</p>
+                                    <div class="d-flex justify-content-center">
+                                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.TaskName)</h5>
+                                        <p class="card-text">進捗: @item.Progress%</p>
+                                    </div>
+                                    <p class="card-text custom-hidden" style="display: none;">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
+                                    <p class="card-text custom-hidden" style="display: none;">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>
+                                    <p class="card-text custom-hidden" style="display: none;">コメント: @Html.DisplayFor(modelItem => item.Comment)</p>
                                 </div>
-                                <div>
-                                    <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-primary">Edit</a>
+                                <div class="d-flex justify-content-center align-items-end">
+                                    <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-primary me-1">Edit</a>
                                     <form asp-action="Delete" onSubmit="return check()">
                                         <input type="hidden" name="id" value="@item.TodoId" />
                                         <button type="submit" class="btn btn-danger">削除</button>
                                     </form>
                                 </div>
-                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             }
         }
     </div>
-
+</div>
 
 <script>
     function check() {
@@ -61,4 +62,17 @@
         }
     }
 
+    function showHidden(card) {
+        var hiddenElements = card.getElementsByClassName("custom-hidden");
+        for (var i = 0; i < hiddenElements.length; i++) {
+            hiddenElements[i].style.display = "block";
+        }
+    }
+
+    function hideHidden(card) {
+        var hiddenElements = card.getElementsByClassName("custom-hidden");
+        for (var i = 0; i < hiddenElements.length; i++) {
+            hiddenElements[i].style.display = "none";
+        }
+    }
 </script>
