@@ -31,7 +31,7 @@
                                 <div>
                                     <div class="d-flex justify-content-center">
                                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.TaskName)</h5>
-                                        <p class="card-text">進捗: @item.Progress%</p>
+                                        <p class="card-text">進捗: @(item.Progress * 10)%</p>
                                     </div>
                                     <p class="card-text custom-hidden" style="display: none;">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
                                     <p class="card-text custom-hidden" style="display: none;">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>

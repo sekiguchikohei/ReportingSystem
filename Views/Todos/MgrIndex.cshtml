@@ -7,72 +7,65 @@
 
 @foreach (var project in Model.Projects)
 {
-    <p>所属プロジェクト名　： @project.Name </p>
+    <p>プロジェクト名　： @project.Name </p>
 
 }
 
-<p>
-    マネージャー（ログイン中）：@Model.User.LastName @Model.User.FirstName
-</p>
-
 @foreach (var user in Model.Users)
 {
-    <p>Member: @user.LastName @user.FirstName</p>
-    if (user.Todos != null)
+    var userDivId = "user-" + user.Id;
+    <p class="mgrname">@user.LastName @user.FirstName <button class="toggle-details" data-target="details-@user.Id">詳細を表示</button></p>    if (user.Todos != null)
     {
         @foreach (var todo in user.Todos) @* Model.Todos *@
         {
             @if (todo.UserId.Equals(user.Id))
             {
-                <p>@user.LastName @user.FirstName のTask: </p>
-                <p>@todo.TaskName</p>
-        
-                <p>Progress: @switch (@todo.Progress)
-                {
-                    case 0:
-                        <p>0%</p>
-                        break;
-                    case 1:
-                        <p>10%</p>
-                        break;
-                    case 2:
-                        <p>20%</p>
-                        break;
-                    case 3:
-                        <p>30%</p>
-                        break;
-                    case 4:
-                        <p>40%</p>
-                        break;
-                    case 5:
-                        <p>50%</p>
-                        break;
-                    case 6:
-                        <p>60%</p>
-                        break;
-                    case 7:
-                        <p>70%</p>
-                        break;
-                    case 8:
-                        <p>80%</p>
-                        break;
-                    case 9:
-                        <p>90%</p>
-                        break;
-                    case 10:
-                        <p>100%</p>
-                        break;
-                }   </P>
-                <form asp-controller="Todos" asp-action="Edit" asp-route-id="@todo.TodoId" method="get">@* "@Model.Todos.First().TodoId" *@
-                    <input type="submit" value="編集" class="btn btn-warning" />
-                </form>
+                <div class="container">
+                    <div  class="mgrcard">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div  class="d-flex justify-content-center"  id="@userDivId" style="display: none;">
+                                    <p>@todo.TaskName</p>
+                                    <p>@(todo.Progress*10)%</P> 
+                                </div>
+                                <div class="details" id="details-@user.Id" style="display: none;">
+                                    <p >開始日: @Html.DisplayFor(modelItem => todo.StartDate)</p>
+                                    <p >終了日: @Html.DisplayFor(modelItem => todo.EndDate)</p>
+                                    <p >コメント: @Html.DisplayFor(modelItem => todo.Comment)</p>
+                                 </div>
+                            </div>
+                             <div>
+                                <form asp-controller="Todos" asp-action="Edit" asp-route-id="@todo.TodoId" method="get">
+                                    <input type="submit" value="編集" class="btn btn-warning" />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+               </div>
             }
-            
         }
-        
     }
     else
     {
         <p>タスクがありません</p>
     }
 }
+
+<script>
+    const toggleButtons = document.querySelectorAll(".toggle-details");
+
+    toggleButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const targetId = button.getAttribute("data-target");
+            const details = document.getElementById(targetId);
+
+            if (details.style.display === "none") {
+                details.style.display = "block";
+                button.textContent = "詳細を非表示";
+            } else {
+                details.style.display = "none";
+                button.textContent = "詳細を表示";
+            }
+        });
+    });
+</script>
