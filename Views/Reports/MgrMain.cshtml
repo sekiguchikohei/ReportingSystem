@@ -81,16 +81,19 @@
 
     <div class="mgrmain-flexcontents">
         <h3 class="text-center">昨日の報告未提出者一覧</h3>
-        <ul class="text-center">
+       
+
             @if (Model.ReportNotSubmit != null)
             {
                 @foreach (var user in Model.ReportNotSubmit)
                 {
-                    <li class="fw-bold">@user.LastName @user.FirstName</li>
+                    <div class="unfinish-todos">
+                    <h4 class="text-center">@user.LastName @user.FirstName</h4>
+                    </div>
 
                 }
             }
-        </ul>
+
     </div>
 
     <div class="mgrmain-flexcontents">
@@ -122,22 +125,22 @@
                                 <p class="text-danger fw-bold">進捗 : 40%</p>
                         break;
                     case 5:
-                                <p class="text-danger fw-bold">進捗 : 50%</p>
+                                <p class="fw-bold">進捗 : 50%</p>
                         break;
                     case 6:
-                        <p>進捗 : 60%</p>
+                                <p class="fw-bold">進捗 : 60%</p>
                         break;
                     case 7:
-                        <p>進捗 : 70%</p>
+                                <p class="fw-bold">進捗 : 70%</p>
                         break;
                     case 8:
-                        <p>進捗 : 80%</p>
+                                <p class="fw-bold text-success">進捗 : 80%</p>
                         break;
                     case 9:
-                        <p>進捗 : 90%</p>
+                                <p class="fw-bold text-success">進捗 : 90%</p>
                         break;
                     case 10:
-                        <p>進捗 : 100%</p>
+                                <p class="fw-bold text-success">進捗 : 100%</p>
                         break;
                 }
                     </div>

@@ -82,45 +82,63 @@ $gray: #EDF2F7;
     }
 }
 
-.container-uindex {
+.container-for-grid-mem {
     margin-right: auto;
     margin-left: auto;
     margin-top: 24px;
+    display: grid;
+    grid-gap: 6px;
+    grid-template-columns: 1fr 1fr 1fr;
 
-    .button-container {
-        margin-right: auto;
-        margin-left: auto;
-        margin-top: 24px;
-        margin-bottom: 24px;
-        width: 300px;
-        display: flex;
-        gap: 24px;
+    @media (min-width: 1201px) {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 
-    .u-card {
+    @media (min-width: 993px) and (max-width: 1200px) {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    @media (min-width: 767px) and (max-width: 992px) {
+        grid-template-columns: 1fr ifr;
+    }
+
+    @media (min-width: 100px) and (max-width: 767px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.mem-card {
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 24px;
+    background: $gray;
+    border-radius: 24px;
+    width: 250px;
+    min-height: 100px;
+    align-items: center;
+    text-align: center;
+
+    h2 {
+        vertical-align: middle;
+    }
+
+    a .mgrlink {
+        text-decoration: none;
+    }
+
+    a .mgrlink:hover {
+        text-decoration: none;
+    }
+}
+
+
+
+    .container-uindex {
         margin-right: auto;
         margin-left: auto;
         margin-top: 24px;
-        background: $gray;
-        border-radius: 24px;
-        width: 500px;
-        min-height: 212px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
         opacity: 0.9;
         animation: fadeIn 0.5s ease 0.1s 0.5 normal backwards;
-
-        .u-info {
-            margin-right: auto;
-            margin-left: auto;
-            margin-top: 12px;
-        }
-
-        .u-button {
-            margin-right: auto;
-            margin-left: auto;
-        }
 
         @keyframes fadeIn {
             from {
@@ -133,107 +151,143 @@ $gray: #EDF2F7;
                 transform: translateX(0);
             }
         }
-    }
-}
 
-.container-form {
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 24px;
-    width: 600px;
-    height: auto;
-
-
-    @media (min-width: 100px) and (max-width: 767px) {
-        padding:12px;
-        width: 400px;
-        height: auto;
-    }
-}
-
-.container-rdetail {
-    width:90%;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 24px;
-    border-radius: 24px;
-    background: $gray;
-    opacity: 0.9;
-    animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
-}
-
-@keyframes fadeInR {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 0.9;
-        transform: translateY(0);
-    }
-}
-
-.mgr-container {
-    margin-top: 12px;
-    padding: 12px;
-    border-radius: 12px;
-    margin-right: auto;
-    margin-left: auto;
-    min-height: 100px;
-    background: $gray;
-    opacity: 0.9;
-    animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
-}
-
-.mgr-container-sub {
-    
-    margin-right:auto;
-    margin-left:auto;
-    width: 60%;
-
-    @media (min-width: 100px) and (max-width: 767px) {
-        width: 95%;
-    }
-}
-
-.mgr-main-contents {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 12px;
-    opacity: 0.9;
-    animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
-
-    @media (min-width: 100px) and (max-width: 767px) {
-        margin-top: 0;
-        display: inline;
-    }
-
-    .mgrmain-flexcontents {
-        padding: 12px;
-        width: 48%;
-        min-height: 80px;
-        height: auto;
-        border-radius: 12px;
-        background: $gray;
-
-        @media (min-width: 100px) and (max-width: 767px) {
-            margin-top: 12px;
+        .button-container {
             margin-right: auto;
             margin-left: auto;
-            width: 100%;
+            margin-top: 24px;
+            margin-bottom: 24px;
+            width: 300px;
+            display: flex;
+            justify-content: space-between;
         }
     }
-}
 
-.unfinish-todos {
-    padding:12px;
-    border-radius:12px;
-    /*border:1px solid gray;*/
-    background:white;
-    margin-top: 6px;
-    margin-right: auto;
-    margin-left: auto;
-    width: 90%;
-}
-//rika end here//
+    .u-card {
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: 24px;
+        background: $gray;
+        border-radius: 24px;
+        width: 480px;
+        min-height: 212px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .u-info {
+            margin-right: auto;
+            margin-left: auto;
+            margin-top: 12px;
+        }
+
+        .u-button {
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        @media (min-width: 100px) and (max-width: 992px) {
+            width: 95%;
+        }
+    }
+
+    .container-form {
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: 24px;
+        width: 600px;
+        height: auto;
+
+
+        @media (min-width: 100px) and (max-width: 767px) {
+            padding: 12px;
+            width: 400px;
+            height: auto;
+        }
+    }
+
+    .container-rdetail {
+        width: 90%;
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: 24px;
+        border-radius: 24px;
+        background: $gray;
+        opacity: 0.9;
+        animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
+    }
+
+    @keyframes fadeInR {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 0.9;
+            transform: translateY(0);
+        }
+    }
+
+    .mgr-container {
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 12px;
+        margin-right: auto;
+        margin-left: auto;
+        min-height: 100px;
+        background: $gray;
+        opacity: 0.9;
+        animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
+    }
+
+    .mgr-container-sub {
+        margin-right: auto;
+        margin-left: auto;
+        width: 60%;
+
+        @media (min-width: 100px) and (max-width: 767px) {
+            width: 95%;
+        }
+    }
+
+    .mgr-main-contents {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 12px;
+        opacity: 0.9;
+        animation: fadeInR 0.5s ease 0.1s 0.5 normal backwards;
+
+        @media (min-width: 100px) and (max-width: 767px) {
+            margin-top: 0;
+            display: inline;
+        }
+
+        .mgrmain-flexcontents {
+            padding: 12px;
+            width: 48%;
+            min-height: 80px;
+            height: auto;
+            border-radius: 12px;
+            background: $gray;
+
+            @media (min-width: 100px) and (max-width: 767px) {
+                margin-top: 12px;
+                margin-right: auto;
+                margin-left: auto;
+                width: 100%;
+            }
+        }
+    }
+
+    .unfinish-todos {
+        padding: 12px;
+        border-radius: 12px;
+        /*border:1px solid gray;*/
+        background: $main-yellow;
+        margin-top: 6px;
+        margin-right: auto;
+        margin-left: auto;
+        width: 90%;
+    }
+    //rika end here//
