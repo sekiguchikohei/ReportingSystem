@@ -30,14 +30,16 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.TaskName)</h5>
-                                    <p class="card-text">進捗: @item.Progress%</p>
+                                    <div class="d-flex justify-content-center">
+                                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.TaskName)</h5>
+                                        <p class="card-text">進捗: @item.Progress%</p>
+                                    </div>
                                     <p class="card-text">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
                                     <p class="card-text">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>
                                     <p class="card-text">コメント: @Html.DisplayFor(modelItem => item.Comment)</p>
                                 </div>
-                                <div>
-                                    <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-primary">Edit</a>
+                                <div class="d-flex justify-content-center align-items-end">
+                                    <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-primary me-1">Edit</a>
                                     <form asp-action="Delete" onSubmit="return check()">
                                         <input type="hidden" name="id" value="@item.TodoId" />
                                         <button type="submit" class="btn btn-danger">削除</button>
