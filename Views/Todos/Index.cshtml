@@ -33,15 +33,42 @@
                                 <div >
                                     <div class="d-flex justify-content-center">
                                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.TaskName)</h5>
-                                        <p class="card-text">
-                                            進捗: @(item.Progress * 10)%
-                                        @if(item.Progress <= 3)
+                                        @switch(@item.Progress)
                                         {
-                                            <span style="color: red;"/>
-                                        }else {
-                                            <span style="color: #66f66;" />
+                                            case 0:
+                                                <p class="text-danger fw-bold">進捗 : 0%</p>
+                                                break;
+                                            case 1:
+                                                <p class="text-danger fw-bold">進捗 : 10%</p>
+                                                break;
+                                            case 2:
+                                                <p class="text-danger fw-bold">進捗 : 20%</p>
+                                                break;
+                                            case 3:
+                                                <p class="text-danger fw-bold">進捗 : 30%</p>
+                                                break;
+                                            case 4:
+                                                <p class="text-danger fw-bold">進捗 : 40%</p>
+                                                break;
+                                            case 5:
+                                                <p class="fw-bold">進捗 : 50%</p>
+                                                break;
+                                            case 6:
+                                                <p class="fw-bold">進捗 : 60%</p>
+                                                break;
+                                            case 7:
+                                                <p class="fw-bold">進捗 : 70%</p>
+                                                break;
+                                            case 8:
+                                                <p class="fw-bold text-success">進捗 : 80%</p>
+                                                break;
+                                            case 9:
+                                                <p class="fw-bold text-success">進捗 : 90%</p>
+                                                break;
+                                            case 10:
+                                                <p class="fw-bold text-success">進捗 : 100%</p>
+                                                break;
                                         }
-                                    </p>
                                     </div>
                                     <p class="card-text custom-hidden" style="display: none;">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
                                     <p class="card-text custom-hidden" style="display: none;">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>
