@@ -1,26 +1,18 @@
-//テーマカラー
 $main-blue: #38C3FF;
+$main-yellow: #FFDE59;
 $orange: #FF914D;
-
-//ロゴ使用カラー
-
-$navy: #0A4191;  
-
-//入力フォーム
-$gray: #EDF2F7;             
-
-//ボタンカラー
-$main-yellow: #FFDE59;   
-
+$navy: #0A4191;
+$gray: #EDF2F7;
 
 //関口======================================
 .card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
+    border: 1px solid $gray;
+    background-color: $gray;
+    border-radius: 10px;
+    /*    padding: 10px;*/
     margin: 10px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+    max-width: 500px;
 }
 
 .mgrcard {
@@ -47,6 +39,7 @@ $main-yellow: #FFDE59;
 
 .card-body {
     padding: 10px;
+/*    background-color: $gray;*/
 }
 
 .card-text {
