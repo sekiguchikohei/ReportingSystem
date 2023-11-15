@@ -118,8 +118,13 @@
             }
                     
             <div>
-                        <p>目標開始日：@todo.StartDate.Year 年 @todo.StartDate.Month 月 @todo.StartDate.Day 日</p>
-                        <p>目標完了日：@todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日</p>
+                        @{
+                            string dows = todo.StartDate.ToString("ddd");
+                            string dowe = todo.EndDate.ToString("ddd");
+                        }
+
+                        <p>目標開始日：@todo.StartDate.Year 年 @todo.StartDate.Month 月 @todo.StartDate.Day 日 (@dows)</p>
+                        <p>目標完了日：@todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日 (@dowe)</p>
             </div>
                 </div>
        </div>
