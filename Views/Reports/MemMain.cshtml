@@ -19,7 +19,7 @@
     {
         TempData["AlertReportError"] = $"{zenjitsu}と本日の報告がまだ提出されていません。";
     }
-    if (alertTime.Hour >= 16 && Model.TodayReport == null)
+    else if (alertTime.Hour >= 16 && Model.TodayReport == null)
     {
         TempData["AlertReportError"] = "本日の報告がまだ提出されていません。";
     }
