@@ -82,7 +82,7 @@ namespace 業務報告システム.Controllers
             reportIndex.Attendances = new List<Attendance>();
 
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            reportIndex.User = await _userManager.FindByEmailAsync(loginUserId);
+            reportIndex.User = await _userManager.FindByIdAsync(loginUserId);
 
             //Reportsにデータを格納
             var allReports = _context.report.Where(x => x.UserId.Equals(loginUserId)).ToList();
@@ -170,6 +170,15 @@ namespace 業務報告システム.Controllers
 
             var today = DateTime.Today;
             var yesterday = DateTime.Today.AddDays(-1);
+
+            if (yesterday.ToString("ddd").Equals("土"))
+            {
+                yesterday = yesterday.AddDays(-1);
+            }
+            else if (yesterday.ToString("ddd").Equals("日"))
+            {
+                yesterday = yesterday.AddDays(-2);
+            }
 
             foreach (var report in userReports)
             {
@@ -292,6 +301,13 @@ namespace 業務報告システム.Controllers
             }
 
             DateTime yesterday = DateTime.Today.AddDays(-1);
+
+            if (yesterday.ToString("ddd").Equals("土")) {
+                yesterday = yesterday.AddDays(-1);
+            } else if(yesterday.ToString("ddd").Equals("日")) {
+                yesterday = yesterday.AddDays(-2);
+            }
+
             var allYesterdayReports = _context.report.Where(x => x.Date.Year == yesterday.Year && x.Date.Month == yesterday.Month && x.Date.Day == yesterday.Day).ToList();
             var allYesterdayAttendances = _context.attendance.Where(x => x.Date.Year == yesterday.Year && x.Date.Month == yesterday.Month && x.Date.Day == yesterday.Day).ToList();
 

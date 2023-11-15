@@ -2,13 +2,22 @@
 
 @{
     DateTime alertTime = DateTime.Now;
+
+    string zenjitsu = "昨日";
+    DateTime yesterday = DateTime.Today.AddDays(-1);
+
+    if (yesterday.ToString("ddd").Equals("日") || yesterday.ToString("ddd").Equals("土"))
+    {
+        zenjitsu = "金曜日";
+    }
+
     if (alertTime.Hour <= 15 && Model.Report == null)
     {
-        TempData["AlertReportError"] = "昨日の報告がまだ提出されていません。";
+        TempData["AlertReportError"] = $"{zenjitsu}の報告がまだ提出されていません。";
     }
     else if (alertTime.Hour >= 16 && Model.TodayReport == null && Model.Report == null)
     {
-        TempData["AlertReportError"] = "昨日と本日の報告がまだ提出されていません。";
+        TempData["AlertReportError"] = $"{zenjitsu}と本日の報告がまだ提出されていません。";
     }
     if (alertTime.Hour >= 16 && Model.TodayReport == null)
     {
@@ -16,7 +25,7 @@
     }
     else if (alertTime.Hour >= 16 && Model.Report == null)
     {
-        TempData["AlertReportError"] = "昨日の報告がまだ提出されていません。";
+        TempData["AlertReportError"] = $"{zenjitsu}の報告がまだ提出されていません。";
     }
 
 }
