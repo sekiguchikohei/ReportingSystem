@@ -13,32 +13,42 @@
     </div>
 }
 
-<h1>TodoIndex</h1>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 
-<div class="container">
-    <div>
+    <h1>タスク一覧</h1>
+    <p>
+    <a asp-action="Create" 　class="btn btn-warning me-1">新規作成</a>
+    </p>
+
+
+@* <div> *@
+<div class="container-for-grid">
         @foreach (var item in Model)
         {
             @if (loginUserId.Equals(item.UserId))
             {
-                <div>
+                <div >
                     <div class="card " onmouseover="showHidden(this)" onmouseout="hideHidden(this)">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
-                                <div>
+                                <div >
                                     <div class="d-flex justify-content-center">
                                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.TaskName)</h5>
-                                        <p class="card-text">進捗: @(item.Progress * 10)%</p>
+                                        <p class="card-text">
+                                            進捗: @(item.Progress * 10)%
+                                        @if(item.Progress <= 3)
+                                        {
+                                            <span style="color: red;"/>
+                                        }else {
+                                            <span style="color: #66f66;" />
+                                        }
+                                    </p>
                                     </div>
                                     <p class="card-text custom-hidden" style="display: none;">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
                                     <p class="card-text custom-hidden" style="display: none;">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>
                                     <p class="card-text custom-hidden" style="display: none;">コメント: @Html.DisplayFor(modelItem => item.Comment)</p>
                                 </div>
                                 <div class="d-flex justify-content-center align-items-end">
-                                    <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-primary me-1">Edit</a>
+                                <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-warning me-1">編集</a>
                                     <form asp-action="Delete" onSubmit="return check()">
                                         <input type="hidden" name="id" value="@item.TodoId" />
                                         <button type="submit" class="btn btn-danger">削除</button>
@@ -51,7 +61,7 @@
             }
         }
     </div>
-</div>
+@* </div> *@
 
 <script>
     function check() {
