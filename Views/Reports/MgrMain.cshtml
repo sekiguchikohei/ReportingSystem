@@ -18,7 +18,7 @@
 </div>
 
 <div class="mgr-container">
-<h3 class="text-center">今日提出された報告一覧</h3>
+<h3 class="text-center">今日の報告一覧</h3>
     <p class="text-center">メンバー名クリックで報告の詳細にアクセス</p>
 
 @if (Model.Reports != null)
@@ -87,7 +87,18 @@
 <div class="mgr-main-contents">
 
     <div class="mgrmain-flexcontents">
-        <h3 class="text-center">昨日の報告未提出者一覧</h3>
+
+        @{
+            string zenjitsu = "昨日の報告未提出者一覧";
+            DateTime yesterday = DateTime.Today.AddDays(-1);
+            if (yesterday.ToString("ddd").Equals("日") || yesterday.ToString("ddd").Equals("土"))
+            {
+                zenjitsu = "金曜日の報告未提出者一覧";
+            }
+
+        }
+
+        <h3 class="text-center">@zenjitsu</h3>
        
 
             @if (Model.ReportNotSubmit != null)

@@ -219,7 +219,7 @@ $gray: #EDF2F7;
 }
 
 .r-card {
-    padding:12px;
+    padding: 12px;
     margin-right: auto;
     margin-left: auto;
     margin-top: 12px;
@@ -230,6 +230,10 @@ $gray: #EDF2F7;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    @media (min-width: 1201px) {
+        width:550px;
+    }
 
     @media (min-width: 100px) and (max-width: 767px) {
         width: 100%;
@@ -356,12 +360,12 @@ $gray: #EDF2F7;
 .unfinish-todos {
     padding: 12px;
     border-radius: 12px;
-    /*border:1px solid gray;*/
     background: $main-yellow;
     margin-top: 6px;
     margin-right: auto;
     margin-left: auto;
     width: 90%;
+    transition:transform .6s ease;
 
     a {
         text-decoration: none;
@@ -374,5 +378,9 @@ $gray: #EDF2F7;
         text-shadow: 1px 1px 1px white;
         transition: 0.5s;
     }
+}
+
+.unfinish-todos:hover {
+    transform:scale(1.05);
 }
     //rika end here//
