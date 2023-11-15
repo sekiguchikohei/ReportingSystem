@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Composition;
 using System.Security.Claims;
 using 業務報告システム.Data;
 using 業務報告システム.Models;
+using 業務報告システム.ViewModels;
 
 namespace 業務報告システム.Controllers
 {
@@ -106,6 +108,47 @@ namespace 業務報告システム.Controllers
             return View(project);
         }
 
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.project == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.project.FindAsync(id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            ProjectDetails projectDetails = new ProjectDetails();
+            projectDetails.Managers = new List<ApplicationUser>();
+            projectDetails.Members = new List<ApplicationUser>();
+            projectDetails.Project = project;
+
+            var allUserProjects = _context.userproject.Where(x => x.ProjectId == project.ProjectId).ToList();
+
+            if (allUserProjects != null) {
+                foreach (var up in allUserProjects)
+                {
+                    ApplicationUser user = await _userManager.FindByIdAsync(up.UserId);
+
+                    if (user.Role.Equals("Member"))
+                    {
+                        projectDetails.Members.Add(user);
+                    } else if (user.Role.Equals("Manager"))
+                    {
+                        projectDetails.Managers.Add(user);
+                    }
+
+                }
+            }
+            
+
+            return View(projectDetails);
+        }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
