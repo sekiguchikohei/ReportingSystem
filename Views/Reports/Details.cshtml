@@ -23,6 +23,7 @@
         eTime = Model.Attendance.EndTime.Minute.ToString();
     }
 
+    string dow = Model.Report.Date.ToString("ddd");
 }
 
 
@@ -30,7 +31,7 @@
 
 <div class="container-rdetail fadeInR">
     <div class="container-form">
-    <h4 class="pt-3 text-center">報告日：@Model.Report.Date.Year 年 @Model.Report.Date.Month 月 @Model.Report.Date.Day 日</h4>
+    <h4 class="pt-3 text-center">報告日：@Model.Report.Date.Year 年 @Model.Report.Date.Month 月 @Model.Report.Date.Day 日 (@dow)</h4>
         
     <div class="d-flex justify-content-center">
             <p class="text-center fw-bold pt-2 pe-3">勤怠 : @Model.Attendance.Status</p>

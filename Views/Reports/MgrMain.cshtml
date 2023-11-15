@@ -26,6 +26,8 @@
 
     @foreach (var report in Model.Reports)
     {
+        
+
             <div class="unfinish-todos">
                 <div class="d-flex justify-content-between">
        
@@ -33,9 +35,13 @@
         {
             @if (report.UserId.Equals(user.Id))
             {
+                            
 
-                        <a asp-action="Details" asp-route-id="@user.Reports.First().ReportId">
-                            <h3 class="mt-2">@report.Date.Year 年 @report.Date.Month 月 @report.Date.Day 日 @user.LastName @user.FirstName</h3>
+                            <a asp-action="Details" asp-route-id="@user.Reports.First().ReportId">
+
+                           
+
+                                <h3 class="mt-2">@report.Date.Year 年 @report.Date.Month 月 @report.Date.Day 日 @user.LastName @user.FirstName</h3>
                         </a>
 
             }
@@ -145,7 +151,12 @@
                         break;
                 }
                     </div>
-                <p class="mt-0">目標完了日 : @todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日</p>
+
+                    @{
+                        string dow = todo.EndDate.ToString("ddd");
+                    }
+
+                <p class="mt-0">目標完了日 : @todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日 (@dow)</p>
                 </div>
         }
     }

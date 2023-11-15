@@ -3,13 +3,21 @@
 @{
     ViewData["Title"] = "MgrIndex";
     var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
 }
 
 <h2 class="text-center">報告一覧　@ViewBag.MemberName</h2>
 <div class="container-for-grid">
         @foreach (var item in Model.Reports)
         {
-                    <h3>@item.Date.Year 年 @item.Date.Month 月 @item.Date.Day 日</h3>
+          
+        <div class="r-card">
+
+            @{
+                string dow = item.Date.ToString("ddd");
+            }
+
+            <h4>@item.Date.Year 年 @item.Date.Month 月 @item.Date.Day 日 (@dow)</h4>
 
                     @foreach (var itemA in Model.Attendances)
                     {
@@ -45,7 +53,8 @@
                             <a asp-action="Details" asp-route-id="@item.ReportId" class="btn btn-warning">詳細</a>
                         }
                     }
-                    
-        }
+            
+        </div>
+    }
 
 </div>
