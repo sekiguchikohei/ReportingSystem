@@ -19,13 +19,13 @@
 </p>
 
 <div class="container">
-    <div class="row">
+    <div>
         @foreach (var item in Model)
         {
             @if (loginUserId.Equals(item.UserId))
             {
-                <div class="col-md-4">
-                    <div class="card position-relative" onmouseover="showHidden(this)" onmouseout="hideHidden(this)">
+                <div>
+                    <div class="card " onmouseover="showHidden(this)" onmouseout="hideHidden(this)">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
