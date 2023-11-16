@@ -184,6 +184,7 @@ namespace 業務報告システム.Areas.Identity.Pages.Account
             }
 
             // If we got this far, something failed, redisplay form
+            ViewData["Projects"] = new SelectList(_context.project, "ProjectId", "Name");
             return Page();
         }
 

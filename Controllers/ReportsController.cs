@@ -552,25 +552,50 @@ namespace 業務報告システム.Controllers
                 UserId = loginUserId
             };
 
-            _context.Add(report);
-            await _context.SaveChangesAsync();
-
-            Attendance attendance = new Attendance()
+            if (ModelState.IsValid)
             {
-                Date = submitDay,
-                Status = values[1],
-                StartTime = startTime,
-                EndTime = endTime,
-                HealthRating = int.Parse(values[6]),
-                HealthComment = values[7],
-                ReportId = report.ReportId,
-            };
+                _context.Add(report);
+                await _context.SaveChangesAsync();
 
-            _context.Add(attendance);
-            await _context.SaveChangesAsync();
+                Attendance attendance = new Attendance()
+                {
+                    Date = submitDay,
+                    Status = values[1],
+                    StartTime = startTime,
+                    EndTime = endTime,
+                    HealthRating = int.Parse(values[6]),
+                    HealthComment = values[7],
+                    ReportId = report.ReportId,
+                };
 
-            TempData["AlertReport"] = "報告を作成しました。";
-            return RedirectToAction(nameof(MemIndex));
+                if (ModelState.IsValid) { 
+                }
+                _context.Add(attendance);
+                await _context.SaveChangesAsync();
+
+                TempData["AlertReport"] = "報告を作成しました。";
+                return RedirectToAction(nameof(MemIndex));
+
+            }
+            else {
+                return View();
+            }
+            
+
+           
+
+
+            //ModelState.Remove("Users");
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(project);
+            //    await _context.SaveChangesAsync();
+            //    TempData["AlertProject"] = "新しいプロジェクトを追加しました。";
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //return View(project);
+
+
 
         }
 
