@@ -70,7 +70,7 @@
                     <input asp-for="UserId" type="hidden" asp-items="@loginUserId" />
                 </div>
                 <div class="form-group">
-                    <input type = "submit" value="保存" class="btn btn-warning" />
+                    <input type="submit" value="保存" class="w-100 btn btn-lg btn-warning" />
                 </div>
             }
             @if (User.IsInRole("Manager"))
@@ -80,7 +80,7 @@
                     <input asp-for="UserId" type="hidden" asp-items="@Model.UserId" />
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="保存" class="btn btn-warning" />
+                    <input type="submit" value="保存" class="w-100 btn btn-lg btn-warning" />
                 </div>
             }
             
