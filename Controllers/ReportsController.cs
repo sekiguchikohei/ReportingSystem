@@ -33,7 +33,7 @@ namespace 業務報告システム.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> MgrIndex(string? Id)
         {
-            if (Id == null || _context.todo == null)
+            if (Id == null || _context.report == null)
             {
                 return NotFound("存在しません");
             }
@@ -42,12 +42,14 @@ namespace 業務報告システム.Controllers
             reportIndex.User = new ApplicationUser();
             reportIndex.Reports = new List<Report>();
             reportIndex.Attendances = new List<Attendance>();
+            reportIndex.Feedbacks = new List<Feedback>();
 
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             reportIndex.User = (ApplicationUser)_context.Users.FirstOrDefault(x => x.Id == Id);
 
             var allReports = _context.report.Where(x => x.UserId.Equals(Id)).ToList();
             var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(Id)).ToList();
+            var allFeedback = _context.feedback.ToList();
 
             foreach (var report in allReports)
             {
@@ -66,6 +68,8 @@ namespace 業務報告システム.Controllers
                 at.ReportId = attendance.ReportId;
                 reportIndex.Attendances.Add(at);
             }
+
+            reportIndex.Feedbacks = allFeedback;
 
             ViewBag.MemberName = $"{reportIndex.User.LastName} {reportIndex.User.FirstName}";
 
@@ -565,7 +569,7 @@ namespace 業務報告システム.Controllers
             _context.Add(attendance);
             await _context.SaveChangesAsync();
 
-
+            TempData["AlertReport"] = "報告を作成しました。";
             return RedirectToAction(nameof(MemIndex));
 
         }
@@ -657,6 +661,7 @@ namespace 業務報告システム.Controllers
                 await _context.SaveChangesAsync();
                 _context.Update(attendance);
                 await _context.SaveChangesAsync();
+                TempData["AlertReport"] = "報告を編集しました。";
                 return RedirectToAction(nameof(MemIndex));
             }
 
@@ -703,6 +708,7 @@ namespace 業務報告システム.Controllers
             }
 
             await _context.SaveChangesAsync();
+            TempData["AlertReport"] = "報告を削除しました。";
             return RedirectToAction(nameof(MemIndex));
         }
 

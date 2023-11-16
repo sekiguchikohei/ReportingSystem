@@ -27,6 +27,7 @@ namespace 業務報告システム.Models
         public int HealthRating { get; set; }
 
         //体調・健康状態のコメント
+        [MaxLength(50)]
         public string? HealthComment { get; set; }
 
         //FK

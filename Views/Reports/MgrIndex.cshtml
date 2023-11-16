@@ -17,6 +17,31 @@
                 string dow = item.Date.ToString("ddd");
             }
 
+            @if (Model.Feedbacks != null)
+            {
+                int count = 0;
+
+                @foreach (var fb in Model.Feedbacks)
+                {
+                    @if (fb.ReportId == item.ReportId)
+                    {
+                        count += 1;    
+                    }
+
+
+                }
+                @if (count == 0)
+                {
+                    <p class="mt-2 text-danger fw-bold">未読</p>
+                }
+
+                count = 0;
+            }else
+            {
+                <p class="mt-2 text-danger fw-bold">未読</p>
+            }
+
+
             <h4>@item.Date.Year 年 @item.Date.Month 月 @item.Date.Day 日 (@dow)</h4>
 
                     @foreach (var itemA in Model.Attendances)

@@ -11,5 +11,7 @@ namespace 業務報告システム.ViewModels
         public List<Report> Reports { get; set;} 
 
         public List<Attendance> Attendances { get; set;}
+
+        public List<Feedback>? Feedbacks {  get; set;} 
     }
 }
