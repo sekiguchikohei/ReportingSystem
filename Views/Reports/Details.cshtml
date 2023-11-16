@@ -167,6 +167,15 @@
     </div>
 </div>
 
+@if (User.IsInRole("Member"))
+{
+    <a asp-action="MemIndex">一覧に戻る</a>
+} else if (User.IsInRole("Manager"))
+{
+    <a asp-controller="Home" asp-action="MgrIndex">メンバー一覧に戻る</a>
+}
+
+
 <script>
     function check() {
         if (window.confirm('このフィードバックを削除しますか？')) {
