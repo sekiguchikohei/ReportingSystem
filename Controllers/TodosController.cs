@@ -126,8 +126,10 @@ namespace 業務報告システム.Controllers
                 }
                 if (User.IsInRole("Manager"))
                 {
+                    TempData["AlertTodo"] = "タスクを編集しました。";
                     return RedirectToAction(nameof(MgrIndex));
                 }
+                TempData["AlertTodo"] = "タスクを編集しました。";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", todo.UserId);
@@ -252,7 +254,7 @@ namespace 業務報告システム.Controllers
                 _context.todo.Remove(todo);
            // }
 
-            TempData["AlertTodo"] = "Todoを削除しました。";
+            TempData["AlertTodo"] = "タスクを削除しました。";
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
            
@@ -369,6 +371,7 @@ namespace 業務報告システム.Controllers
             {
                 _context.Add(todo);
                 await _context.SaveChangesAsync();
+                TempData["AlertTodo"] = "タスクを作成しました。";
                 return RedirectToAction(nameof(MgrIndex));
             }
             return View(todo);
