@@ -11,6 +11,9 @@ $gray: #EDF2F7;
     border-radius: 10px;
     margin: 10px;
     max-width: 500px;
+    margin-top:10px;
+    margin-right:auto;
+    margin-left:auto;
 }
 
 .mgrcard p {
@@ -19,7 +22,7 @@ $gray: #EDF2F7;
 
 .mgr-center {
     margin:auto;
-    align-items:center;
+    text-align:center;
 }
 
 .mgrname {
