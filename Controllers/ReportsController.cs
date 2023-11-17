@@ -118,6 +118,7 @@ namespace 業務報告システム.Controllers
             MemberMain memberMain = new MemberMain();
             memberMain.Projects = new List<Project>();
             memberMain.Todos = new List<Todo>();
+            memberMain.Managers = new List<ApplicationUser>();
 
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             memberMain.LoginMember = await _userManager.FindByIdAsync(loginUserId);
@@ -152,7 +153,7 @@ namespace 業務報告システム.Controllers
 
                         if (await _userManager.IsInRoleAsync(user, "Manager"))
                         {
-                            memberMain.Manager = user;
+                            memberMain.Managers.Add(user);
                         }
                     }
                 }
