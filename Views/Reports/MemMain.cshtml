@@ -52,11 +52,15 @@
 <p>所属プロジェクトはありません。</p>    
 }
     <div class="mgr-container-sub">
-<div class="d-flex justify-content-center">
-<h3>報告先 : </h3>
-@if (Model.Manager != null)
+<div class="text-center">
+<h4>報告先</h4>
+@if (Model.Managers != null)
 {
-    <h3>@Model.Manager.LastName @Model.Manager.FirstName</h3>
+                @foreach (var manager in Model.Managers)
+                {
+                    <h3>@manager.LastName @manager.FirstName</h3>
+                }
+               
 } else
 {
   <p>マネージャーの登録がありません。</p>  
