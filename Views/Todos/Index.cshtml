@@ -20,75 +20,52 @@
     </p>
 </div>
 
-@* <div> *@
 <div class="container-for-grid">
-        @foreach (var item in Model)
-        {
-            @if (loginUserId.Equals(item.UserId))
-            {
-                <div >
-                    <div class="card " onmouseover="showHidden(this)" onmouseout="hideHidden(this)">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div >
-                                    <div class="d-flex justify-content-center">
-                                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.TaskName)</h5>
-                                        @switch(@item.Progress)
-                                        {
-                                            case 0:
-                                                <p class="text-danger fw-bold">進捗 : 0%</p>
-                                                break;
-                                            case 1:
-                                                <p class="text-danger fw-bold">進捗 : 10%</p>
-                                                break;
-                                            case 2:
-                                                <p class="text-danger fw-bold">進捗 : 20%</p>
-                                                break;
-                                            case 3:
-                                                <p class="text-danger fw-bold">進捗 : 30%</p>
-                                                break;
-                                            case 4:
-                                                <p class="text-danger fw-bold">進捗 : 40%</p>
-                                                break;
-                                            case 5:
-                                                <p class="fw-bold">進捗 : 50%</p>
-                                                break;
-                                            case 6:
-                                                <p class="fw-bold">進捗 : 60%</p>
-                                                break;
-                                            case 7:
-                                                <p class="fw-bold">進捗 : 70%</p>
-                                                break;
-                                            case 8:
-                                                <p class="fw-bold text-success">進捗 : 80%</p>
-                                                break;
-                                            case 9:
-                                                <p class="fw-bold text-success">進捗 : 90%</p>
-                                                break;
-                                            case 10:
-                                                <p class="fw-bold text-success">進捗 : 100%</p>
-                                                break;
-                                        }
-                                    </div>
-                                    <p class="card-text custom-hidden" style="display: none;">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
-                                    <p class="card-text custom-hidden" style="display: none;">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>
-                                    <p class="card-text custom-hidden" style="display: none;">コメント: @Html.DisplayFor(modelItem => item.Comment)</p>
-                                </div>
-                                <div class="d-flex justify-content-center align-items-end">
-                                <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-warning me-1">編集</a>
-                                    <form asp-action="Delete" onSubmit="return check()">
-                                        <input type="hidden" name="id" value="@item.TodoId" />
-                                        <button type="submit" class="btn btn-danger">削除</button>
-                                    </form>
-                                </div>
+    @foreach (var item in Model)
+    {
+        <div >
+            <div class="card " onmouseover="showHidden(this)" onmouseout="hideHidden(this)">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div >
+                            <div class="d-flex justify-content-center">
+                                <h5 class="card-title">@Html.DisplayFor(modelItem => item.TaskName)</h5>
+                                @if(item.Progress <= 4)
+                                {
+                                    <p class="text-danger fw-bold">
+                                        進捗: @(item.Progress * 10)%
+                                    </p>
+                                }
+                                else if(item.Progress <= 7)
+                                {
+                                    <p class="fw-bold">
+                                        進捗: @(item.Progress * 10)%
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="text-success fw-bold">
+                                        進捗: @(item.Progress * 10)%
+                                    </p>
+                                }
                             </div>
+                            <p class="card-text custom-hidden" style="display: none;">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
+                            <p class="card-text custom-hidden" style="display: none;">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>
+                            <p class="card-text custom-hidden" style="display: none;">コメント: @Html.DisplayFor(modelItem => item.Comment)</p>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-end">
+                        <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-warning me-1">編集</a>
+                            <form asp-action="Delete" onSubmit="return check()">
+                                <input type="hidden" name="id" value="@item.TodoId" />
+                                <button type="submit" class="btn btn-danger">削除</button>
+                            </form>
                         </div>
                     </div>
                 </div>
-            }
-        }
-    </div>
-@* </div> *@
+            </div>
+        </div>
+    }
+</div>
 
 <script>
     function check() {
