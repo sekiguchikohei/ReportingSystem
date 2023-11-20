@@ -40,7 +40,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label">詳細(300文字以内)</label>
-                <input asp-for="Comment" class="form-control" />
+                <textarea asp-for="Comment" class="form-control" style="height:200px;"></textarea>
                 <span asp-validation-for="Comment" class="text-danger"/>
             </div>
             @if (User.IsInRole("Member"))

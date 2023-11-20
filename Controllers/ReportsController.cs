@@ -473,6 +473,20 @@ namespace 業務報告システム.Controllers
         [Authorize(Roles = "Member")]
         public IActionResult Create()
         {
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var Re = _context.user.Include(x => x.Reports).Where(x => x.Id.Equals(loginUserId)).ToList();
+            var At = _context.report.Include(x => x.Attendance).Where(x => x.ReportId == Re.Last().Reports.Last().ReportId).ToList();
+
+            int startHour = At.First().Attendance.StartTime.Hour;
+            int startMinute = At.First().Attendance.StartTime.Minute;
+            int endHour = At.First().Attendance.EndTime.Hour;
+            int endMinute = At.First().Attendance.EndTime.Minute;
+
+            ViewBag.StartHour = startHour;
+            ViewBag.StartMinute = startMinute;
+            ViewBag.EndHour = endHour;
+            ViewBag.EndMinute = endMinute;
+
             return View();
         }
 

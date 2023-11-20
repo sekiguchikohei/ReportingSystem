@@ -206,11 +206,11 @@
             </div>
             <div class="form-group">
                 <label class="control-label">報告内容(400文字以内)</label>
-                <textarea name="values" class="form-control" maxlength="400">@Model.Report.Comment</textarea>
+                <textarea name="values" class="form-control" maxlength="400" style="height:300px;">@Model.Report.Comment</textarea>
             </div>
             <div class="form-group">
                 <label class="control-label">明日やること(200文字以内)</label>
-                <textarea name="values" class="form-control" maxlength="200">@Model.Report.TomorrowComment</textarea>
+                <textarea name="values" class="form-control" maxlength="200" style="height:150px;">@Model.Report.TomorrowComment</textarea>
             </div>
             <input type="hidden" name="values" value="@Model.Attendance.ReportId" />
             @* ここまで追記 *@
