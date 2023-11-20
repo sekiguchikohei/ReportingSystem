@@ -336,6 +336,7 @@ namespace 業務報告システム.Controllers
         {
             ReportDetail reportDetail = new ReportDetail();
             reportDetail.Projects = new List<Project>();
+            reportDetail.Managers = new List<ApplicationUser>();
 
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -374,6 +375,7 @@ namespace 業務報告システム.Controllers
             }
 
             var alluserprojects = _context.userproject.ToList();
+            ApplicationUser user;
 
             foreach (var userproject in alluserprojects)
             {
@@ -381,15 +383,17 @@ namespace 業務報告システム.Controllers
                 {
                     if (userproject.ProjectId == loginuserproject.ProjectId)
                     {
-                        ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
+                        user = await _userManager.FindByIdAsync(userproject.UserId);
 
                         if (await _userManager.IsInRoleAsync(user, "Manager"))
                         {
-                            reportDetail.Manager = user;
+                            reportDetail.Managers.Add(user);
                         }
                     }
                 }
             }
+
+            int count = 0;
 
             if (User.IsInRole("Member"))
             {
@@ -398,9 +402,20 @@ namespace 業務報告システム.Controllers
                     return NotFound("アクセス権がありません。");
                 }
             }
-            else if (User.IsInRole("Manager") && !(loginUserId.Equals(reportDetail.Manager.Id)))
+            else if (User.IsInRole("Manager"))
             {
-                return NotFound("アクセス権がありません。");
+                foreach (var mgr in reportDetail.Managers) {
+
+                    if ((loginUserId.Equals(mgr.Id))) {
+                        count++;
+                    }
+                }
+
+                if (count == 0) {
+                    return NotFound("アクセス権がありません。");
+                    
+                }
+                count = 0;
             }
 
             reportDetail.Report = report;
@@ -433,6 +448,7 @@ namespace 業務報告システム.Controllers
         {
             ReportDetail reportDetail = new ReportDetail();
             reportDetail.Projects = new List<Project>();
+            reportDetail.Managers = new List<ApplicationUser>();
 
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             reportDetail.User = await _userManager.FindByIdAsync(loginUserId);
@@ -479,23 +495,32 @@ namespace 業務報告システム.Controllers
 
                         if (await _userManager.IsInRoleAsync(user, "Manager"))
                         {
-                            reportDetail.Manager = user;
+                            reportDetail.Managers.Add(user);
                         }
                     }
                 }
             }
 
-            if (User.IsInRole("Member"))
-            {
-                if (!(report.UserId.Equals(loginUserId)))
-                {
-                    return NotFound("アクセス権がありません。");
-                }
-            }
-            else if (User.IsInRole("Manager") && !(loginUserId.Equals(reportDetail.Manager.Id)))
-            {
-                return NotFound("アクセス権がありません。");
-            }
+            //if (User.IsInRole("Member"))
+            //{
+            //    if (!(report.UserId.Equals(loginUserId)))
+            //    {
+            //        return NotFound("アクセス権がありません。");
+            //    }
+            //}
+            //else if (User.IsInRole("Manager"))
+            //{
+            //    foreach (var mgr in reportDetail.Managers)
+            //    {
+
+            //        if (!(loginUserId.Equals(mgr.Id)))
+            //        {
+            //            return NotFound("アクセス権がありません。");
+            //        }
+
+            //    }
+
+            //}
 
             reportDetail.Report = report;
             var allattendance = _context.attendance.ToList();
@@ -513,7 +538,7 @@ namespace 業務報告システム.Controllers
                 Confirm = true,
                 Rating = int.Parse(values[0]),
                 Comment = values[1],
-                Name = $"{reportDetail.Manager.LastName} {reportDetail.Manager.FirstName}"
+                Name = $"{reportDetail.User.LastName} {reportDetail.User.FirstName}"
             };
 
             _context.Add(feedback);

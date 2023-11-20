@@ -6,7 +6,7 @@ namespace 業務報告システム.ViewModels
     {
         public ApplicationUser User { get; set; }
 
-        public ApplicationUser? Manager { get; set; }
+        public List<ApplicationUser>? Managers { get; set; }
 
         public List<Project> Projects { get; set; }
         public Report Report { get; set; }
