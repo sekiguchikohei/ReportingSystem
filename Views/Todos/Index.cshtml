@@ -26,41 +26,47 @@
         <div >
             <div class="card " onmouseover="showHidden(this)" onmouseout="hideHidden(this)">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between">
+                    @* <div class="d-flex justify-content-between"> *@
                         <div >
                             <div class="d-flex justify-content-center">
-                                <h5 class="card-title">@Html.DisplayFor(modelItem => item.TaskName)</h5>
+                                <div class="d-flex justify-content-between w-100">
+                                    <div style="max-width:250px;">
+                                <h5 class="fw-bold mt-2">@Html.DisplayFor(modelItem => item.TaskName)</h5>
+                                </div>
+                                
                                 @if(item.Progress <= 4)
                                 {
-                                    <p class="text-danger fw-bold">
+                                    <p class="text-danger fw-bold mt-2">
                                         進捗: @(item.Progress * 10)%
                                     </p>
                                 }
                                 else if(item.Progress <= 7)
                                 {
-                                    <p class="fw-bold">
+                                    <p class="fw-bold mt-2">
                                         進捗: @(item.Progress * 10)%
                                     </p>
                                 }
                                 else
                                 {
-                                    <p class="text-success fw-bold">
+                                    <p class="text-success fw-bold mt-2">
                                         進捗: @(item.Progress * 10)%
                                     </p>
                                 }
+                                    <div class="d-flex justify-content-center align-items-end" style="min-width:120px;">
+                                        <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-warning me-1">編集</a>
+                                        <form asp-action="Delete" onSubmit="return check()">
+                                            <input type="hidden" name="id" value="@item.TodoId" />
+                                            <button type="submit" class="btn btn-danger">削除</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                             <p class="card-text custom-hidden" style="display: none;">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
                             <p class="card-text custom-hidden" style="display: none;">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>
                             <p class="card-text custom-hidden" style="display: none;">コメント: @Html.DisplayFor(modelItem => item.Comment)</p>
                         </div>
-                        <div class="d-flex justify-content-center align-items-end">
-                        <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-warning me-1">編集</a>
-                            <form asp-action="Delete" onSubmit="return check()">
-                                <input type="hidden" name="id" value="@item.TodoId" />
-                                <button type="submit" class="btn btn-danger">削除</button>
-                            </form>
-                        </div>
-                    </div>
+                        
+                    @* </div> *@
                 </div>
             </div>
         </div>
