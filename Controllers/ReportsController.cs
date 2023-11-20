@@ -200,8 +200,7 @@ namespace 業務報告システム.Controllers
             var loginManagerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             managerMain.Manager = await _userManager.FindByIdAsync(loginManagerId);
 
-            var allprojects = _context.project.ToList();
-            var managerprojects = _context.userproject.Where(x => x.UserId.Equals(managerMain.Manager.Id)).ToList();
+            var managerprojects = _context.userproject.Include(x => x.Project).Where(x => x.UserId.Equals(managerMain.Manager.Id)).ToList();
 
             foreach (var project in managerprojects)
             {
@@ -212,8 +211,14 @@ namespace 業務報告システム.Controllers
                 managerMain.Projects.Add(pj);
             }
 
-            var alluserprojects = _context.userproject.Include(x => x.User).Where(x => x.ProjectId == managerMain.Projects.First().ProjectId).ToList();
+            //==========================================================================================================
+            var projectIds = managerMain.Projects.Select(x => x.ProjectId).ToList();    //未検証だが、managerMainが複数addされた時、コメントアウトのalluserprojectsなら処理可能(chatGPT)で、
+                                                                                        //foreachで複数managerMain.ReportNotSubmitにadd出来る　ここ以外(Reports,Todos,Home)は未対応
+            //var alluserprojects = _context.userproject.Include(x => x.User).Where(x =>projectIds.Contains(x.ProjectId)).ToList();
+            //==========================================================================================================
 
+            var alluserprojects = _context.userproject.Include(x => x.User).Where(x => x.ProjectId == managerMain.Projects.First().ProjectId).ToList();
+            
             foreach (var userproject in alluserprojects)
             {
                 ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
@@ -373,16 +378,13 @@ namespace 業務報告システム.Controllers
             }
 
             reportDetail.Report = report;
-            var allattendance = _context.attendance.ToList();
+            var allattendance = _context.attendance.Where(x => x.ReportId == reportDetail.Report.ReportId).ToList();
             foreach (var attendance in allattendance)
             {
-                if (attendance.ReportId == report.ReportId)
-                {
-                    reportDetail.Attendance = attendance;
-                }
+                reportDetail.Attendance = attendance;
             }
 
-            var feedbacks = _context.feedback.ToList();
+            var feedbacks = _context.feedback.Where(x => x.ReportId == report.ReportId).ToList();
 
             foreach (var feedback in feedbacks)
             {
@@ -420,70 +422,33 @@ namespace 業務報告システム.Controllers
                 return NotFound();
             }
 
-            var allprojects = _context.project.ToList();
-            var userprojects = _context.userproject.Where(x => x.UserId.Equals(reportDetail.User.Id)).ToList();
+            var userprojects = _context.userproject.Include(x => x.Project).Where(x => x.UserId.Equals(reportDetail.User.Id)).ToList();
 
             foreach (var project in userprojects)
             {
-                foreach (var allproject in allprojects)
-                {
-                    if (project.ProjectId == allproject.ProjectId)
-                    {
-                        Project pj = new Project();
-                        pj.ProjectId = allproject.ProjectId;
-                        pj.Name = allproject.Name;
-                        reportDetail.Projects.Add(pj);
-                    }
-                }
+                Project pj = new Project();
+                pj.ProjectId = project.ProjectId;
+                pj.Name = project.Project.Name;
+                reportDetail.Projects.Add(pj);
             }
 
-            var alluserprojects = _context.userproject.ToList();
+            var alluserprojects = _context.userproject.Where(x => x.ProjectId == reportDetail.Projects.First().ProjectId).ToList();
 
             foreach (var userproject in alluserprojects)
             {
-                foreach (var loginuserproject in reportDetail.Projects)
-                {
-                    if (userproject.ProjectId == loginuserproject.ProjectId)
-                    {
-                        ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
+                ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
 
-                        if (await _userManager.IsInRoleAsync(user, "Manager"))
-                        {
-                            reportDetail.Managers.Add(user);
-                        }
-                    }
+                if (await _userManager.IsInRoleAsync(user, "Manager"))
+                {
+                    reportDetail.Managers.Add(user);
                 }
             }
 
-            //if (User.IsInRole("Member"))
-            //{
-            //    if (!(report.UserId.Equals(loginUserId)))
-            //    {
-            //        return NotFound("アクセス権がありません。");
-            //    }
-            //}
-            //else if (User.IsInRole("Manager"))
-            //{
-            //    foreach (var mgr in reportDetail.Managers)
-            //    {
-
-            //        if (!(loginUserId.Equals(mgr.Id)))
-            //        {
-            //            return NotFound("アクセス権がありません。");
-            //        }
-
-            //    }
-
-            //}
-
             reportDetail.Report = report;
-            var allattendance = _context.attendance.ToList();
+            var allattendance = _context.attendance.Where(x => x.ReportId == reportDetail.Report.ReportId).ToList();
             foreach (var attendance in allattendance)
             {
-                if (attendance.ReportId == report.ReportId)
-                {
-                    reportDetail.Attendance = attendance;
-                }
+                reportDetail.Attendance = attendance;
             }
 
             Feedback feedback = new Feedback()
@@ -560,22 +525,6 @@ namespace 業務報告システム.Controllers
             else {
                 return View();
             }
-            
-
-           
-
-
-            //ModelState.Remove("Users");
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(project);
-            //    await _context.SaveChangesAsync();
-            //    TempData["AlertProject"] = "新しいプロジェクトを追加しました。";
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //return View(project);
-
-
 
         }
 

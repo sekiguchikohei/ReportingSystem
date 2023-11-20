@@ -259,8 +259,8 @@ namespace 業務報告システム.Controllers
                 todoIndex.Projects.Add(pj);
 
                 //全ユーザーからマネージャーと同じProjectIdのリストを作成
-                var alluserprojects = _context.userproject.Where(x => x.ProjectId == pj.ProjectId).ToList();
-                //---------------------------------------------------------------------------------------------------------------------------------------
+                var alluserprojects = _context.userproject.Where(x => x.ProjectId == pj.ProjectId && x.User.Role.Equals("Member")).ToList();
+
                 //全ユーザーのプロジェクトの参照リストからマネージャーのプロジェクトと一致するものを持つユーザーをviewmodelのusersに追加
                 foreach (var userproject in alluserprojects)
                 {
