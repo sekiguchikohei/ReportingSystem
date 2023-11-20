@@ -63,6 +63,7 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+        <button id="js-pagetop" class="pagetop"><span class="pagetop__arrow"></span></button>
     </div>
 
 
@@ -70,6 +71,25 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        $(function () {
+            $("#js-pagetop").click(function () {
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 300);
+            });
+            $(window).scroll(function () {
+                if ($(window).scrollTop() > 1) {
+                    $('#js-pagetop').fadeIn(300).css('display', 'flex')
+                } else {
+                    $('#js-pagetop').fadeOut(300)
+                }
+            });
+        });
+
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
