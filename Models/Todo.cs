@@ -10,6 +10,7 @@ namespace 業務報告システム.Models
         public int TodoId { get; set; }
 
         //タスクの名前
+        [MaxLength(50)]
         public string TaskName { get; set; }
 
         //進捗　1～10の10段階
@@ -25,6 +26,7 @@ namespace 業務報告システム.Models
         public DateTime EndDate { get; set; }
 
         //メンバーの備忘録
+        [MaxLength(300)]
         public string Comment { get; set; }
 
         //FK

@@ -33,7 +33,7 @@ namespace 業務報告システム.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> MgrIndex(string? Id)
         {
-            if (Id == null || _context.todo == null)
+            if (Id == null || _context.report == null)
             {
                 return NotFound("存在しません");
             }
@@ -42,12 +42,14 @@ namespace 業務報告システム.Controllers
             reportIndex.User = new ApplicationUser();
             reportIndex.Reports = new List<Report>();
             reportIndex.Attendances = new List<Attendance>();
+            reportIndex.Feedbacks = new List<Feedback>();
 
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             reportIndex.User = (ApplicationUser)_context.Users.FirstOrDefault(x => x.Id == Id);
 
             var allReports = _context.report.Where(x => x.UserId.Equals(Id)).ToList();
             var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(Id)).ToList();
+            var allFeedback = _context.feedback.ToList();
 
             foreach (var report in allReports)
             {
@@ -67,6 +69,8 @@ namespace 業務報告システム.Controllers
                 reportIndex.Attendances.Add(at);
             }
 
+            reportIndex.Feedbacks = allFeedback;
+
             ViewBag.MemberName = $"{reportIndex.User.LastName} {reportIndex.User.FirstName}";
 
             var applicationDbContext = _context.report.Include(r => r.User);
@@ -82,7 +86,7 @@ namespace 業務報告システム.Controllers
             reportIndex.Attendances = new List<Attendance>();
 
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            reportIndex.User = await _userManager.FindByEmailAsync(loginUserId);
+            reportIndex.User = await _userManager.FindByIdAsync(loginUserId);
 
             //Reportsにデータを格納
             var allReports = _context.report.Where(x => x.UserId.Equals(loginUserId)).ToList();
@@ -114,6 +118,7 @@ namespace 業務報告システム.Controllers
             MemberMain memberMain = new MemberMain();
             memberMain.Projects = new List<Project>();
             memberMain.Todos = new List<Todo>();
+            memberMain.Managers = new List<ApplicationUser>();
 
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             memberMain.LoginMember = await _userManager.FindByIdAsync(loginUserId);
@@ -148,7 +153,7 @@ namespace 業務報告システム.Controllers
 
                         if (await _userManager.IsInRoleAsync(user, "Manager"))
                         {
-                            memberMain.Manager = user;
+                            memberMain.Managers.Add(user);
                         }
                     }
                 }
@@ -165,10 +170,28 @@ namespace 業務報告システム.Controllers
                 }
             }
 
-            //昨日提出したreportのtomorrowコメント抽出（単体）
+            //今日と昨日提出したreportのtomorrowコメント抽出（単体）
             var userReports = _context.report.Where(x => x.UserId.Equals(memberMain.LoginMember.Id)).ToList();
 
+            var today = DateTime.Today;
             var yesterday = DateTime.Today.AddDays(-1);
+
+            if (yesterday.ToString("ddd").Equals("土"))
+            {
+                yesterday = yesterday.AddDays(-1);
+            }
+            else if (yesterday.ToString("ddd").Equals("日"))
+            {
+                yesterday = yesterday.AddDays(-2);
+            }
+
+            foreach (var report in userReports)
+            {
+                if (report.Date.Year == today.Year && report.Date.Month == today.Month && report.Date.Day == today.Day)
+                {
+                    memberMain.TodayReport = report;
+                }
+            }
 
             foreach (var report in userReports)
             {
@@ -283,6 +306,13 @@ namespace 業務報告システム.Controllers
             }
 
             DateTime yesterday = DateTime.Today.AddDays(-1);
+
+            if (yesterday.ToString("ddd").Equals("土")) {
+                yesterday = yesterday.AddDays(-1);
+            } else if(yesterday.ToString("ddd").Equals("日")) {
+                yesterday = yesterday.AddDays(-2);
+            }
+
             var allYesterdayReports = _context.report.Where(x => x.Date.Year == yesterday.Year && x.Date.Month == yesterday.Month && x.Date.Day == yesterday.Day).ToList();
             var allYesterdayAttendances = _context.attendance.Where(x => x.Date.Year == yesterday.Year && x.Date.Month == yesterday.Month && x.Date.Day == yesterday.Day).ToList();
 
@@ -523,25 +553,50 @@ namespace 業務報告システム.Controllers
                 UserId = loginUserId
             };
 
-            _context.Add(report);
-            await _context.SaveChangesAsync();
-
-            Attendance attendance = new Attendance()
+            if (ModelState.IsValid)
             {
-                Date = submitDay,
-                Status = values[1],
-                StartTime = startTime,
-                EndTime = endTime,
-                HealthRating = int.Parse(values[6]),
-                HealthComment = values[7],
-                ReportId = report.ReportId,
-            };
+                _context.Add(report);
+                await _context.SaveChangesAsync();
 
-            _context.Add(attendance);
-            await _context.SaveChangesAsync();
+                Attendance attendance = new Attendance()
+                {
+                    Date = submitDay,
+                    Status = values[1],
+                    StartTime = startTime,
+                    EndTime = endTime,
+                    HealthRating = int.Parse(values[6]),
+                    HealthComment = values[7],
+                    ReportId = report.ReportId,
+                };
+
+                if (ModelState.IsValid) { 
+                }
+                _context.Add(attendance);
+                await _context.SaveChangesAsync();
+
+                TempData["AlertReport"] = "報告を作成しました。";
+                return RedirectToAction(nameof(MemIndex));
+
+            }
+            else {
+                return View();
+            }
+            
+
+           
 
 
-            return RedirectToAction(nameof(MemIndex));
+            //ModelState.Remove("Users");
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(project);
+            //    await _context.SaveChangesAsync();
+            //    TempData["AlertProject"] = "新しいプロジェクトを追加しました。";
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //return View(project);
+
+
 
         }
 
@@ -632,6 +687,7 @@ namespace 業務報告システム.Controllers
                 await _context.SaveChangesAsync();
                 _context.Update(attendance);
                 await _context.SaveChangesAsync();
+                TempData["AlertReport"] = "報告を編集しました。";
                 return RedirectToAction(nameof(MemIndex));
             }
 
@@ -678,6 +734,7 @@ namespace 業務報告システム.Controllers
             }
 
             await _context.SaveChangesAsync();
+            TempData["AlertReport"] = "報告を削除しました。";
             return RedirectToAction(nameof(MemIndex));
         }
 

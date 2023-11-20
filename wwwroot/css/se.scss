@@ -3,14 +3,30 @@ $main-yellow: #FFDE59;
 $orange: #FF914D;
 $navy: #0A4191;
 $gray: #EDF2F7;
+
 //К÷Мы======================================
 .card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
+    border: 1px solid $gray;
+    background-color: $gray;
+    border-radius: 10px;
     margin: 10px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin-top:10px;
+    margin-right:auto;
+    margin-left:auto;
+}
+
+.mgrcard p {
+    margin: 10px;
+}
+
+.mgr-center {
+    margin:auto;
+    text-align:center;
+}
+
+.mgrname {
+    margin-top:20px;
 }
 
 .card-title {
@@ -34,6 +50,17 @@ $gray: #EDF2F7;
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
+}
+
+.hidden {
+    display: none
+}
+
+.toggle-details {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
 }
 //К÷Мы======================================
 

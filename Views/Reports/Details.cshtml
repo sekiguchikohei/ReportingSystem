@@ -23,6 +23,7 @@
         eTime = Model.Attendance.EndTime.Minute.ToString();
     }
 
+    string dow = Model.Report.Date.ToString("ddd");
 }
 
 
@@ -30,7 +31,7 @@
 
 <div class="container-rdetail fadeInR">
     <div class="container-form">
-    <h4 class="pt-3 text-center">報告日：@Model.Report.Date.Year 年 @Model.Report.Date.Month 月 @Model.Report.Date.Day 日</h4>
+    <h4 class="pt-3 text-center">報告日：@Model.Report.Date.Year 年 @Model.Report.Date.Month 月 @Model.Report.Date.Day 日 (@dow)</h4>
         
     <div class="d-flex justify-content-center">
             <p class="text-center fw-bold pt-2 pe-3">勤怠 : @Model.Attendance.Status</p>
@@ -85,7 +86,7 @@
             <div class="p-2">
                     <form asp-controller="Reports" asp-action="Edit" method="get">
                         <input type="hidden" name="id" value="@Model.Report.ReportId" />
-                        <input type="submit" value="編集" class="btn btn-warning" />
+                        <input type="submit" value="編集" class="btn btn-warning"  />
                     </form>
 
             </div>       
@@ -119,7 +120,7 @@
                 <input name="values" class="form-control" placeholder="コメントがあれば入力" />
             </div>
             <div class="form-group">
-                <input type="submit" value="保存" class="btn btn-warning" />
+                    <input type="submit" value="保存" class="w-100 btn btn-lg btn-warning" />
             </div>
         </form>
     }
@@ -158,13 +159,22 @@
             <div class="text-end">
             <form asp-controller="Feedbacks" asp-action="Delete" onSubmit="return check()">
                 <input type="hidden" name="id" value="@Model.Feedback.FeedbackId" />
-                <input type="submit" value="フィードバック削除" class="btn btn-danger" />
+                        <input type="submit" value="フィードバック削除" class="w-100 btn btn-lg btn-danger" />
             </form>
                 </div>
         }
     }
     </div>
 </div>
+
+@if (User.IsInRole("Member"))
+{
+    <a asp-action="MemIndex">一覧に戻る</a>
+} else if (User.IsInRole("Manager"))
+{
+    <a asp-controller="Home" asp-action="MgrIndex">メンバー一覧に戻る</a>
+}
+
 
 <script>
     function check() {

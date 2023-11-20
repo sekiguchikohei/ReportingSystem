@@ -2,77 +2,115 @@
 
 @{
 }
-
-<a asp-action="MgrCreate" class="btn btn-danger">MgrCreate</a>
-
-@foreach (var project in Model.Projects)
+@if (TempData["AlertTodo"] != null)
 {
-    <p>所属プロジェクト名　： @project.Name </p>
-
+    <div class="alert alert-success alert-dismissable fade show m-1" role="alert">
+        @TempData["AlertTodo"]
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 }
 
-<p>
-    マネージャー（ログイン中）：@Model.User.LastName @Model.User.FirstName
-</p>
+<div class="mgr-center">
+        @foreach (var project in Model.Projects)
+        {
+        <h1 class="fw-bold mgrmain">プロジェクト名： @project.Name </h1>
+        }
+        <a asp-action="MgrCreate" class="btn btn-warning">新規作成</a>
+</div>
 
+<div class="mgr-center">
 @foreach (var user in Model.Users)
 {
-    <p>Member: @user.LastName @user.FirstName</p>
-    if (user.Todos != null)
+    var userDivId = "user-" + user.Id;
+    <h3 class="mgrname">@user.LastName @user.FirstName <button class="toggle-details btn btn-info" data-target="details-@user.Id">詳細表示</button></h3>    if (user.Todos != null)
     {
-        @foreach (var todo in user.Todos) @* Model.Todos *@
+        @foreach (var todo in user.Todos)
         {
             @if (todo.UserId.Equals(user.Id))
             {
-                <p>@user.LastName @user.FirstName のTask: </p>
-                <p>@todo.TaskName</p>
-        
-                <p>Progress: @switch (@todo.Progress)
-                {
-                    case 0:
-                        <p>0%</p>
-                        break;
-                    case 1:
-                        <p>10%</p>
-                        break;
-                    case 2:
-                        <p>20%</p>
-                        break;
-                    case 3:
-                        <p>30%</p>
-                        break;
-                    case 4:
-                        <p>40%</p>
-                        break;
-                    case 5:
-                        <p>50%</p>
-                        break;
-                    case 6:
-                        <p>60%</p>
-                        break;
-                    case 7:
-                        <p>70%</p>
-                        break;
-                    case 8:
-                        <p>80%</p>
-                        break;
-                    case 9:
-                        <p>90%</p>
-                        break;
-                    case 10:
-                        <p>100%</p>
-                        break;
-                }   </P>
-                <form asp-controller="Todos" asp-action="Edit" asp-route-id="@todo.TodoId" method="get">@* "@Model.Todos.First().TodoId" *@
-                    <input type="submit" value="編集" class="btn btn-warning" />
-                </form>
+                <div >
+                    <div  class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <div  class="d-flex justify-content-center"  name="@userDivId" style="display: none;">
+                                        <h5 class="card-title">@todo.TaskName</h5>
+                                        @switch (@todo.Progress)
+                                        {
+                                            case 0:
+                                            <p class="text-danger fw-bold">進捗 : 0%</p>
+                                                break;
+                                            case 1:
+                                            <p class="text-danger fw-bold">進捗 : 10%</p>
+                                                break;
+                                            case 2:
+                                            <p class="text-danger fw-bold">進捗 : 20%</p>
+                                                break;
+                                            case 3:
+                                            <p class="text-danger fw-bold">進捗 : 30%</p>
+                                                break;
+                                            case 4:
+                                            <p class="text-danger fw-bold">進捗 : 40%</p>
+                                                break;
+                                            case 5:
+                                            <p class="fw-bold">進捗 : 50%</p>
+                                                break;
+                                            case 6:
+                                            <p class="fw-bold">進捗 : 60%</p>
+                                                break;
+                                            case 7:
+                                            <p class="fw-bold">進捗 : 70%</p>
+                                                break;
+                                            case 8:
+                                            <p class="fw-bold text-success">進捗 : 80%</p>
+                                                break;
+                                            case 9:
+                                            <p class="fw-bold text-success">進捗 : 90%</p>
+                                                break;
+                                            case 10:
+                                            <p class="fw-bold text-success">進捗 : 100%</p>
+                                                break;
+                                        }
+                                    </div>
+                                    <div class="details" name="details-@user.Id" style="display: none;">
+                                        <p >開始日: @Html.DisplayFor(modelItem => todo.StartDate)</p>
+                                        <p >終了日: @Html.DisplayFor(modelItem => todo.EndDate)</p>
+                                        <p >コメント: @Html.DisplayFor(modelItem => todo.Comment)</p>
+                                     </div>
+                                </div>
+                                 <div>
+                                    <form asp-controller="Todos" asp-action="Edit" asp-route-id="@todo.TodoId" method="get">
+                                        <input type="submit" value="編集" class="btn btn-warning me-2" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               </div>
             }
-            
         }
-        
     }
     else
     {
         <p>タスクがありません</p>
     }
 }
+</div>
+<script>
+    const toggleButtons = document.querySelectorAll(".toggle-details");
+    toggleButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const targetId = button.getAttribute("data-target");
+            const details = document.getElementsByName(targetId);
+            for (let i = 0; i < details.length; i ++) {
+                if (details[i].style.display === "none") {
+                details[i].style.display = "block";
+                button.textContent = "詳細非表示";
+                } else {
+                    details[i].style.display = "none";
+                    button.textContent = "詳細表示";
+                }
+            }
+        });
+    });
+</script>

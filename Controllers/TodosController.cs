@@ -30,7 +30,8 @@ namespace 業務報告システム.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.todo.Include(t => t.User);
+            var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var applicationDbContext = _context.todo.Where(t => t.UserId.Equals(loginUserId));//ログインユーザーIdと同じIdのみ格納
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -73,12 +74,8 @@ namespace 業務報告システム.Controllers
             {
                 return NotFound();
             }
-            //Todo Edit画面でタスクIDとログインユーザーIDが一致していない場合は「アクセス権がありません」と表示する。
-            //追記=================================
-
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var mgrEdit = await _context.project.FindAsync(id);
-
             if (!todo.UserId.Equals(loginUserId))
             {
                 if (User.IsInRole("Manager"))
@@ -88,7 +85,6 @@ namespace 業務報告システム.Controllers
                 }
                 return NotFound("アクセス権がありません");
             }
-            //追記=================================
             ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", todo.UserId);
             return View(todo);
         }
@@ -104,7 +100,6 @@ namespace 業務報告システム.Controllers
             {
                 return NotFound();
             }
-
             ModelState.Remove("User");
             if (ModelState.IsValid)
             {
@@ -126,8 +121,10 @@ namespace 業務報告システム.Controllers
                 }
                 if (User.IsInRole("Manager"))
                 {
+                    TempData["AlertTodo"] = "タスクを編集しました。";
                     return RedirectToAction(nameof(MgrIndex));
                 }
+                TempData["AlertTodo"] = "タスクを編集しました。";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = new SelectList(_context.user, "Id", "Id", todo.UserId);
@@ -135,7 +132,7 @@ namespace 業務報告システム.Controllers
         }
 
         [Authorize(Roles ="Manager")]
-        public async Task<IActionResult> MgrIndex()
+        public async Task<IActionResult> MgrIndex()//
         {
             //viewmodelの呼び出し
             TodoIndex todoIndex = new TodoIndex();
@@ -252,7 +249,7 @@ namespace 業務報告システム.Controllers
                 _context.todo.Remove(todo);
            // }
 
-            TempData["AlertTodo"] = "Todoを削除しました。";
+            TempData["AlertTodo"] = "タスクを削除しました。";
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
            
@@ -369,6 +366,7 @@ namespace 業務報告システム.Controllers
             {
                 _context.Add(todo);
                 await _context.SaveChangesAsync();
+                TempData["AlertTodo"] = "タスクを作成しました。";
                 return RedirectToAction(nameof(MgrIndex));
             }
             return View(todo);

@@ -14,9 +14,11 @@ namespace 業務報告システム.Models
         public DateTime Date { get; set; }
 
         //今日のコメント
+        [MaxLength(400)]
         public string? Comment { get; set; }
 
         //明日の予定
+        [MaxLength(200)]
         public string? TomorrowComment { get; set; }
 
         //User_FK

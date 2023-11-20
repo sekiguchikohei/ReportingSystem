@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Create";
+    DateTime today = DateTime.Now;
+    string formatToday = today.ToString("yyyy-MM-dd");
 }
 
 <div class="container-uindex">
@@ -13,7 +15,7 @@
         <form method="post" action="">
             <div class="form-group">
                 <label class="control-label">日付</label>
-                <input name="values" class="form-control" type="date" />
+                <input name="values" class="form-control" type="date" value="@formatToday" min="2000-01-01" max="2100-12-31" />
             </div>
             <div class="form-group">
                 <label class="control-label">勤怠</label>
@@ -86,18 +88,18 @@
             </div>
             <div class="form-group">
                 <label class="control-label">体調コメント</label>
-                <input name="values" class="form-control" />
+                <input name="values" class="form-control" maxlength="50"/>
             </div>
             <div class="form-group">
                 <label class="control-label">報告内容</label>
-                <textarea name="values" class="form-control"></textarea>
+                <textarea name="values" class="form-control" maxlength="400"></textarea>
             </div>
             <div class="form-group">
                 <label class="control-label">明日やること</label>
-                <textarea name="values" class="form-control"></textarea>
+                <textarea name="values" class="form-control" maxlength="200"></textarea>
             </div>
             <div class="form-group">
-                <input type="submit" value="作成" class="btn btn-warning" />
+                <input type="submit" value="作成" class="w-100 btn btn-lg btn-warning" />
             </div>
         </form>
         <a asp-action="MemIndex">報告一覧に戻る</a>

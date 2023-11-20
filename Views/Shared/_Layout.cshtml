@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 text-white" style="background-color:#38C3FF">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 text-white fixed-top" style="background-color:#38C3FF">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Home"><img src="/images/logo-yoko2.png" class="nav-logo" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -34,7 +34,7 @@
                                 <a class="nav-link text-white" asp-area="" asp-controller="Reports" asp-action="MgrMain">メインページ</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="MgrIndex">ユーザー一覧</a>
+                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="MgrIndex">メンバー一覧</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="Todos" asp-action="MgrIndex">タスク一覧</a>
@@ -58,6 +58,7 @@
             </div>
         </nav>
     </header>
+    <div style="height:80px"></div>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

@@ -1,0 +1,44 @@
+﻿@model 業務報告システム.ViewModels.ProjectDetails
+
+@{
+}
+<div class="text-center">
+<div class="mgr-container">
+    <h3>プロジェクト名</h3>
+    <h2>@Model.Project.Name</h2>
+</div>
+
+<div class="mgr-container">
+<h3>マネージャー</h3>
+@if (Model.Managers.Count() != 0)
+{
+    @foreach (var manager in Model.Managers)
+    {
+    <h2>@manager.LastName @manager.FirstName</h2>    
+    
+    }
+
+} else
+{
+<p>マネージャーはいません</p>    
+}
+</div>
+
+<div class="mgr-container">
+<h3>メンバー</h3>
+
+@if (Model.Members.Count() != 0)
+{
+    foreach (var member in Model.Members)
+    {
+            <h4>@member.LastName @member.FirstName</h4>
+        }
+    }
+    else
+    {
+        <p>メンバーはいません</p>
+    }
+
+</div>
+</div>
+<a asp-action="Index">プロジェクト一覧に戻る</a>

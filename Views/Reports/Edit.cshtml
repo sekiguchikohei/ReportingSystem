@@ -47,7 +47,7 @@
             @* Attendance追記 *@
             <div class="form-group">
                 <label class="control-label">日付</label>
-                <input name="values" class="form-control" type="date-local" value="@Model.Report.Date.Year-@Model.Report.Date.Month-@Model.Report.Date.Day"/>
+                <input name="values" class="form-control" type="date" value="@Model.Report.Date.Year-@Model.Report.Date.Month-@Model.Report.Date.Day"/>
             </div>
             <div class="form-group">
                 <label class="control-label">勤怠</label>
@@ -202,15 +202,15 @@
             </div>
             <div class="form-group">
                 <label class="control-label">体調コメント</label>
-                <input name="values" class="form-control" value="@Model.Attendance.HealthComment"/>
+                <input name="values" class="form-control" value="@Model.Attendance.HealthComment" maxlength="50" />
             </div>
             <div class="form-group">
                 <label class="control-label">報告内容</label>
-                <textarea name="values" class="form-control">@Model.Report.Comment</textarea>
+                <textarea name="values" class="form-control" maxlength="400">@Model.Report.Comment</textarea>
             </div>
             <div class="form-group">
                 <label class="control-label">明日やること</label>
-                <textarea name="values" class="form-control">@Model.Report.TomorrowComment</textarea>
+                <textarea name="values" class="form-control" maxlength="200">@Model.Report.TomorrowComment</textarea>
             </div>
             <input type="hidden" name="values" value="@Model.Attendance.ReportId" />
             @* ここまで追記 *@
@@ -236,7 +236,7 @@
             </div>
             *@
             <div class="form-group">
-                <input type="submit" value="編集を保存" class="btn btn-warning" />
+                <input type="submit" value="編集を保存" class="w-100 btn btn-lg btn-warning" />
             </div>
         </form>
         <a asp-action="MemIndex">報告一覧に戻る</a>

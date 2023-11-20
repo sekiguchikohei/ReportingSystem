@@ -1,93 +1,150 @@
 ﻿@model 業務報告システム.ViewModels.MemberMain;
 
 @{
+    DateTime alertTime = DateTime.Now;
+
+    string zenjitsu = "昨日";
+    DateTime yesterday = DateTime.Today.AddDays(-1);
+
+    if (yesterday.ToString("ddd").Equals("日") || yesterday.ToString("ddd").Equals("土"))
+    {
+        zenjitsu = "金曜日";
+    }
+
+    if (alertTime.Hour <= 15 && Model.Report == null)
+    {
+        TempData["AlertReportError"] = $"{zenjitsu}の報告がまだ提出されていません。";
+    }
+    else if (alertTime.Hour >= 16 && Model.TodayReport == null && Model.Report == null)
+    {
+        TempData["AlertReportError"] = $"{zenjitsu}と本日の報告がまだ提出されていません。";
+    }
+    else if (alertTime.Hour >= 16 && Model.TodayReport == null)
+    {
+        TempData["AlertReportError"] = "本日の報告がまだ提出されていません。";
+    }
+    else if (alertTime.Hour >= 16 && Model.Report == null)
+    {
+        TempData["AlertReportError"] = $"{zenjitsu}の報告がまだ提出されていません。";
+    }
+
 }
 
-<h1>Member Mainページ</h1>
+@if (TempData["AlertReportError"] != null)
+{
+    <div class="alert alert-danger alert-dismissable fade show m-1" role="alert">
+        @TempData["AlertReportError"]
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 
-<p>所属プロジェクト</p>
+<div class="mgr-container">
+<h3 class="text-center">所属プロジェクト</h3>
 @if (Model.Projects != null)
 {
     @foreach (var item in Model.Projects)
     {
-        <p>@item.Name</p>
+        <h2 class="text-center">@item.Name</h2>
 
     }
 }else
 {
 <p>所属プロジェクトはありません。</p>    
 }
-
-
-<p>報告先マネージャー</p>
-@if (Model.Manager != null)
+    <div class="mgr-container-sub">
+<div class="text-center">
+<h4>報告先</h4>
+@if (Model.Managers != null)
 {
-    <p>@Model.Manager.LastName @Model.Manager.FirstName</p>
+                @foreach (var manager in Model.Managers)
+                {
+                    <h3>@manager.LastName @manager.FirstName</h3>
+                }
+               
 } else
 {
   <p>マネージャーの登録がありません。</p>  
 }
+    </div>
+</div>
+</div>
 
-
-<p>前日提出したReport tomorrow comment入力(今日のやること)</p>
+<div class="mgr-container">
+<h3 class="text-center">今日のやること</h3>
 @if (Model.Report != null)
 {
-    <p>@Model.Report.TomorrowComment</p>
+        <div class="unfinish-todos">
+    <p class="text-center fw-bold">@Model.Report.TomorrowComment</p>
+    </div>
 } else
 {
-    <p>昨日提出したレポートが無いため表示できません。</p>
+    <p class="text-center">昨日提出した報告が無いため表示できません。</p>
 }
+</div>
 
-<p>未達成Todo一覧</p>
+<div class="mgr-container">
+<h3 class="text-center">未達成タスク一覧</h3>
 @if(Model.Todos != null)
 {
     @foreach (var todo in Model.Todos)
     {
-        <p>@todo.TaskName</p>
-        <p>@switch (@todo.Progress)
+            <div class="unfinish-todos">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="w-25 me-1">
+        <h4>@todo.TaskName</h4>
+                    </div>
+        @switch (@todo.Progress)
             {
                 case 0:
-                    <p>0%</p>
+                    <h4 class="text-danger fw-bold">進捗 : 0%</h4>
                     break;
                 case 1:
-                    <p>10%</p>
+                        <h4 class="text-danger fw-bold">進捗 : 10%</h4>
                     break;
                 case 2:
-                    <p>20%</p>
+                        <h4 class="text-danger fw-bold">進捗 : 20%</h4>
                     break;
                 case 3:
-                    <p>30%</p>
+                        <h4 class="text-danger fw-bold">進捗 : 30%</h4>
                     break;
                 case 4:
-                    <p>40%</p>
+                        <h4 class="text-danger fw-bold">進捗 : 40%</h4>
                     break;
                 case 5:
-                    <p>50%</p>
+                        <h4 class="fw-bold">進捗 : 50%</h4>
                     break;
                 case 6:
-                    <p>60%</p>
+                        <h4 class="fw-bold">進捗 : 60%</h4>
                     break;
                 case 7:
-                    <p>70%</p>
+                        <h4 class="fw-bold">進捗 : 70%</h4>
                     break;
                 case 8:
-                    <p>80%</p>
+                            <h4 class="fw-bold text-success">進捗: 80%</h4>
                     break;
                 case 9:
-                    <p>90%</p>
+                        <h4 class="fw-bold text-success">進捗: 90%</h4>
                     break;
                 case 10:
-                    <p>100%</p>
+                        <h4 class="fw-bold">進捗: 100%</h4>
                     break;
             }
-                    </p>
+                    
+            <div>
+                        @{
+                            string dows = todo.StartDate.ToString("ddd");
+                            string dowe = todo.EndDate.ToString("ddd");
+                        }
 
-        <p>目標開始日：@todo.StartDate</p>
-        <p>目標終了日：@todo.EndDate</p>
+                        <p>目標開始日：@todo.StartDate.Year 年 @todo.StartDate.Month 月 @todo.StartDate.Day 日 (@dows)</p>
+                        <p>目標完了日：@todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日 (@dowe)</p>
+            </div>
+                </div>
+       </div>
     }
 } else
 {
-<p>完了していないTodoはありません。</p>
+<p>完了していないタスクはありません。</p>
 }
 
-
+</div>

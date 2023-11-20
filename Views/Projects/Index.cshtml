@@ -16,7 +16,7 @@
 <div class="text-center">
 <a class="btn btn-warning" asp-action="Create">プロジェクト作成</a>
     </div>
-
+    <div class="container-for-grid">
 @if (Model != null)
 {
     @foreach (var item in Model)
@@ -34,7 +34,8 @@
         }
                 </div>
        
-        <div class="u-button">
+        <div class="d-flex justify-content-between flex-column me-2">
+        <a asp-action="Details" asp-route-id="@item.ProjectId" class="btn btn-info">参加者一覧</a>
 
         <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.ProjectId">編集</a>
 
@@ -44,9 +45,11 @@
         </form>
         </div>
             </div>
+            
     }
     
 }
+    </div>
 </div>
 
 <script>
