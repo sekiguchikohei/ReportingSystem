@@ -1,6 +1,10 @@
 ﻿@model 業務報告システム.ViewModels.ManagerMain;
 
 @{
+    DateTime today = DateTime.Today;
+    string doww = today.ToString("ddd");
+    string todays = $"{today.Year}年{today.Month}月{today.Day}日({doww})";
+    string title = $"{todays}の報告一覧";
 }
 
 <div class="mgr-container">
@@ -18,7 +22,7 @@
 </div>
 
 <div class="mgr-container">
-<h3 class="text-center">今日の報告一覧</h3>
+<h3 class="text-center">@title</h3>
     <p class="text-center">メンバー名クリックで報告の詳細にアクセス</p>
 
 @if (Model.Reports != null)
@@ -41,7 +45,7 @@
 
                            
 
-                                <h3 class="mt-2">@report.Date.Year 年 @report.Date.Month 月 @report.Date.Day 日 @user.LastName @user.FirstName</h3>
+                                <h3 class="mt-2">@user.LastName @user.FirstName</h3>
                         </a>
 
             }
@@ -117,14 +121,26 @@
     <div class="mgrmain-flexcontents">
     <h3 class="text-center">メンバーの未達成タスク一覧</h3>
 
-    
+    @if (Model.Members != null)
+    {
+        @foreach (var user in Model.Members)
+        {
+          <h4 class="text-center">@user.LastName @user.FirstName</h4>      
+            
     @if (Model.Todos != null)
     {
         @foreach (var todo in Model.Todos)
         {
-                <div class="unfinish-todos">
+            @if (todo.UserId.Equals(user.Id))  
+            {
+                            
+                        
+           
+                        <div class="unfinish-todos">
                     <div class="d-flex justify-content-start">
-            <p class="fw-bold">@todo.TaskName</p><p>　</p>
+                        <div style="max-width:300px;">
+            <p class="fw-bold me-2">@todo.TaskName</p>
+                        </div>
                 @switch (@todo.Progress)
                 {
                     case 0:
@@ -170,7 +186,11 @@
                 <p class="mt-0">目標完了日 : @todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日 (@dow)</p>
                 </div>
         }
+                    }
     }
+            }
+
+        }
     </div>
 
 </div>

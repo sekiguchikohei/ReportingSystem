@@ -201,15 +201,15 @@
                 }
             </div>
             <div class="form-group">
-                <label class="control-label">体調コメント</label>
+                <label class="control-label">体調コメント(50文字以内)</label>
                 <input name="values" class="form-control" value="@Model.Attendance.HealthComment" maxlength="50" />
             </div>
             <div class="form-group">
-                <label class="control-label">報告内容</label>
+                <label class="control-label">報告内容(400文字以内)</label>
                 <textarea name="values" class="form-control" maxlength="400">@Model.Report.Comment</textarea>
             </div>
             <div class="form-group">
-                <label class="control-label">明日やること</label>
+                <label class="control-label">明日やること(200文字以内)</label>
                 <textarea name="values" class="form-control" maxlength="200">@Model.Report.TomorrowComment</textarea>
             </div>
             <input type="hidden" name="values" value="@Model.Attendance.ReportId" />
