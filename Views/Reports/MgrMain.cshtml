@@ -33,7 +33,7 @@
         
 
             <div class="unfinish-todos">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-center">
        
         @foreach (var user in Model.Members)
         {
@@ -41,7 +41,7 @@
             {
                             
 
-                            <a asp-action="Details" asp-route-id="@user.Reports.First().ReportId">
+                            <a asp-action="Details" asp-route-id="@user.Reports.First().ReportId" class="me-3">
 
                            
 

@@ -10,12 +10,13 @@ $gray: #EDF2F7;
     background-color: $gray;
     border-radius: 10px;
     margin: 10px;
-    min-width: 550px;
+    width: 550px;
     margin-top: 10px;
     margin-right: auto;
     margin-left: auto;
 
     @media (min-width: 100px) and (max-width: 767px) {
+        min-width: 100%;
         width: 100%;
     }
 }
