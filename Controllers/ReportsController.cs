@@ -123,40 +123,23 @@ namespace 業務報告システム.Controllers
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             memberMain.LoginMember = await _userManager.FindByIdAsync(loginUserId);
 
-            var allprojects = _context.project.ToList();
-            var userprojects = _context.userproject.Where(x => x.UserId.Equals(memberMain.LoginMember.Id)).ToList();
+            var userprojects = _context.userproject.Include(x => x.Project).Where(x => x.UserId.Equals(memberMain.LoginMember.Id)).ToList();
 
             foreach (var project in userprojects)
             {
-                foreach (var allproject in allprojects)
-                {
-                    if (project.ProjectId == allproject.ProjectId)
-                    {
-                        Project pj = new Project();
-                        pj.ProjectId = allproject.ProjectId;
-                        pj.Name = allproject.Name;
-                        memberMain.Projects.Add(pj);
-                    }
-                }
+                Project pj = new Project();
+                pj.ProjectId = project.ProjectId;
+                pj.Name = project.Project.Name;
+                memberMain.Projects.Add(pj);
             }
 
-            var alluserprojects = _context.userproject.ToList();
+            var alluserprojects = _context.userproject.Include(x => x.User).Where(x => x.ProjectId == memberMain.Projects.First().ProjectId && x.User.Role.Equals("Manager")).ToList();
 
             //マネージャー特定（単体）
             foreach (var userproject in alluserprojects)
             {
-                foreach (var loginuserproject in memberMain.Projects)
-                {
-                    if (userproject.ProjectId == loginuserproject.ProjectId)
-                    {
-                        ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
-
-                        if (await _userManager.IsInRoleAsync(user, "Manager"))
-                        {
-                            memberMain.Managers.Add(user);
-                        }
-                    }
-                }
+                ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
+                memberMain.Managers.Add(user);
             }
 
             //todoリスト（未達成のみ）（複数）
@@ -222,47 +205,31 @@ namespace 業務報告システム.Controllers
 
             foreach (var project in managerprojects)
             {
-                foreach (var allproject in allprojects)
-                {
-                    if (project.ProjectId == allproject.ProjectId)
-                    {
-                        Project pj = new Project();
-                        pj.ProjectId = allproject.ProjectId;
-                        pj.Name = allproject.Name;
-                        //マネージャーのプロジェクト一覧作成
-                        managerMain.Projects.Add(pj);
-                    }
-                }
+                Project pj = new Project();
+                pj.ProjectId = project.ProjectId;
+                pj.Name = project.Project.Name;
+                //マネージャーのプロジェクト一覧作成
+                managerMain.Projects.Add(pj);
             }
 
-            var alluserprojects = _context.userproject.ToList();
+            var alluserprojects = _context.userproject.Include(x => x.User).Where(x => x.ProjectId == managerMain.Projects.First().ProjectId).ToList();
 
             foreach (var userproject in alluserprojects)
             {
-                foreach (var managerproject in managerMain.Projects)
-                {
-                    if (userproject.ProjectId == managerproject.ProjectId)
-                    {
-                        ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
+                ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
 
-                        if (user.Role.Equals("Member")) {
-                            // マネージャー配下のメンバーリスト作成
-                            managerMain.Members.Add(user);
+                if (user.Role.Equals("Member")) {
+                    // マネージャー配下のメンバーリスト作成
+                    managerMain.Members.Add(user);
 
-                            managerMain.ReportNotSubmit.Add(user);
-                        }
-                        
-
-
-                    }
+                    managerMain.ReportNotSubmit.Add(user);
                 }
-
             }
 
             //managerMain.Members.Remove(managerMain.Manager);
             //managerMain.ReportNotSubmit.Remove(managerMain.Manager);
 
-            var alltodos = _context.todo.ToList();
+            var alltodos = _context.todo.Where(x => x.User.UserProjects.First().ProjectId == managerMain.Projects.First().ProjectId).ToList();
 
             foreach (var todo in alltodos)
             {
@@ -362,34 +329,21 @@ namespace 業務報告システム.Controllers
 
             foreach (var project in userprojects)
             {
-                foreach (var allproject in allprojects)
-                {
-                    if (project.ProjectId == allproject.ProjectId)
-                    {
-                        Project pj = new Project();
-                        pj.ProjectId = allproject.ProjectId;
-                        pj.Name = allproject.Name;
-                        reportDetail.Projects.Add(pj);
-                    }
-                }
+                Project pj = new Project();
+                pj.ProjectId = project.ProjectId;
+                pj.Name = project.Project.Name;
+                reportDetail.Projects.Add(pj);
             }
 
-            var alluserprojects = _context.userproject.ToList();
+            var alluserprojects = _context.userproject.Where(x => x.ProjectId == reportDetail.Projects.First().ProjectId).ToList();
             ApplicationUser user;
 
             foreach (var userproject in alluserprojects)
             {
-                foreach (var loginuserproject in reportDetail.Projects)
+                user = await _userManager.FindByIdAsync(userproject.UserId);
+                if (await _userManager.IsInRoleAsync(user, "Manager"))
                 {
-                    if (userproject.ProjectId == loginuserproject.ProjectId)
-                    {
-                        user = await _userManager.FindByIdAsync(userproject.UserId);
-
-                        if (await _userManager.IsInRoleAsync(user, "Manager"))
-                        {
-                            reportDetail.Managers.Add(user);
-                        }
-                    }
+                    reportDetail.Managers.Add(user);
                 }
             }
 
