@@ -16,7 +16,7 @@
             <div class="form-group">
                 <label class="control-label">日付</label>
                 <input name="values" class="form-control" type="date" value="@formatToday" min="2000-01-01" max="2100-12-31" />
-            </div>
+             </div>
             <div class="form-group">
                 <label class="control-label">勤怠</label>
                 <select name="values" class="form-control">
@@ -26,30 +26,58 @@
                     <option value="遅刻">遅刻</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label class="control-label pt-2 pb-2">出社時間</label>
-                <div class="d-flex">
-                <div>
-                    <label class="control-label">時間</label>
-                    <select name="values" class="form-control" type="time">
-                        @for (int i = 0; i <= 23; i++)
-                        {
-                            <option value="@i">@i</option>
-                        }
-                    </select>
+                <div class="form-group">
+                    <label class="control-label pt-2 pb-2">出社時間</label>
+                    <div class="d-flex">
+                        <div>
+                            <label class="control-label">時間</label>
+                            <select name="values" class="form-control" type="time">
+                                @for (int i = 0; i <= 23; i++)
+                                {
+                                    @if(i == ViewBag.StartHour)
+                                    {
+                                    <option value="@i" selected>@i</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    <div>
+                        <label class="control-label">分</label>
+                        <select name="values" class="form-control" type="time">
+                            @switch(ViewBag.StartMinute)
+                            {
+                                case 0:
+                                    <option value="0" selected>00</option>
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                    break;
+                                case 15:
+                                    <option value="0">00</option>
+                                    <option value="15" selected>15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                    break;
+                                case 30:
+                                    <option value="0">00</option>
+                                    <option value="15">15</option>
+                                    <option value="30" selected>30</option>
+                                    <option value="45">45</option>
+                                    break;
+                                case 45:
+                                    <option value="0">00</option>
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45" selected>45</option>
+                                    break;
+                            }
+                        </select>
+                    </div>
                 </div>
-               <div>
-                    <label class="control-label">分</label>
-                    <select name="values" class="form-control" type="time">
-                        <option value="0">00</option>
-                        <option value="15">15</option>
-                        <option value="30">30</option>
-                        <option value="45">45</option>
-                    </select>
-
-               </div>
-                </div>
-                
             </div>
             <div class="form-group">
                 <label class="control-label pt-2 pb-2">退勤時間</label>
@@ -59,24 +87,50 @@
                         <select name="values" class="form-control" type="time">
                             @for (int i = 0; i <= 23; i++)
                             {
-                                <option value="@i">@i</option>
+                                @if (i == ViewBag.EndHour)
+                                {
+                                    <option value="@i" selected>@i</option>
+                                }
+                                else
+                                {
+                                    <option value="@i">@i</option>
+                                }
                             }
                         </select>
-
-
                     </div>
                     <div>
                         <label class="control-label">分</label>
                         <select name="values" class="form-control" type="time">
-                            <option value="0">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
+                            @switch (ViewBag.EndMinute)
+                            {
+                                case 0:
+                                    <option value="0" selected>00</option>
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                    break;
+                                case 15:
+                                    <option value="0">00</option>
+                                    <option value="15" selected>15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                    break;
+                                case 30:
+                                    <option value="0">00</option>
+                                    <option value="15">15</option>
+                                    <option value="30" selected>30</option>
+                                    <option value="45">45</option>
+                                    break;
+                                case 45:
+                                    <option value="0">00</option>
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45" selected>45</option>
+                                    break;
+                            }
                         </select>
                     </div>
-
-                </div>
-               
+                </div>         
             </div>
             <div class="form-group pt-2 pb-2">
                 <label class="control-label">体調</label>
@@ -104,8 +158,6 @@
         </form>
         <a asp-action="MemIndex">報告一覧に戻る</a>
     </div>
-
-
 </div>
 
 @section Scripts {
