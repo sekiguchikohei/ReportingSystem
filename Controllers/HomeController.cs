@@ -78,40 +78,22 @@ namespace 業務報告システム.Controllers
             ApplicationUser loginManager = await _userManager.FindByIdAsync(loginManagerId);
             userIndex.User = loginManager;
 
-            var allprojects = _context.project.ToList();
-            var managerprojects = _context.userproject.Where(x => x.UserId.Equals(loginManager.Id)).ToList();
+            var managerproject = _context.userproject.Include(x => x.Project).Where(x => x.UserId.Equals(loginManager.Id)).ToList();
 
-            foreach (var project in managerprojects)
-            {
-                foreach (var allproject in allprojects)
-                {
-                    if (project.ProjectId == allproject.ProjectId)
-                    {
-                        Project pj = new Project();
-                        pj.ProjectId = allproject.ProjectId;
-                        pj.Name = allproject.Name;
-                        userIndex.Projects.Add(pj);
-                    }
-                }
-            }
+            Project pj = new Project();
+            pj.ProjectId = managerproject.First().ProjectId;
+            pj.Name = managerproject.First().Project.Name;
+            userIndex.Projects.Add(pj);
 
-            var alluserprojects = _context.userproject.ToList();
+            var alluserprojects = _context.userproject.Where(x => x.ProjectId == userIndex.Projects.First().ProjectId).ToList();
 
             foreach (var userproject in alluserprojects)
             {
-                foreach (var managerproject in userIndex.Projects)
+                ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
+                if (user.Role.Equals("Member"))
                 {
-                    if (userproject.ProjectId == managerproject.ProjectId)
-                    {
-                        ApplicationUser user = await _userManager.FindByIdAsync(userproject.UserId);
-
-                        if (user.Role.Equals("Member")) {
-                            userIndex.Users.Add(user);
-                        }
-                        
-                    }
+                    userIndex.Users.Add(user);
                 }
-
             }
 
             userIndex.Users.Remove(loginManager);
