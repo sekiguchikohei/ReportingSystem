@@ -11,98 +11,99 @@
 }
 
 <div class="mgr-center">
-        @foreach (var project in Model.Projects)
-        {
+    @foreach (var project in Model.Projects)
+    {
         <h1 class="mgrmain">プロジェクト名： @project.Name </h1>
-        }
-        <a asp-action="MgrCreate" class="btn btn-warning">新規作成</a>
+    }
+    <a asp-action="MgrCreate" class="btn btn-warning">新規作成</a>
 </div>
 
 <div class="mgr-center">
-@foreach (var user in Model.Users)
-{
-    var userDivId = "user-" + user.Id;
-    <h3 class="mgrname">@user.LastName @user.FirstName <button class="toggle-details btn btn-info" data-target="details-@user.Id">詳細表示</button></h3>    if (user.Todos != null)
+    @foreach (var user in Model.Users)
     {
-        @foreach (var todo in user.Todos)
+        var userDivId = "user-" + user.Id;
+        <h3 class="mgrname">@user.LastName @user.FirstName <button class="toggle-details btn btn-info" data-target="details-@user.Id">詳細表示</button></h3>
+        if (user.Todos != null)
         {
-            @if (todo.UserId.Equals(user.Id))
+            @foreach (var todo in user.Todos)
             {
-                <div >
-                    <div  class="card">
-                        <div class="card-body">
+                @if (todo.UserId.Equals(user.Id))
+                {
+                    <div>
+                        <div class="card">
+                            @* <div class="card-body"> *@
                             @* <div class="d-flex justify-content-between"> *@
-                                <div>
-                                    <div class="d-flex justify-content-center"  name="@userDivId" style="display: none;">
-                                        <div class="d-flex justify-content-between vw-100">
-                                        <div style="max-width:250px;">
-                                        <h5 class="fw-bold mt-2">@todo.TaskName</h5>
+                            <div>
+                                <div class="d-flex justify-content-between p-3" name="@userDivId" style="display: none;">
+                                    @* <div class="d-flex justify-content-between"> *@
+                                        <div style="width:250px;">
+                                            <h5 class="fw-bold mt-2 text-start">@todo.TaskName</h5>
                                         </div>
                                         @switch (@todo.Progress)
                                         {
                                             case 0:
-                                                    <p class="text-danger fw-bold mt-2">進捗 : 0%</p>
+                                                <p class="text-danger fw-bold mt-2">進捗 : 0%</p>
                                                 break;
                                             case 1:
-                                                    <p class="text-danger fw-bold mt-2">進捗 : 10%</p>
+                                                <p class="text-danger fw-bold mt-2">進捗 : 10%</p>
                                                 break;
                                             case 2:
-                                                    <p class="text-danger fw-bold mt-2">進捗 : 20%</p>
+                                                <p class="text-danger fw-bold mt-2">進捗 : 20%</p>
                                                 break;
                                             case 3:
-                                                    <p class="text-danger fw-bold mt-2">進捗 : 30%</p>
+                                                <p class="text-danger fw-bold mt-2">進捗 : 30%</p>
                                                 break;
                                             case 4:
-                                                    <p class="text-danger fw-bold mt-2">進捗 : 40%</p>
+                                                <p class="text-danger fw-bold mt-2">進捗 : 40%</p>
                                                 break;
                                             case 5:
-                                                    <p class="fw-bold mt-2">進捗 : 50%</p>
+                                                <p class="fw-bold mt-2">進捗 : 50%</p>
                                                 break;
                                             case 6:
-                                                    <p class="fw-bold mt-2">進捗 : 60%</p>
+                                                <p class="fw-bold mt-2">進捗 : 60%</p>
                                                 break;
                                             case 7:
-                                                    <p class="fw-bold mt-2">進捗 : 70%</p>
+                                                <p class="fw-bold mt-2">進捗 : 70%</p>
                                                 break;
                                             case 8:
-                                                    <p class="fw-bold text-success mt-2">進捗 : 80%</p>
+                                                <p class="fw-bold text-success mt-2">進捗 : 80%</p>
                                                 break;
                                             case 9:
-                                                    <p class="fw-bold text-success mt-2">進捗 : 90%</p>
+                                                <p class="fw-bold text-success mt-2">進捗 : 90%</p>
                                                 break;
                                             case 10:
-                                                    <p class="fw-bold text-success mt-2">進捗 : 100%</p>
+                                                <p class="fw-bold text-success mt-2">進捗 : 100%</p>
                                                 break;
                                         }
-                                    
-                                    <div>
-                                        <form asp-controller="Todos" asp-action="Edit" asp-route-id="@todo.TodoId" method="get">
-                                            <input type="submit" value="編集" class="btn btn-warning me-2" />
-                                        </form>
-                                    </div>
+
+                                        <div>
+                                            <form asp-controller="Todos" asp-action="Edit" asp-route-id="@todo.TodoId" method="get">
+                                                <input type="submit" value="編集" class="btn btn-warning me-2" />
+                                            </form>
                                         </div>
-                                    </div>
-                                    <div class="details" name="details-@user.Id" style="display: none;">
-                                        <div class="text-start">
-                                        <p >開始日: @Html.DisplayFor(modelItem => todo.StartDate)</p>
-                                        <p >終了日: @Html.DisplayFor(modelItem => todo.EndDate)</p>
-                                        <p >詳細: @Html.DisplayFor(modelItem => todo.Comment)</p>
-                                        </div>
-                                     </div>
+                                    @* </div> *@
                                 </div>
-                                 
+                                <div class="details" name="details-@user.Id" style="display: none;">
+                                    <div class="text-start p-3">
+                                        <p>開始日: @Html.DisplayFor(modelItem => todo.StartDate)</p>
+                                        <p>終了日: @Html.DisplayFor(modelItem => todo.EndDate)</p>
+                                        <p>詳細: @Html.DisplayFor(modelItem => todo.Comment)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @* </div> *@
                             @* </div> *@
                         </div>
                     </div>
-               </div>
+                }
             }
         }
+        else
+        {
+            <p>タスクがありません</p>
+        }
     }
-    else
-    {
-        <p>タスクがありません</p>
-    }
-}
 </div>
 <script>
     const toggleButtons = document.querySelectorAll(".toggle-details");
@@ -110,10 +111,10 @@
         button.addEventListener("click", () => {
             const targetId = button.getAttribute("data-target");
             const details = document.getElementsByName(targetId);
-            for (let i = 0; i < details.length; i ++) {
+            for (let i = 0; i < details.length; i++) {
                 if (details[i].style.display === "none") {
-                details[i].style.display = "block";
-                button.textContent = "詳細非表示";
+                    details[i].style.display = "block";
+                    button.textContent = "詳細非表示";
                 } else {
                     details[i].style.display = "none";
                     button.textContent = "詳細表示";
