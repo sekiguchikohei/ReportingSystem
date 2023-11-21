@@ -47,7 +47,7 @@
             @* Attendance追記 *@
             <div class="form-group">
                 <label class="control-label">日付</label>
-                <input name="values" class="form-control" type="date" value="@Model.Report.Date.Year-@Model.Report.Date.Month-@Model.Report.Date.Day"/>
+                <input name="values" class="form-control" type="date" value="@Model.Report.Date.ToString("yyyy-MM-dd")"/>
             </div>
             <div class="form-group">
                 <label class="control-label">勤怠</label>
@@ -106,7 +106,7 @@
                             {
                                 @if (i == sminute)
                                 {
-                                    <option value="@i" selected>@i</option>
+                                    <option value="@i" selected>@((i == 0) ? "00" : i.ToString())</option>
                                 }
                                 <option value="@i">@i</option>
                             }
