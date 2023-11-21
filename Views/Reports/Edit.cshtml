@@ -70,7 +70,7 @@
 
                     <div>
                         <label class="control-label">時間</label>
-                        <select name="values" class="form-control">
+                        <select name="values" class="form-control" type="time">
                             @for (int i = 0; i <= 23; i++)
                             {
                                 @if (i == shour)
@@ -85,23 +85,37 @@
                     <div>
                         <label class="control-label">分</label>
                         <select name="values" class="form-control" type="time">
-                            @for (int i = 0; i <= 45; i += 15)
+                            @switch (sminute)
                             {
-                                @if (i == sminute)
-                                {
-                                    <option value="@i" selected>@((i == 0) ? "00" : i.ToString())</option>
-                                }
-                                <option value="@i">@i</option>
+                                case 0:
+                                    <option value="0" selected>00</option>
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                    break;
+                                case 15:
+                                    <option value="0">00</option>
+                                    <option value="15" selected>15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                    break;
+                                case 30:
+                                    <option value="0">00</option>
+                                    <option value="15">15</option>
+                                    <option value="30" selected>30</option>
+                                    <option value="45">45</option>
+                                    break;
+                                case 45:
+                                    <option value="0">00</option>
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45" selected>45</option>
+                                    break;
                             }
-
                         </select>
-
-
                     </div>
 
                 </div>
-
-                
             </div>
             <div class="form-group">
                 <label class="control-label pt-2 pb-2">退勤時間</label>
@@ -126,13 +140,32 @@
                     <div>
                         <label class="control-label">分</label>
                         <select name="values" class="form-control" type="time">
-                            @for (int i = 0; i <= 45; i += 15)
+                            @switch (eminute)
                             {
-                                @if (i == eminute)
-                                {
-                                    <option value="@i" selected>@i</option>
-                                }
-                                <option value="@i">@i</option>
+                                case 0:
+                                    <option value="0" selected>00</option>
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                    break;
+                                case 15:
+                                    <option value="0">00</option>
+                                    <option value="15" selected>15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                    break;
+                                case 30:
+                                    <option value="0">00</option>
+                                    <option value="15">15</option>
+                                    <option value="30" selected>30</option>
+                                    <option value="45">45</option>
+                                    break;
+                                case 45:
+                                    <option value="0">00</option>
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45" selected>45</option>
+                                    break;
                             }
                         </select>
 
