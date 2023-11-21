@@ -68,12 +68,11 @@
         <p>@Model.Report.Comment</p>
         <p class="fw-bold pt-2 pb-2">明日やること</p>
         <p>@Model.Report.TomorrowComment</p>
-        @* //============================================ *@
-        @if(Model.Report.UpDate != null)
+        @if (Model.Report.UpDate.HasValue)
         {
             <p class="fw-bold pt-2 pb-2">更新日時</p>
+            <p>@Model.Report.UpDate.Value.ToString("yyyy/MM/dd HH:mm")</p>
         }
-        @* //============================================ *@
         <div class="d-flex flex-row-reverse">
             @if (User.IsInRole("Member"))
             {
