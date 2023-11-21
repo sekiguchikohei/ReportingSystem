@@ -23,7 +23,7 @@
                 <select asp-for="Progress" class="form-control">
                     @for (int i = 0; i <= 10; i++)
                     {
-                        <option value="@i">@i</option>
+                        <option value="@i">@(i*10)%</option>
                     }
                 </select>
                 <span asp-validation-for="Progress" class="text-danger"/>

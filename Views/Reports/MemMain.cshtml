@@ -39,112 +39,134 @@
 }
 
 <div class="mgr-container">
-<h3 class="text-center">所属プロジェクト</h3>
-@if (Model.Projects != null)
-{
-    @foreach (var item in Model.Projects)
+    <h3 class="text-center">所属プロジェクト</h3>
+    @if (Model.Projects != null)
     {
-        <h2 class="text-center">@item.Name</h2>
+        @foreach (var item in Model.Projects)
+        {
+            <h2 class="text-center">@item.Name</h2>
 
+        }
     }
-}else
-{
-<p>所属プロジェクトはありません。</p>    
-}
+    else
+    {
+        <p>所属プロジェクトはありません。</p>    
+    }
     <div class="mgr-container-sub">
-<div class="text-center">
-<h4>報告先</h4>
-@if (Model.Managers != null)
-{
+        <div class="text-center">
+            <h4>報告先</h4>
+            @if (Model.Managers != null)
+            {
                 @foreach (var manager in Model.Managers)
                 {
                     <h3>@manager.LastName @manager.FirstName</h3>
                 }
                
-} else
-{
-  <p>マネージャーの登録がありません。</p>  
-}
+            } 
+            else
+            {
+              <p>マネージャーの登録がありません。</p>  
+            }
+        </div>
     </div>
-</div>
 </div>
 
 <div class="mgr-container">
-<h3 class="text-center">今日のやること</h3>
-@if (Model.Report != null)
-{
-        <div class="unfinish-todos">
-    <p class="text-center fw-bold">@Model.Report.TomorrowComment</p>
-    </div>
-} else
-{
-    <p class="text-center">昨日提出した報告が無いため表示できません。</p>
-}
-</div>
-
-<div class="mgr-container">
-<h3 class="text-center">未達成タスク一覧</h3>
-@if(Model.Todos != null)
-{
-    @foreach (var todo in Model.Todos)
+    <h3 class="text-center">今日のやること</h3>
+    @if (Model.Report != null)
     {
+        <div class="unfinish-todos">
+            <p class="text-center fw-bold">@Model.Report.TomorrowComment</p>
+        </div>
+    } 
+    else
+    {
+        <p class="text-center">昨日提出した報告が無いため表示できません。</p>
+    }
+</div>
+
+<div class="mgr-container">
+    <h3 class="text-center">未達成タスク一覧</h3>
+    @if(Model.Todos != null)
+    {
+        @foreach (var todo in Model.Todos)
+        {
             <div class="unfinish-todos">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="w-25 me-1">
-        <h4>@todo.TaskName</h4>
+                        <h4>@todo.TaskName</h4>
                     </div>
-        @switch (@todo.Progress)
-            {
-                case 0:
-                    <h4 class="text-danger fw-bold">進捗 : 0%</h4>
-                    break;
-                case 1:
-                        <h4 class="text-danger fw-bold">進捗 : 10%</h4>
-                    break;
-                case 2:
-                        <h4 class="text-danger fw-bold">進捗 : 20%</h4>
-                    break;
-                case 3:
-                        <h4 class="text-danger fw-bold">進捗 : 30%</h4>
-                    break;
-                case 4:
-                        <h4 class="text-danger fw-bold">進捗 : 40%</h4>
-                    break;
-                case 5:
-                        <h4 class="fw-bold">進捗 : 50%</h4>
-                    break;
-                case 6:
-                        <h4 class="fw-bold">進捗 : 60%</h4>
-                    break;
-                case 7:
-                        <h4 class="fw-bold">進捗 : 70%</h4>
-                    break;
-                case 8:
-                            <h4 class="fw-bold text-success">進捗: 80%</h4>
-                    break;
-                case 9:
-                        <h4 class="fw-bold text-success">進捗: 90%</h4>
-                    break;
-                case 10:
-                        <h4 class="fw-bold">進捗: 100%</h4>
-                    break;
-            }
-                    
-            <div>
+                    @switch (@todo.Progress)
+                    {
+                        case 0:
+                            <h4 class="text-danger fw-bold">進捗 : 0%</h4>
+                            break;
+                        case 1:
+                            <h4 class="text-danger fw-bold">進捗 : 10%</h4>
+                            break;
+                        case 2:
+                            <h4 class="text-danger fw-bold">進捗 : 20%</h4>
+                            break;
+                        case 3:
+                            <h4 class="text-danger fw-bold">進捗 : 30%</h4>
+                            break;
+                        case 4:
+                            <h4 class="text-danger fw-bold">進捗 : 40%</h4>
+                            break;
+                        case 5:
+                            <h4 class="fw-bold">進捗 : 50%</h4>
+                            break;
+                        case 6:
+                            <h4 class="fw-bold">進捗 : 60%</h4>
+                            break;
+                        case 7:
+                            <h4 class="fw-bold">進捗 : 70%</h4>
+                            break;
+                        case 8:
+                                 <h4 class="fw-bold text-success">進捗: 80%</h4>
+                            break;
+                        case 9:
+                            <h4 class="fw-bold text-success">進捗: 90%</h4>
+                            break;
+                        case 10:
+                            <h4 class="fw-bold">進捗: 100%</h4>
+                            break;
+                    }  
+                    <div>
+                        @{
+                            var remainingDays = (todo.EndDate - DateTime.Now.Date).TotalDays;
+                        }
+                        @if(remainingDays > 0)
+                        {
+                            <h5>
+                                <span style="color: green;">あと @remainingDays 日</span>
+                            </h5>
+                        }
+                        else　if(remainingDays == 0)
+                        {
+                            <h5>期限日<span style="color: red;">当日</span>です！</h5>
+                        }
+                        else
+                        {
+                            <h5>
+                                <span style="color: red;">期限切れ</span>
+                            </h5>
+                        }
+                    </div>
+                    <div>
                         @{
                             string dows = todo.StartDate.ToString("ddd");
                             string dowe = todo.EndDate.ToString("ddd");
                         }
-
                         <p>目標開始日：@todo.StartDate.Year 年 @todo.StartDate.Month 月 @todo.StartDate.Day 日 (@dows)</p>
                         <p>目標完了日：@todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日 (@dowe)</p>
-            </div>
+                    </div>
                 </div>
-       </div>
+            </div>
+        }
+    } 
+    else
+    {
+        <p>完了していないタスクはありません。</p>
     }
-} else
-{
-<p>完了していないタスクはありません。</p>
-}
-
 </div>

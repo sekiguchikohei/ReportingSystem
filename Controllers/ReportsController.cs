@@ -196,6 +196,7 @@ namespace 業務報告システム.Controllers
             managerMain.Todos = new List<Todo>();
             managerMain.Members = new List<ApplicationUser>();
             managerMain.ReportNotSubmit = new List<ApplicationUser>();
+            managerMain.Feedbacks = new List<Feedback>();
 
             var loginManagerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             managerMain.Manager = await _userManager.FindByIdAsync(loginManagerId);
@@ -276,6 +277,9 @@ namespace 業務報告システム.Controllers
                     }
                 }
             }
+
+            var allFeedback = _context.feedback.ToList();
+            managerMain.Feedbacks = allFeedback;
 
             DateTime yesterday = DateTime.Today.AddDays(-1);
 

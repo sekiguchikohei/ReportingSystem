@@ -3,35 +3,11 @@
 
 @{
     ViewData["Title"] = "Edit";
-    string status1 = "";
-    string status2 = "";
-    string status3 = "";
-    string status4 = "";
     var shour = Model.Attendance.StartTime.Hour;
     var ehour = Model.Attendance.EndTime.Hour;
     var sminute = Model.Attendance.StartTime.Minute;
     var eminute = Model.Attendance.EndTime.Minute;
     var atd = Model.Attendance.Status;
-
-    switch (Model.Attendance.Status)
-    {
-        case "出勤":
-            status1 = "selected";
-            break;
-        case "有給":
-            status2 = "selected";
-            break;
-        case "早退":
-            status3 = "selected";
-            break;
-        case "遅刻":
-            status4 = "selected";
-            break;
-
-    }
-
-
-
 }
 
 

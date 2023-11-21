@@ -12,80 +12,86 @@
 
     <div class="mgr-container-sub">
 
+
+
         @foreach (var project in Model.Projects)
         {
             <h2 class="text-center">@project.Name</h2>
-
         }
 
     </div>
 </div>
 
 <div class="mgr-container">
-<h3 class="text-center">@title</h3>
+    <h3 class="text-center">@title</h3>
     <p class="text-center">メンバー名クリックで報告の詳細にアクセス</p>
 
-@if (Model.Reports != null)
-{
-
-    @foreach (var report in Model.Reports)
+    @if (Model.Reports != null)
     {
-        
-
+        @foreach (var report in Model.Reports)
+        {
             <div class="unfinish-todos">
                 <div class="d-flex justify-content-center">
-       
-        @foreach (var user in Model.Members)
-        {
-            @if (report.UserId.Equals(user.Id))
-            {
-                            
-
-                            <a asp-action="Details" asp-route-id="@user.Reports.First().ReportId" class="me-3">
-
-                           
-
-                                <h3 class="mt-2">@user.LastName @user.FirstName</h3>
-                        </a>
-
-            }
-        }
-        
-        @foreach (var attendance in Model.Attendances)
-        {
-            @if (attendance.ReportId == report.ReportId)
-            {
-                            <div class="d-flex">
-                <p class="me-3 mt-3">出勤状況 : @attendance.Status</p>
-                    @switch (@attendance.HealthRating)
+                    @foreach (var user in Model.Members)
                     {
-                        case 1:
-                            <img class="select-icon" src="/images/bad.png" />
-                            break;
-                        case 2:
-                            <img class="select-icon" src="/images/soso.png" />
-                            break;
-                        case 3:
-                            <img class="select-icon" src="/images/fine.png">
-                            break;
-                        case 4:
-                            <img class="select-icon" src="/images/good.png" />
-                            break;
-                        case 5:
-                            <img class="select-icon" src="/images/great.png" />
-                            break;
-                    }
+                        @if (report.UserId.Equals(user.Id))
+                        {
+                            @if (Model.Feedbacks != null)
+                            {
+                                int count = 0;
+                                @foreach (var fb in Model.Feedbacks)
+                                {
+                                    @if (fb.ReportId == report.ReportId)
+                                    {
+                                        count += 1;
+                                    }
+                                }
+                                @if (count == 0)
+                                {
+                                    <p class="mt-2 text-danger fw-bold me-3">未読</p>
+                                }
+                                count = 0;
+                            }
+                            else
+                            {
+                                <p class="mt-2 text-danger fw-bold me-3">未読</p>
+                            }
+                            <a asp-action="Details" asp-route-id="@user.Reports.First().ReportId" class="me-3">
+                                <h3 class="mt-2">@user.LastName @user.FirstName</h3>
+                            </a>
+                        }
+                     }
+                    @foreach (var attendance in Model.Attendances)
+                    {
+                        @if (attendance.ReportId == report.ReportId)
+                        {
+                            <div class="d-flex">
+                                <p class="me-3 mt-3">出勤状況 : @attendance.Status</p>
+                                @switch (@attendance.HealthRating)
+                                {
+                                    case 1:
+                                        <img class="select-icon" src="/images/bad.png" />
+                                        break;
+                                    case 2:
+                                        <img class="select-icon" src="/images/soso.png" />
+                                        break;
+                                    case 3:
+                                        <img class="select-icon" src="/images/fine.png">
+                                        break;
+                                    case 4:
+                                        <img class="select-icon" src="/images/good.png" />
+                                        break;
+                                    case 5:
+                                        <img class="select-icon" src="/images/great.png" />
+                                        break;
+                                }
                             </div>
-
-            }
-
-        }
+                        }
+                    }
                 </div>
             </div>
+        }
     }
-
-}
-
 </div>
 
 <div class="mgr-main-contents">
