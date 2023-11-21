@@ -4,6 +4,15 @@
     ViewData["Title"] = "Create";
     DateTime today = DateTime.Now;
     string formatToday = today.ToString("yyyy-MM-dd");
+    formatToday = formatToday.Replace("-0", "-0");
+}
+
+@if (TempData["AlertReportError"] != null)
+{
+    <div class="alert alert-danger alert-dismissable fade show m-1" role="alert">
+        @TempData["AlertReportError"]
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 }
 
 <div class="container-uindex">

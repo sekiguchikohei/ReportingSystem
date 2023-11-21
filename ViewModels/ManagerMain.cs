@@ -11,6 +11,8 @@ namespace 業務報告システム.ViewModels
         public List<Todo>? Todos { get; set; }
         public List<ApplicationUser>? Members { get; set; }
 
-        public List<ApplicationUser>? ReportNotSubmit {  get; set; } 
+        public List<ApplicationUser>? ReportNotSubmit {  get; set; }
+
+        public List<Feedback>? Feedbacks { get; set; }
     }
 }

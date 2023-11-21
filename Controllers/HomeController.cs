@@ -41,15 +41,21 @@ namespace 業務報告システム.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Index() {
+        public async Task<IActionResult> Index(string[] search) {
 
             AdminIndex adminIndex = new AdminIndex();
             adminIndex.Projects = new List<Project>();
+
             adminIndex.Projects = _context.project.ToList();
+
             adminIndex.UserProjects = new List<UserProject>();
+
             adminIndex.UserProjects = _context.userproject.ToList();
+
             adminIndex.Users = new List<ApplicationUser>();
+
             adminIndex.Users = _userManager.Users.ToList();
+
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             adminIndex.User = await _userManager.FindByIdAsync(loginUserId);
 
@@ -62,9 +68,56 @@ namespace 業務報告システム.Controllers
             }
             else {
 
-                return View(adminIndex);
+                if (search.Length == 0)
+                {
+                    return View(adminIndex);
+
+                }
+                else {
+
+                    switch (search[1]) {
+                        case "名前":
+                            adminIndex.Users = await _userManager.Users.Where(x => x.FirstName.Contains(search[0]) || x.LastName.Contains(search[0])).ToListAsync();
+                            break;
+                        case "メールアドレス":
+                            adminIndex.Users = await _userManager.Users.Where(x => x.Email.Contains(search[0])).ToListAsync();
+                            break;
+                        case "ロール":
+                            adminIndex.Users = await _userManager.Users.Where(x => x.Role.Contains(search[0])).ToListAsync();
+                            break;
+                        case "プロジェクト":
+                            adminIndex.Projects = _context.project.Where(x => x.Name.Contains(search[0])).ToList();
+                            adminIndex.UserProjects = new List<UserProject>();
+                            foreach (var pj in adminIndex.Projects) { 
+                                var allUserProjects = _context.userproject.ToList();
+                                foreach (var up in allUserProjects) {
+                                    if (pj.ProjectId == up.ProjectId) {
+                                        adminIndex.UserProjects.Add(up);
+                                    }
+                                }
+                            }
+                            adminIndex.Users = new List<ApplicationUser>();
+                            var allusers = _userManager.Users.ToList();
+
+                            foreach (var us in allusers) {
+                                foreach (var up in adminIndex.UserProjects) {
+                                    if (us.UserProjects != null) { 
+                                        if (us.UserProjects.Contains(up))
+                                            adminIndex.Users.Add(us);                                 
+                                    }
+                                }
+                            }
+                            break;
+
+                    }
+                        
+                    return View(adminIndex);
+                }
+
+               
             }
         }
+
 
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> MgrIndex()
