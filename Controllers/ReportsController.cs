@@ -108,7 +108,7 @@ namespace 業務報告システム.Controllers
                 at.ReportId = attendance.ReportId;
                 reportIndex.Attendances.Add(at);
             }
-            var applicationDbContext = _context.report.Include(r => r.User);
+
             return View(reportIndex);
         }
 
@@ -516,7 +516,12 @@ namespace 業務報告システム.Controllers
                 UserId = loginUserId
             };
 
-            if (ModelState.IsValid)
+            var sameDayReportCheck = _context.report.Where(x => x.UserId.Equals(loginUserId)).Where(y => y.Date.Year == report.Date.Year && y.Date.Month == report.Date.Month && y.Date.Day == report.Date.Day).ToList();
+            if (sameDayReportCheck.Count() != 0) {
+                TempData["AlertReportError"] = "同じ日付の報告が既に存在しています。別の日付で作り直してください。";
+                return View();
+
+            } else if (ModelState.IsValid)
             {
                 _context.Add(report);
                 await _context.SaveChangesAsync();
@@ -532,16 +537,23 @@ namespace 業務報告システム.Controllers
                     ReportId = report.ReportId,
                 };
 
-                if (ModelState.IsValid) { 
-                }
-                _context.Add(attendance);
-                await _context.SaveChangesAsync();
+                if (ModelState.IsValid)
+                {
 
-                TempData["AlertReport"] = "報告を作成しました。";
-                return RedirectToAction(nameof(MemIndex));
+                    _context.Add(attendance);
+                    await _context.SaveChangesAsync();
+
+                    TempData["AlertReport"] = "報告を作成しました。";
+                    return RedirectToAction(nameof(MemIndex));
+                }
+                else {
+                    TempData["AlertReportError"] = "報告を保存できませんでした。";
+                    return View();
+                }
 
             }
             else {
+                TempData["AlertReportError"] = "報告を保存できませんでした。";
                 return View();
             }
 
@@ -642,6 +654,7 @@ namespace 業務報告システム.Controllers
             reportCRUD.Attendance = attendance;
             reportCRUD.User = await _userManager.FindByIdAsync(report.UserId);
 
+            TempData["AlertReportError"] = "報告を編集できませんでした。";
             return View(reportCRUD);
         }
 

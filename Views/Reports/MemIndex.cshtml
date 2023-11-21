@@ -17,7 +17,7 @@
     <a asp-action="Create" class="btn btn-warning m-3">報告の新規作成</a>
 </div>
 <div class="container-for-grid">
-        @foreach (var item in Model.Reports)
+    @foreach (var item in Model.Reports.OrderByDescending(x => x.Date))
         {
         <div class="r-card">
             @{
