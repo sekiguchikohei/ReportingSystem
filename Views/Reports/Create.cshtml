@@ -4,6 +4,7 @@
     ViewData["Title"] = "Create";
     DateTime today = DateTime.Now;
     string formatToday = today.ToString("yyyy-MM-dd");
+    formatToday = formatToday.Replace("-0", "-0");
 }
 
 @if (TempData["AlertReportError"] != null)
