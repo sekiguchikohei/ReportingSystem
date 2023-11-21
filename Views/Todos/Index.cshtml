@@ -26,47 +26,62 @@
         <div >
             <div class="card " onmouseover="showHidden(this)" onmouseout="hideHidden(this)">
                 <div class="card-body">
-                    @* <div class="d-flex justify-content-between"> *@
-                        <div >
-                            <div class="d-flex justify-content-center">
-                                <div class="d-flex justify-content-between w-100">
-                                    <div style="width:250px;">
-                                <h5 class="fw-bold mt-2">@Html.DisplayFor(modelItem => item.TaskName)</h5>
-                                </div>
-                                
-                                @if(item.Progress <= 4)
-                                {
-                                    <p class="text-danger fw-bold mt-2">
-                                        進捗: @(item.Progress * 10)%
-                                    </p>
-                                }
-                                else if(item.Progress <= 7)
-                                {
-                                    <p class="fw-bold mt-2">
-                                        進捗: @(item.Progress * 10)%
-                                    </p>
-                                }
-                                else
-                                {
-                                    <p class="text-success fw-bold mt-2">
-                                        進捗: @(item.Progress * 10)%
-                                    </p>
-                                }
-                                    <div class="d-flex justify-content-center align-items-end" style="min-width:120px;">
-                                        <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-warning me-1">編集</a>
-                                        <form asp-action="Delete" onSubmit="return check()">
-                                            <input type="hidden" name="id" value="@item.TodoId" />
-                                            <button type="submit" class="btn btn-danger">削除</button>
-                                        </form>
-                                    </div>
+                    <div >
+                        <div class="d-flex justify-content-center">
+                            <div class="d-flex justify-content-between w-100">
+                                <div style="width:250px;">
+                            <h5 class="fw-bold mt-2">@Html.DisplayFor(modelItem => item.TaskName)</h5>
+                            </div>
+                            @{
+                                var remainingDays = (item.EndDate - DateTime.Now.Date).TotalDays;
+                            }
+                            @if (remainingDays > 0)
+                            {
+                                <p class="mt-2">
+                                    <span style="color: green;">あと @remainingDays 日</span>
+                                </p>
+                            }
+                            else if (remainingDays == 0)
+                            {
+                                <p class="mt-2">期限日<span style="color: red;">当日</span>です！</p>
+                            }
+                            else
+                            {
+                                <p class="mt-2">
+                                    <span style="color: red;">期限切れ</span>
+                                </p>
+                            }
+                            @if(item.Progress <= 4)
+                            {
+                                <p class="text-danger fw-bold mt-2">
+                                    進捗: @(item.Progress * 10)%
+                                </p>
+                            }
+                            else if(item.Progress <= 7)
+                            {
+                                <p class="fw-bold mt-2">
+                                    進捗: @(item.Progress * 10)%
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="text-success fw-bold mt-2">
+                                    進捗: @(item.Progress * 10)%
+                                </p>
+                            }
+                                <div class="d-flex justify-content-center align-items-end" style="min-width:120px;">
+                                    <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-warning me-1">編集</a>
+                                    <form asp-action="Delete" onSubmit="return check()">
+                                        <input type="hidden" name="id" value="@item.TodoId" />
+                                        <button type="submit" class="btn btn-danger">削除</button>
+                                    </form>
                                 </div>
                             </div>
-                            <p class="card-text custom-hidden" style="display: none;">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
-                            <p class="card-text custom-hidden" style="display: none;">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>
-                            <p class="card-text custom-hidden" style="display: none;">コメント: @Html.DisplayFor(modelItem => item.Comment)</p>
                         </div>
-                        
-                    @* </div> *@
+                        <p class="card-text custom-hidden" style="display: none;">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
+                        <p class="card-text custom-hidden" style="display: none;">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>
+                        <p class="card-text custom-hidden" style="display: none;">コメント: @Html.DisplayFor(modelItem => item.Comment)</p>
+                    </div>
                 </div>
             </div>
         </div>
