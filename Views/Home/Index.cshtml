@@ -34,6 +34,19 @@
             <a class="btn btn-warning" asp-area="Identity" asp-page="/Account/Register">ユーザー作成</a>
     </div>
 
+    <div class="text-center">
+    <form asp-controller="Home" asp-action="Index" method="get">
+        <input name="search" type="text"/>
+        <select name="search">
+                <option>名前</option>
+                <option>メールアドレス</option>
+                <option>ロール</option>
+                <option>プロジェクト</option>
+        </select>
+        <input type="submit" value="検索" class="btn btn-info"/>
+    </form>
+    </div>
+
     <div class="container-for-grid">
 @foreach (var user in Model.Users)
 {
