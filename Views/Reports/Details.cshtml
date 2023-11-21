@@ -31,9 +31,8 @@
 
 <div class="container-rdetail fadeInR">
     <div class="container-form">
-    <h4 class="pt-3 text-center">報告日：@Model.Report.Date.Year 年 @Model.Report.Date.Month 月 @Model.Report.Date.Day 日 (@dow)</h4>
-        
-    <div class="d-flex justify-content-center">
+        <h4 class="pt-3 text-center">報告日：@Model.Report.Date.Year 年 @Model.Report.Date.Month 月 @Model.Report.Date.Day 日 (@dow)</h4>
+        <div class="d-flex justify-content-center">
             <p class="text-center fw-bold pt-2 pe-3">勤怠 : @Model.Attendance.Status</p>
 
             <div class="d-flex">
@@ -59,42 +58,40 @@
                 }
 
             </div>
-    </div>
-    <p class="text-center">体調コメント : @Model.Attendance.HealthComment</p>
-       
+        </div>
+        <p class="text-center">体調コメント : @Model.Attendance.HealthComment</p>
         <div class="d-flex justify-content-center">
             <p class="fw-bold pt-2 pb-2 pe-3">出勤時間 : @Model.Attendance.StartTime.Hour : @sTime </p>
             <p class="fw-bold pt-2 pb-2">退勤時間 : @Model.Attendance.EndTime.Hour : @eTime</p>
-
         </div>
-     
-    <p class="fw-bold pt-2 pb-2">報告内容</p>
-    <p>@Model.Report.Comment</p>
-    <p class="fw-bold pt-2 pb-2">明日やること</p>
-    <p>@Model.Report.TomorrowComment</p>
-
-        <div class="d-flex flex-row-reverse">
-        @if (User.IsInRole("Member"))
+        <p class="fw-bold pt-2 pb-2">報告内容</p>
+        <p>@Model.Report.Comment</p>
+        <p class="fw-bold pt-2 pb-2">明日やること</p>
+        <p>@Model.Report.TomorrowComment</p>
+        @* //============================================ *@
+        @if(Model.Report.UpDate != null)
         {
-            <div class="p-2">
-                <form asp-action="Delete" onsubmit="return checkR()">
-                    <input type="hidden" name="id" value="@Model.Report.ReportId" />
-                    <input type="submit" value="削除" class="btn btn-danger" />
-                </form>
-
-            </div>
-            <div class="p-2">
+            <p class="fw-bold pt-2 pb-2">更新日時</p>
+        }
+        @* //============================================ *@
+        <div class="d-flex flex-row-reverse">
+            @if (User.IsInRole("Member"))
+            {
+                <div class="p-2">
+                    <form asp-action="Delete" onsubmit="return checkR()">
+                        <input type="hidden" name="id" value="@Model.Report.ReportId" />
+                        <input type="submit" value="削除" class="btn btn-danger" />
+                    </form>
+                </div>
+                <div class="p-2">
                     <form asp-controller="Reports" asp-action="Edit" method="get">
                         <input type="hidden" name="id" value="@Model.Report.ReportId" />
                         <input type="submit" value="編集" class="btn btn-warning"  />
                     </form>
-
-            </div>       
-            
-        }
+                </div>       
+            }
+        </div>
     </div>
-
-</div>
 </div>
 
 <div class="container-rdetail fadeInR">

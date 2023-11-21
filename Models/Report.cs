@@ -13,6 +13,10 @@ namespace 業務報告システム.Models
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
+        //更新日時
+        [DataType(DataType.Date)]
+        public DateTime UpDate { get; set; }
+
         //今日のコメント
         [MaxLength(400)]
         public string? Comment { get; set; }
