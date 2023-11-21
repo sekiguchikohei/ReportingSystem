@@ -626,6 +626,7 @@ namespace 業務報告システム.Controllers
             {
                 ReportId = int.Parse(values[0]),
                 Date = submitDay,
+                UpDate = DateTime.Now,
                 Comment = values[9],
                 TomorrowComment = values[10],
                 UserId = loginUserId
