@@ -165,10 +165,10 @@
 
 @if (User.IsInRole("Member"))
 {
-    <a asp-action="MemIndex">一覧に戻る</a>
+    <a asp-action="MemIndex" style="margin-left:2rem;">一覧に戻る</a>
 } else if (User.IsInRole("Manager"))
 {
-    <a asp-controller="Home" asp-action="MgrIndex">メンバー一覧に戻る</a>
+    <a asp-controller="Home" asp-action="MgrIndex" style="margin-left:2rem;">メンバー一覧に戻る</a>
 }
 
 
