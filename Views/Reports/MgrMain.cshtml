@@ -92,12 +92,10 @@
             </div>
         }
     }
-</div>
+ </div>
 
 <div class="mgr-main-contents">
-
     <div class="mgrmain-flexcontents">
-
         @{
             string zenjitsu = "昨日の報告未提出者一覧";
             DateTime yesterday = DateTime.Today.AddDays(-1);
@@ -105,100 +103,104 @@
             {
                 zenjitsu = "金曜日の報告未提出者一覧";
             }
-
         }
-
         <h3 class="text-center">@zenjitsu</h3>
-       
-
-            @if (Model.ReportNotSubmit != null)
+        @if (Model.ReportNotSubmit != null)
+        {
+            @foreach (var user in Model.ReportNotSubmit)
             {
-                @foreach (var user in Model.ReportNotSubmit)
-                {
-                    <div class="unfinish-todos">
+                <div class="unfinish-todos">
                     <h4 class="text-center">@user.LastName @user.FirstName</h4>
-                    </div>
-
-                }
-            }
-
-    </div>
-
-    <div class="mgrmain-flexcontents">
-    <h3 class="text-center">メンバーの未達成タスク一覧</h3>
-
-    @if (Model.Members != null)
-    {
-        @foreach (var user in Model.Members)
-        {
-          <h4 class="text-center">@user.LastName @user.FirstName</h4>      
-            
-    @if (Model.Todos != null)
-    {
-        @foreach (var todo in Model.Todos)
-        {
-            @if (todo.UserId.Equals(user.Id))  
-            {
-                            
-                        
-           
-                        <div class="unfinish-todos">
-                    <div class="d-flex justify-content-start">
-                        <div style="max-width:300px;">
-            <p class="fw-bold me-2">@todo.TaskName</p>
-                        </div>
-                @switch (@todo.Progress)
-                {
-                    case 0:
-                    <p class="text-danger fw-bold">進捗 : 0%</p>
-                        break;
-                    case 1:
-                                <p class="text-danger fw-bold">進捗 : 10%</p>
-                        break;
-                    case 2:
-                                <p class="text-danger fw-bold">進捗 : 20%</p>
-                        break;
-                    case 3:
-                                <p class="text-danger fw-bold">進捗 : 30%</p>
-                        break;
-                    case 4:
-                                <p class="text-danger fw-bold">進捗 : 40%</p>
-                        break;
-                    case 5:
-                                <p class="fw-bold">進捗 : 50%</p>
-                        break;
-                    case 6:
-                                <p class="fw-bold">進捗 : 60%</p>
-                        break;
-                    case 7:
-                                <p class="fw-bold">進捗 : 70%</p>
-                        break;
-                    case 8:
-                                <p class="fw-bold text-success">進捗 : 80%</p>
-                        break;
-                    case 9:
-                                <p class="fw-bold text-success">進捗 : 90%</p>
-                        break;
-                    case 10:
-                                <p class="fw-bold text-success">進捗 : 100%</p>
-                        break;
-                }
-                    </div>
-
-                    @{
-                        string dow = todo.EndDate.ToString("ddd");
-                    }
-
-                <p class="mt-0">目標完了日 : @todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日 (@dow)</p>
                 </div>
-        }
-                    }
-    }
             }
-
         }
     </div>
-
+    <div class="mgrmain-flexcontents">
+        <h3 class="text-center">メンバーの未達成タスク一覧</h3>
+        @if (Model.Members != null)
+        {
+            @foreach (var user in Model.Members)
+            {
+              <h4 class="text-center">@user.LastName @user.FirstName</h4>      
+            
+            @if (Model.Todos != null)
+            {
+                @foreach (var todo in Model.Todos)
+                {
+                    @if (todo.UserId.Equals(user.Id))  
+                    {
+                        <div class="unfinish-todos">
+                            <div class="d-flex justify-content-start">
+                                <div style="max-width:300px;">
+                                    <p class="fw-bold me-2">@todo.TaskName</p>
+                                </div>
+                                @switch (@todo.Progress)
+                                {
+                                    case 0:
+                                    <p class="text-danger fw-bold me-2">進捗 : 0%</p>
+                                        break;
+                                    case 1:
+                                            <p class="text-danger fw-bold me-2">進捗 : 10%</p>
+                                        break;
+                                    case 2:
+                                            <p class="text-danger fw-bold me-2">進捗 : 20%</p>
+                                        break;
+                                    case 3:
+                                            <p class="text-danger fw-bold me-2">進捗 : 30%</p>
+                                        break;
+                                    case 4:
+                                            <p class="text-danger fw-bold me-2">進捗 : 40%</p>
+                                        break;
+                                    case 5:
+                                            <p class="fw-bold me-2">進捗 : 50%</p>
+                                        break;
+                                    case 6:
+                                            <p class="fw-bold me-2">進捗 : 60%</p>
+                                        break;
+                                    case 7:
+                                            <p class="fw-bold me-2">進捗 : 70%</p>
+                                        break;
+                                    case 8:
+                                                <p class="fw-bold text-success">進捗 : 80%</p>
+                                        break;
+                                    case 9:
+                                            <p class="fw-bold text-success me-2">進捗 : 90%</p>
+                                        break;
+                                    case 10:
+                                            <p class="fw-bold text-success me-2">進捗 : 100%</p>
+                                        break;
+                                }
+                                @{
+                                    var remainingDays = (todo.EndDate - DateTime.Now.Date).TotalDays;
+                                }
+                                @if (remainingDays > 0)
+                                {
+                                        <p class="me-2">
+                                        <span style="color: green;">あと @remainingDays 日</span>
+                                    </p>
+                                }
+                                else if (remainingDays == 0)
+                                {
+                                    <p class="me-2">期限日<span style="color: red;">当日</span>です！</p>
+                                }
+                                else
+                                {
+                                    <p class="me-2">
+                                        <span style="color: red;">期限切れ</span>
+                                    </p>
+                                }
+                            </div>
+                            @{
+                                string dow = todo.EndDate.ToString("ddd");
+                            }
+                            <p class="mt-0">目標完了日 : @todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日 (@dow)</p>
+                        </div>
+                        }
+                    }
+                }
+            }
+        }
+    </div>
 </div>
 
 
