@@ -48,13 +48,13 @@
                                 }
                                 @if (count == 0)
                                 {
-                                    <p class="mt-2 text-danger fw-bold me-3">未読</p>
+                                    <p class="mt-3 text-danger fw-bold me-3">未読</p>
                                 }
                                 count = 0;
                             }
                             else
                             {
-                                <p class="mt-2 text-danger fw-bold me-3">未読</p>
+                                <p class="mt-3 text-danger fw-bold me-3">未読</p>
                             }
                             <a asp-action="Details" asp-route-id="@user.Reports.First().ReportId" class="me-3">
                                 <h3 class="mt-2">@user.LastName @user.FirstName</h3>
@@ -130,8 +130,8 @@
                     @if (todo.UserId.Equals(user.Id))  
                     {
                         <div class="unfinish-todos">
-                            <div class="d-flex justify-content-start">
-                                <div style="max-width:300px;">
+                            <div class="d-flex justify-content-between">
+                                <div style="width:290px;">
                                     <p class="fw-bold me-2">@todo.TaskName</p>
                                 </div>
                                 @switch (@todo.Progress)
