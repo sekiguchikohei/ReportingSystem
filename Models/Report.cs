@@ -15,7 +15,7 @@ namespace 業務報告システム.Models
 
         //更新日時
         [DataType(DataType.Date)]
-        public DateTime UpDate { get; set; }
+        public DateTime? UpDate { get; set; }
 
         //今日のコメント
         [MaxLength(400)]
