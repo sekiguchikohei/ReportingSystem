@@ -1,10 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace 業務報告システム.Models
 {
+    [Index(nameof(Project.Name),IsUnique = true)]
     public class Project
     {
         public int ProjectId { get; set; }
+
+        [MaxLength(30)]
         public string Name { get; set; }
 
         //public List<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();

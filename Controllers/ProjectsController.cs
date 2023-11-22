@@ -49,11 +49,22 @@ namespace 業務報告システム.Controllers
             ModelState.Remove("Users");
             if (ModelState.IsValid)
             {
-                _context.Add(project);
-                await _context.SaveChangesAsync();
-                TempData["AlertProject"] = "新しいプロジェクトを追加しました。";
-                return RedirectToAction(nameof(Index));
+                var checkDup = _context.project.Where(x => x.Name.Equals(project.Name)).ToList();
+                if (checkDup.Count() == 0)
+                {
+                    _context.Add(project);
+                    await _context.SaveChangesAsync();
+                    TempData["AlertProject"] = "新しいプロジェクトを追加しました。";
+                    return RedirectToAction(nameof(Index));
+                }
+                else {
+                    TempData["AlertProjectError"] = "既に同じプロジェクトが存在しています。";
+                    return View(project);
+                }
+
+                
             }
+            TempData["AlertProjectError"] = "新しいプロジェクトを追加できませんでした。";
             return View(project);
         }
 
