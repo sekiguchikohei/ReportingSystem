@@ -19,6 +19,7 @@ $gray: #EDF2F7;
     border-radius: 24px;
 }
 
+
 .logo-home {
     margin-right: auto;
     margin-left: auto;
@@ -455,4 +456,20 @@ $gray: #EDF2F7;
     }
 }
 
+.mgrmain-title {
+    width: 260px;
+
+    @media (min-width: 100px) and (max-width: 767px) {
+        width:200px;
+    }
+}
+
+.mgrmain-pgs{
+
+
+}
+
+.mgrmain-rd{
+
+}
     //rika end here//

@@ -9,7 +9,8 @@ namespace 業務報告システム.Models
     {
         public int ProjectId { get; set; }
 
-        [MaxLength(30)]
+        [Required(ErrorMessage = "プロジェクトの名前を入力してください。")]
+        [MaxLength(30, ErrorMessage = "プロジェクトの名前は30文字以内で入力してください。")]
         public string Name { get; set; }
 
         //public List<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
