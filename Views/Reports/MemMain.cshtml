@@ -93,8 +93,8 @@
         {
             <div class="unfinish-todos">
                 <div class="d-flex justify-content-between align-items-center">
-                    <div class="w-25 me-1">
-                        <h4>@todo.TaskName</h4>
+                    <div class="memmain-tasktitle">
+                        <h4 class="fw-bold">@todo.TaskName</h4>
                     </div>
                     @switch (@todo.Progress)
                     {
@@ -132,34 +132,34 @@
                             <h4 class="fw-bold">進捗: 100%</h4>
                             break;
                     }  
-                    <div>
+                    <div class="memmain-taskremain">
                         @{
                             var remainingDays = (todo.EndDate - DateTime.Now.Date).TotalDays;
                         }
                         @if(remainingDays > 0)
                         {
-                            <h5>
+                            <h5 class="fw-bold">
                                 <span style="color: green;">あと @remainingDays 日</span>
                             </h5>
                         }
                         else　if(remainingDays == 0)
                         {
-                            <h5>期限日<span style="color: red;">当日</span>です！</h5>
+                            <h5 class="fw-bold">期限日<span class="text-danger">当日</span>です！</h5>
                         }
                         else
                         {
-                            <h5>
-                                <span style="color: red;">期限切れ</span>
+                            <h5 class="fw-bold">
+                                <span class="text-danger">期限切れ</span>
                             </h5>
                         }
                     </div>
-                    <div>
+                    <div class="memmain-taskdd">
                         @{
                             string dows = todo.StartDate.ToString("ddd");
                             string dowe = todo.EndDate.ToString("ddd");
                         }
-                        <p>目標開始日：@todo.StartDate.Year 年 @todo.StartDate.Month 月 @todo.StartDate.Day 日 (@dows)</p>
-                        <p>目標完了日：@todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日 (@dowe)</p>
+                        <p>開始日：@todo.StartDate.Year 年 @todo.StartDate.Month 月 @todo.StartDate.Day 日 (@dows)</p>
+                        <p>完了日：@todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日 (@dowe)</p>
                     </div>
                 </div>
             </div>

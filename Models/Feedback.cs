@@ -10,7 +10,7 @@ namespace 業務報告システム.Models
         public int FeedbackId { get; set; }
 
         //既読
-        public bool Confirm { get; set; } = false;
+        //public bool Confirm { get; set; } = false;
 
         //1～3の3段階評価
         [Range(1,3)]

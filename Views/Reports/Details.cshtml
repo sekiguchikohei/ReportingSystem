@@ -116,7 +116,7 @@
                 <input name="values" class="form-control" placeholder="コメントがあれば入力" />
             </div>
             <div class="form-group">
-                    <input type="submit" value="保存" class="w-100 btn btn-lg btn-warning" />
+                    <input type="submit" value="既読にする" class="w-100 btn btn-lg btn-warning" />
             </div>
         </form>
     }
@@ -152,10 +152,10 @@
 
         @if (User.IsInRole("Manager"))
         {
-            <div class="text-end">
+            <div class="text-center m-3">
             <form asp-controller="Feedbacks" asp-action="Delete" onSubmit="return check()">
                 <input type="hidden" name="id" value="@Model.Feedback.FeedbackId" />
-                        <input type="submit" value="フィードバック削除" class="w-100 btn btn-lg btn-danger" />
+                        <input type="submit" value="既読解除" class="btn btn-danger" />
             </form>
                 </div>
         }
@@ -174,7 +174,7 @@
 
 <script>
     function check() {
-        if (window.confirm('このフィードバックを削除しますか？')) {
+        if (window.confirm('既読状態を解除しますか？')) {
             return true;
         } else {
             return false;
