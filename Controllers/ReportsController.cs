@@ -689,6 +689,7 @@ namespace 業務報告システム.Controllers
 
             var submitDay = DateTime.Parse(values[1]);
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var judgeDate = _context.report.Where(x => x.Date == submitDay).ToList();   
             DateTime startTime = new DateTime(submitDay.Year, submitDay.Month, submitDay.Day, int.Parse(values[3]), int.Parse(values[4]), 0);
             DateTime endTime = new DateTime(submitDay.Year, submitDay.Month, submitDay.Day, int.Parse(values[5]), int.Parse(values[6]), 0);
 
@@ -714,6 +715,16 @@ namespace 業務報告システム.Controllers
                 ReportId = report.ReportId,
             };
 
+            reportCRUD.Report = report;
+            reportCRUD.Attendance = attendance;
+            reportCRUD.User = await _userManager.FindByIdAsync(report.UserId);
+
+            if (judgeDate.Count > 0)
+            {
+                TempData["AlertReportError"] = "同じ日付の報告が既に存在しています。別の日付で作り直してください。。";
+                return View(reportCRUD);
+            }
+
             ModelState.Remove("User");
             if (ModelState.IsValid)
             {
@@ -724,10 +735,6 @@ namespace 業務報告システム.Controllers
                 TempData["AlertReport"] = "報告を編集しました。";
                 return RedirectToAction(nameof(MemIndex));
             }
-
-            reportCRUD.Report = report;
-            reportCRUD.Attendance = attendance;
-            reportCRUD.User = await _userManager.FindByIdAsync(report.UserId);
 
             TempData["AlertReportError"] = "報告を編集できませんでした。";
             return View(reportCRUD);

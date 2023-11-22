@@ -249,7 +249,7 @@ namespace 業務報告システム.Controllers
             if (result.Succeeded)
             {
                     
-                TempData["AlertProject"] = "ユーザーを編集しました。";
+                TempData["AlertUser"] = "ユーザーを編集しました。";
                 return RedirectToAction(nameof(Index));
             }
 
