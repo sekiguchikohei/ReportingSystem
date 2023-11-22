@@ -151,6 +151,12 @@ namespace 業務報告システム.Controllers
             //マネージャーの所属しているプロジェクトのリスト（参照用）を作成
             var managerproject = _context.userproject.Include(x => x.Project).Where(x => x.UserId.Equals(manager.Id)).ToList();
 
+            if (managerproject.Count() == 0)
+            {
+                TempData["AlertError"] = "プロジェクトに参加していません。Adminユーザーにプロジェクトへの参加処理を依頼してください。";
+                return Redirect("/Home/Home");
+            }    
+
             //マネージャーの所属しているプロジェクトをviewmodelのProjectsに追加
                 Project pj = new Project();
                 pj.ProjectId = managerproject.First().ProjectId;

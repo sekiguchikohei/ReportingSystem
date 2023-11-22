@@ -2,12 +2,13 @@
     ViewData["Title"] = "Home Page";
 }
 
-
-
-<div class="logo-home">
-    <img class="purun" src="/images/logo_tate.png"/>
-</div>
-
+@if (TempData["ProjectError"] != null)
+{
+    <div class="alert alert-danger alert-dismissable fade show m-1" role="alert">
+        @TempData["ProjectError"]
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 @if (TempData["AlertError"] != null)
 {
     <div class="alert alert-danger alert-dismissable fade show m-1" role="alert">
@@ -15,6 +16,13 @@
         <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
+
+
+<div class="logo-home">
+    <img class="purun" src="/images/logo_tate.png"/>
+</div>
+
+
 
 <div class="home-message">
 <div class="p-3">
