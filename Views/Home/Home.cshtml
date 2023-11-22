@@ -1,6 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
+@if (TempData["ProjectError"] != null)
+{
+    <div class="alert alert-danger alert-dismissable fade show m-1" role="alert">
+        @TempData["ProjectError"]
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 @if (TempData["AlertError"] != null)
 {
     <div class="alert alert-danger alert-dismissable fade show m-1" role="alert">

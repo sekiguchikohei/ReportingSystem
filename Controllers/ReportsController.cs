@@ -125,6 +125,11 @@ namespace 業務報告システム.Controllers
 
             var userprojects = _context.userproject.Include(x => x.Project).Where(x => x.UserId.Equals(memberMain.LoginMember.Id)).ToList();
 
+            if (userprojects.Count == 0)
+            {
+                TempData["ProjectError"] = "プロジェクトに参加していません。Adminユーザーにプロジェクトへの参加処理を依頼してください。";
+                return Redirect("/Home");
+            }
             foreach (var project in userprojects)
             {
                 Project pj = new Project();
@@ -340,6 +345,12 @@ namespace 業務報告システム.Controllers
 
             var allprojects = _context.project.ToList();
             var userprojects = _context.userproject.Where(x => x.UserId.Equals(reportDetail.User.Id)).ToList();
+
+            if (userprojects.Count == 0)
+            {
+                TempData["ProjectError"] = "プロジェクトに参加していません。Adminユーザーにプロジェクトへの参加処理を依頼してください。";
+                return Redirect("/Home");
+            }
 
             foreach (var project in userprojects)
             {
