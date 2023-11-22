@@ -458,7 +458,7 @@ namespace 業務報告システム.Controllers
             Feedback feedback = new Feedback()
             {
                 ReportId = report.ReportId,
-                Confirm = true,
+                //Confirm = true,
                 Rating = int.Parse(values[0]),
                 Comment = values[1],
                 Name = $"{reportDetail.User.LastName} {reportDetail.User.FirstName}"

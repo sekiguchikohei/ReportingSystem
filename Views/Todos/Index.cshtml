@@ -43,12 +43,12 @@
                             }
                             else if (remainingDays == 0)
                             {
-                                    <p class="m-2">期限日<span style="color: red; font-size:12px;">当日</span>です！</p>
+                                    <p class="m-2 fw-bold" style="font-size:12px;">期限日<span class="text-danger" style="font-size:12px;">当日</span>です！</p>
                             }
                             else
                             {
-                                <p class="m-2">
-                                        <span style="color: red;font-size:12px;">期限切れ</span>
+                                <p class="m-2 fw-bold text-danger">
+                                        <span style="font-size:12px;">期限切れ</span>
                                 </p>
                             }
                             @if(item.Progress <= 4)
@@ -80,7 +80,7 @@
                         </div>
                         <p class="card-text custom-hidden" style="display: none;">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
                         <p class="card-text custom-hidden" style="display: none;">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>
-                        <p class="card-text custom-hidden" style="display: none;">コメント: @Html.DisplayFor(modelItem => item.Comment)</p>
+                        <p class="card-text custom-hidden" style="display: none;">詳細: @Html.DisplayFor(modelItem => item.Comment)</p>
                     </div>
                 </div>
             </div>

@@ -5,6 +5,7 @@
     string doww = today.ToString("ddd");
     string todays = $"{today.Year}年{today.Month}月{today.Day}日({doww})";
     string title = $"{todays}の報告一覧";
+    int countT = 0;
 }
 
 <div class="mgr-container">
@@ -121,83 +122,93 @@
         {
             @foreach (var user in Model.Members)
             {
-              <h4 class="text-center">@user.LastName @user.FirstName</h4>      
-            
-            @if (Model.Todos != null)
-            {
-                @foreach (var todo in Model.Todos)
+                countT = 0;
+                <h4 class="text-center">@user.LastName @user.FirstName</h4>
+
+
+                @if (Model.Todos != null)
                 {
-                    @if (todo.UserId.Equals(user.Id))  
+                    @foreach (var todo in Model.Todos)
                     {
-                        <div class="unfinish-todos">
-                            <div class="d-flex justify-content-between">
-                                <div style="width:290px;">
-                                    <p class="fw-bold me-2">@todo.TaskName</p>
+                        @if (todo.UserId.Equals(user.Id))
+                        {
+                            countT++;
+                            <div class="unfinish-todos">
+                                <div class="d-flex justify-content-between">
+                                    <div style="width:270px;">
+                                        <p class="fw-bold me-2">@todo.TaskName</p>
+                                    </div>
+                                    @switch (@todo.Progress)
+                                    {
+                                        case 0:
+                                            <p class="text-danger fw-bold me-2" style="font-size:14px;">進捗 : 0%</p>
+                                            break;
+                                        case 1:
+                                            <p class="text-danger fw-bold me-2" style="font-size:14px;">進捗 : 10%</p>
+                                            break;
+                                        case 2:
+                                            <p class="text-danger fw-bold me-2" style="font-size:14px;">進捗 : 20%</p>
+                                            break;
+                                        case 3:
+                                            <p class="text-danger fw-bold me-2" style="font-size:14px;">進捗 : 30%</p>
+                                            break;
+                                        case 4:
+                                            <p class="text-danger fw-bold me-2" style="font-size:14px;">進捗 : 40%</p>
+                                            break;
+                                        case 5:
+                                            <p class="fw-bold me-2" style="font-size:14px;">進捗 : 50%</p>
+                                            break;
+                                        case 6:
+                                            <p class="fw-bold me-2" style="font-size:14px;">進捗 : 60%</p>
+                                            break;
+                                        case 7:
+                                            <p class="fw-bold me-2" style="font-size:14px;">進捗 : 70%</p>
+                                            break;
+                                        case 8:
+                                            <p class="fw-bold text-success" style="font-size:14px;">進捗 : 80%</p>
+                                            break;
+                                        case 9:
+                                            <p class="fw-bold text-success me-2" style="font-size:14px;">進捗 : 90%</p>
+                                            break;
+                                        case 10:
+                                            <p class="fw-bold text-success me-2" style="font-size:14px;">進捗 : 100%</p>
+                                            break;
+                                    }
+                                    @{
+                                        var remainingDays = (todo.EndDate - DateTime.Now.Date).TotalDays;
+                                    }
+                                    @if (remainingDays > 0)
+                                    {
+                                        <p class="me-2 fw-bold" style="font-size:14px;">
+                                            <span class="text-success">あと @remainingDays 日</span>
+                                        </p>
+                                    }
+                                    else if (remainingDays == 0)
+                                    {
+                                        <p class="me-2 fw-bold" style="font-size:14px;">期限日<span class="text-danger">当日</span>です！</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="me-2 fw-bold" style="font-size:14px;">
+                                            <span class="text-danger">期限切れ</span>
+                                        </p>
+                                    }
                                 </div>
-                                @switch (@todo.Progress)
-                                {
-                                    case 0:
-                                    <p class="text-danger fw-bold me-2">進捗 : 0%</p>
-                                        break;
-                                    case 1:
-                                            <p class="text-danger fw-bold me-2">進捗 : 10%</p>
-                                        break;
-                                    case 2:
-                                            <p class="text-danger fw-bold me-2">進捗 : 20%</p>
-                                        break;
-                                    case 3:
-                                            <p class="text-danger fw-bold me-2">進捗 : 30%</p>
-                                        break;
-                                    case 4:
-                                            <p class="text-danger fw-bold me-2">進捗 : 40%</p>
-                                        break;
-                                    case 5:
-                                            <p class="fw-bold me-2">進捗 : 50%</p>
-                                        break;
-                                    case 6:
-                                            <p class="fw-bold me-2">進捗 : 60%</p>
-                                        break;
-                                    case 7:
-                                            <p class="fw-bold me-2">進捗 : 70%</p>
-                                        break;
-                                    case 8:
-                                                <p class="fw-bold text-success">進捗 : 80%</p>
-                                        break;
-                                    case 9:
-                                            <p class="fw-bold text-success me-2">進捗 : 90%</p>
-                                        break;
-                                    case 10:
-                                            <p class="fw-bold text-success me-2">進捗 : 100%</p>
-                                        break;
-                                }
                                 @{
-                                    var remainingDays = (todo.EndDate - DateTime.Now.Date).TotalDays;
+                                    string dow = todo.EndDate.ToString("ddd");
                                 }
-                                @if (remainingDays > 0)
-                                {
-                                        <p class="me-2">
-                                        <span style="color: green;">あと @remainingDays 日</span>
-                                    </p>
-                                }
-                                else if (remainingDays == 0)
-                                {
-                                    <p class="me-2">期限日<span style="color: red;">当日</span>です！</p>
-                                }
-                                else
-                                {
-                                    <p class="me-2">
-                                        <span style="color: red;">期限切れ</span>
-                                    </p>
-                                }
+                                <p class="mt-0">完了日 : @todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日 (@dow)</p>
                             </div>
-                            @{
-                                string dow = todo.EndDate.ToString("ddd");
-                            }
-                            <p class="mt-0">目標完了日 : @todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日 (@dow)</p>
-                        </div>
                         }
                     }
                 }
+
+                if (countT == 0)
+                {
+                    <p class="text-center">未達成のタスクはありません。</p>
+                }
+               
+
             }
         }
     </div>
