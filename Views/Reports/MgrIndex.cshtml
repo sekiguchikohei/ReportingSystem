@@ -3,10 +3,36 @@
 @{
     ViewData["Title"] = "MgrIndex";
     var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var uniqueMonths = Model.Reports.Select(x => x.Date.Month).Distinct().ToList();
 
 }
 
 <h2 class="text-center">報告一覧　@ViewBag.MemberName</h2>
+
+<div class="text-center">
+    <form asp-controller="Reports" asp-action="MgrIndex" method="get">
+        <select name="feedbackSearch">
+            <option value="">選択してください</option>
+            <option>既読</option>
+            <option>未読</option>
+        </select>
+        <select name="monthSearch">
+            <option value="">選択してください</option>
+            @foreach (var month in uniqueMonths)
+            {
+                <option value="@month">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)</option>
+            }  
+        </select>
+        <select name="attendanceSearch">
+            <option value="">選択してください</option>
+            <option>有給</option>
+            <option>遅刻</option>
+            <option>早退</option>
+        </select>
+        <input type="submit" value="検索" class="btn btn-info" />
+    </form>
+</div>
+
 <div class="container-for-grid">
     @foreach (var item in Model.Reports.OrderByDescending(x => x.Date))
         {

@@ -30,12 +30,12 @@
             </div>
             <div class="form-group">
                 <label class="control-label">開始日</label>
-                <input asp-for="StartDate" class="form-control" />
+                <input asp-for="StartDate" class="form-control" min="2000-01-01" max="2100-12-31" />
                 <span asp-validation-for="StartDate" class="text-danger"/>
             </div>
             <div class="form-group">
                 <label class="control-label">完了日</label>
-                <input asp-for="EndDate" class="form-control" />
+                <input asp-for="EndDate" class="form-control" min="2000-01-01" max="2100-12-31" />
                 <span asp-validation-for="EndDate" class="text-danger"/>
             </div>
             <div class="form-group">
