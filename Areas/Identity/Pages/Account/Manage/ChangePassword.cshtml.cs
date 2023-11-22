@@ -53,19 +53,19 @@ namespace 業務報告システム.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage ="現在のパスワードを入力してください。")]
             [DataType(DataType.Password)]
-            [Display(Name = "Current password")]
+            [Display(Name = "現在のパスワード")]
             public string OldPassword { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage ="新しいパスワードを入力してください。")]
+            [StringLength(100, ErrorMessage = "{0}は{2}文字以上{1}文字以内にしてください。", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "New password")]
+            [Display(Name = "新しいパスワード")]
             public string NewPassword { get; set; }
 
             /// <summary>
@@ -73,8 +73,8 @@ namespace 業務報告システム.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm new password")]
-            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+            [Display(Name = "新しいパスワード（確認用）")]
+            [Compare("NewPassword", ErrorMessage = "新しいパスワードと確認用のパスワードが一致しません。")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -113,14 +113,15 @@ namespace 業務報告システム.Areas.Identity.Pages.Account.Manage
             {
                 foreach (var error in changePasswordResult.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    //ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError(string.Empty, "パスワードが間違っています。");
                 }
                 return Page();
             }
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            StatusMessage = "パスワードが変更されました。";
 
             return RedirectToPage();
         }

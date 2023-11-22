@@ -67,15 +67,15 @@ namespace 業務報告システム.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage ="Emailアドレスを入力してください。")]
+            [EmailAddress(ErrorMessage = "半角英数字でEmailアドレスを入力してください。")] 
             public string Email { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "パスワードを入力してください。")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -83,7 +83,7 @@ namespace 業務報告システム.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Display(Name = "Remember me?")]
+            [Display(Name = "ログイン状態を保存する")]
             public bool RememberMe { get; set; }
 
            
@@ -136,7 +136,7 @@ namespace 業務報告システム.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "ログインに失敗しました。");
                     return Page();
                 }
             }

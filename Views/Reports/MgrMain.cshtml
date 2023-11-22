@@ -135,9 +135,10 @@
                             countT++;
                             <div class="unfinish-todos">
                                 <div class="d-flex justify-content-between">
-                                    <div style="width:270px;">
+                                    <div class="mgrmain-title">
                                         <p class="fw-bold me-2">@todo.TaskName</p>
                                     </div>
+                                    <div class="mgrmain-pgs">
                                     @switch (@todo.Progress)
                                     {
                                         case 0:
@@ -174,6 +175,8 @@
                                             <p class="fw-bold text-success me-2" style="font-size:14px;">進捗 : 100%</p>
                                             break;
                                     }
+                                    </div>
+                                    <div class="mgrmain-rd">
                                     @{
                                         var remainingDays = (todo.EndDate - DateTime.Now.Date).TotalDays;
                                     }
@@ -193,11 +196,16 @@
                                             <span class="text-danger">期限切れ</span>
                                         </p>
                                     }
-                                </div>
+                                    </div>
+                                
                                 @{
                                     string dow = todo.EndDate.ToString("ddd");
                                 }
+                                </div>
+                                <div>
                                 <p class="mt-0">完了日 : @todo.EndDate.Year 年 @todo.EndDate.Month 月 @todo.EndDate.Day 日 (@dow)</p>
+                                    </div>
+                                
                             </div>
                         }
                     }
