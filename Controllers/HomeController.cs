@@ -174,7 +174,7 @@ namespace 業務報告システム.Controllers
                 return NotFound();
             }
 
-            ViewData["Projects"] = new SelectList(_context.project, "ProjectId", "Name");
+            ViewBag.Projects = new SelectList(_context.project, "ProjectId", "Name");
             return View(user);
         }
 
@@ -188,6 +188,14 @@ namespace 業務報告システム.Controllers
             user.Email = values[2];
             user.UserName = values[2];
             user.Role = values[3];
+
+
+            if (user.LastName == null || user.FirstName == null || user.Email == null)
+            {
+                TempData["AlertEditError"] = "入力情報に誤りがあります。";
+                ViewData["Projects"] = new SelectList(_context.project, "ProjectId", "Name");
+                return View(user);
+            }
 
             var userProjects = _context.userproject.Where(x => x.UserId.Equals(user.Id)).ToList();
 
@@ -245,6 +253,7 @@ namespace 業務報告システム.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            TempData["AlertEditError"] = "入力情報に誤りがあります。";
             ViewData["Projects"] = new SelectList(_context.project, "ProjectId", "Name");
             return View(user);
 

@@ -30,7 +30,7 @@
             @* Attendance追記 *@
             <div class="form-group">
                 <label class="control-label">日付</label>
-                <input name="values" class="form-control" type="date" value="@Model.Report.Date.ToString("yyyy-MM-dd")"/>
+                <input name="values" class="form-control" type="date" value="@Model.Report.Date.ToString("yyyy-MM-dd")" min="2000-01-01" max="2100-12-31" />
             </div>
             <div class="form-group">
                 <label class="control-label">勤怠</label>
