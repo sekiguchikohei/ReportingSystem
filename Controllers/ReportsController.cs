@@ -31,7 +31,7 @@ namespace 業務報告システム.Controllers
 
         // GET: Reports/mgrindex　マネージャー用
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> MgrIndex(string? Id)
+        public async Task<IActionResult> MgrIndex(string? Id,string feedbackSearch, int monthSearch, string attendanceSearch)
         {
             if (Id == null || _context.report == null)
             {
@@ -50,6 +50,60 @@ namespace 業務報告システム.Controllers
             var allReports = _context.report.Where(x => x.UserId.Equals(Id)).ToList();
             var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(Id)).ToList();
             var allFeedback = _context.feedback.ToList();
+
+            var reportIdsWithFeedback = new List<int>();
+            var feedbackReportIds = _context.feedback.Select(f => f.ReportId).ToList();
+            var allReportIds = _context.report.Select(r => r.ReportId).ToList();
+
+            if (feedbackSearch != null)
+            {
+                foreach (var feed in allFeedback)
+                {
+                    if (feedbackSearch.Equals("既読"))
+                    {
+                        reportIdsWithFeedback.AddRange(_context.feedback.Where(x => x.ReportId == feed.ReportId).Select(f => f.ReportId));
+                    }
+                    else if (feedbackSearch.Equals("未読"))
+                    {
+                        reportIdsWithFeedback = allReportIds.Except(feedbackReportIds).ToList();
+                    }
+                }
+            }
+            if (feedbackSearch != null && monthSearch != 0 && attendanceSearch != null)
+            {
+                allReports = _context.report.Where(x => x.Date.Month == monthSearch && x.Attendance.Status.Equals(attendanceSearch) && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && x.Report.Date.Month == monthSearch && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+            }
+            else if (feedbackSearch != null && monthSearch != 0)
+            {
+                allReports = _context.report.Where(x => x.Date.Month == monthSearch && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                allAttendance = _context.attendance.Where(x =>  x.Report.Date.Month == monthSearch && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+            }
+            else if (feedbackSearch != null && attendanceSearch != null)
+            {
+                allReports =  _context.report.Where(x =>  x.Attendance.Status.Equals(attendanceSearch) && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+            }
+            else if (monthSearch != 0 && attendanceSearch != null)
+            {
+                allReports = _context.report.Where(x => x.Date.Month == monthSearch && x.Attendance.Status.Equals(attendanceSearch)).ToList();
+                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && x.Report.Date.Month == monthSearch).ToList();
+            }
+            else if(monthSearch != 0)
+            {
+                allReports = _context.report.Where(x => x.Date.Month == monthSearch).ToList();
+                allAttendance = _context.attendance.Where(x => x.Report.Date.Month == monthSearch).ToList();
+            }
+            else if (attendanceSearch != null)
+            {
+                allReports = _context.report.Where(x => x.Attendance.Status.Equals(attendanceSearch)).ToList();
+                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch)).ToList();
+            }
+            else if(feedbackSearch != null)
+            {
+                allReports = _context.report.Where(x => reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                allAttendance = _context.attendance.Where(x => reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+            }
 
             foreach (var report in allReports)
             {
@@ -92,13 +146,13 @@ namespace 業務報告システム.Controllers
             var allReports = _context.report.Where(x => x.UserId.Equals(loginUserId)).ToList();
             var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(loginUserId)).ToList();
 
-            foreach (var report in allReports)
+            foreach (var report in allReports)//-------------------------------------------
             {
                 Report re = new Report();
                 re.Date = report.Date;
                 re.Comment = report.Comment;
                 re.ReportId = report.ReportId;
-                reportIndex.Reports.Add(re);
+                reportIndex.Reports.Add(re);   
             }
             foreach (var attendance in allAttendance)
             {
