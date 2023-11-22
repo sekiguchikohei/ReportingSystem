@@ -18,6 +18,30 @@
     <a asp-action="MgrCreate" class="btn btn-warning">新規作成</a>
 </div>
 
+<!-- 進捗の検索フォーム -->
+<div class="text-center">
+    <form asp-controller="Todos" asp-action="MgrIndex" method="get">
+        <input name="search" type="text" placeholder="タスク名" />
+        <select name="progressFilter">
+            <option value="">進捗</option>
+            <option value="0">0%</option>
+            <option value="1">10%</option>
+            <option value="2">20%</option>
+            <option value="3">30%</option>
+            <option value="4">40%</option>
+            <option value="5">50%</option>
+            <option value="6">60%</option>
+            <option value="7">70%</option>
+            <option value="8">80%</option>
+            <option value="9">90%</option>
+            <option value="10">100%</option>
+        </select>
+        <input type="submit" value="検索" class="btn btn-info" />
+    </form>
+</div>
+
+
+
 <div class="mgr-center">
     @foreach (var user in Model.Users)
     {
