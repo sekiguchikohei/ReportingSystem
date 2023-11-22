@@ -96,6 +96,7 @@
                     <div class="memmain-tasktitle">
                         <h4 class="fw-bold">@todo.TaskName</h4>
                     </div>
+                    <div class="memmain-taskpgs">
                     @switch (@todo.Progress)
                     {
                         case 0:
@@ -131,7 +132,8 @@
                         case 10:
                             <h4 class="fw-bold">進捗: 100%</h4>
                             break;
-                    }  
+                    }
+                    </div>
                     <div class="memmain-taskremain">
                         @{
                             var remainingDays = (todo.EndDate - DateTime.Now.Date).TotalDays;
@@ -144,7 +146,7 @@
                         }
                         else　if(remainingDays == 0)
                         {
-                            <h5 class="fw-bold">期限日<span class="text-danger">当日</span>です！</h5>
+                            <h5 class="fw-bold text-danger">期限日当日！</h5>
                         }
                         else
                         {

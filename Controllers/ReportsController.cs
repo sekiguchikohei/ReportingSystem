@@ -200,8 +200,13 @@ namespace 業務報告システム.Controllers
 
             var loginManagerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             managerMain.Manager = await _userManager.FindByIdAsync(loginManagerId);
+            var managerprojects =  _context.userproject.Include(x => x.Project).Where(x => x.UserId.Equals(managerMain.Manager.Id)).ToList(); 
+           
+            if (managerprojects.Count() == 0) { 
+                TempData["AlertError"] = "プロジェクトに参加していません。Adminユーザーにプロジェクトへの参加処理を依頼してください。";
+                return Redirect("/Home/Home");
+            }
 
-            var managerprojects = _context.userproject.Include(x => x.Project).Where(x => x.UserId.Equals(managerMain.Manager.Id)).ToList();
 
             foreach (var project in managerprojects)
             {

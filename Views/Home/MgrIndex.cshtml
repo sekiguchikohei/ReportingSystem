@@ -1,23 +1,31 @@
 ﻿@model 業務報告システム.ViewModels.UserIndex;
 
 @{
+
 }
 
 <h1 class="text-center">プロジェクトメンバー一覧</h1>
 <p class="text-center">メンバー名クリックでメンバーの報告一覧にアクセス</p>
 
     <div class="container-for-grid-mem">
+    @if (Model.Users.Count() != 0)
+    {
         @foreach (var user in Model.Users)
         {
 
             <a class="mgrlink" asp-controller="Reports" asp-action="mgrIndex" asp-route-id="@user.Id">
                 <div class="mem-card fadeIn">
                     <div>
-                    <h2 class="text-center">@user.LastName @user.FirstName</h2>
-                </div>
+                        <h2 class="text-center">@user.LastName @user.FirstName</h2>
+                    </div>
 
                 </div>
             </a>
 
         }
+    }else
+    {
+        <p class="text-center">プロジェクトメンバーがいません。</p>
+    }
+
     </div>

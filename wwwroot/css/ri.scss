@@ -414,16 +414,45 @@ $gray: #EDF2F7;
     transform: translateY(20%) rotate(-45deg);
 }
 
-.memmain-tasktitle{
+.memmain-tasktitle {
+    width: 30%;
 
+    @media (min-width: 100px) and (max-width: 767px) {
+        h4 {
+            font-size: 16px;
+        }
+    }
 }
 
-.memmain-taskremain{
+.memmain-taskpgs {
+    width: 20%;
 
+    @media (min-width: 100px) and (max-width: 767px) {
+        h4 {
+            font-size:14px;
+        }
+    }
 }
 
-.memmain-taskdd{
 
+.memmain-taskremain {
+    width: 20%;
+
+    @media (min-width: 100px) and (max-width: 767px) {
+        h5 {
+            font-size: 14px;
+        }
+    }
+}
+
+.memmain-taskdd {
+    width: 25%;
+
+    @media (min-width: 100px) and (max-width: 767px) {
+        p {
+            font-size: 12px;
+        }
+    }
 }
 
     //rika end here//
