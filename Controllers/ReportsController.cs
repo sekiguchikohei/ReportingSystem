@@ -689,7 +689,7 @@ namespace 業務報告システム.Controllers
 
             var submitDay = DateTime.Parse(values[1]);
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var judgeDate = _context.report.Where(x => x.Date == submitDay).ToList();   
+            var judgeDate = _context.report.Where(x => x.Date == submitDay && x.ReportId != int.Parse(values[0])).ToList();   
             DateTime startTime = new DateTime(submitDay.Year, submitDay.Month, submitDay.Day, int.Parse(values[3]), int.Parse(values[4]), 0);
             DateTime endTime = new DateTime(submitDay.Year, submitDay.Month, submitDay.Day, int.Parse(values[5]), int.Parse(values[6]), 0);
 
