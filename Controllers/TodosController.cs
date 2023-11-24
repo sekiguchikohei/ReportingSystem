@@ -132,16 +132,19 @@ namespace 業務報告システム.Controllers
         }
 
         [Authorize(Roles ="Manager")]
-        public async Task<IActionResult> MgrIndex()
+        public async Task<IActionResult> MgrIndex(string progressFilter)
         {
             //viewmodelの呼び出し
             TodoIndex todoIndex = new TodoIndex();
+
 
             //初期化
             todoIndex.Users = new List<ApplicationUser>();
             todoIndex.Projects = new List<Project>();
             todoIndex.Users = new List<ApplicationUser>();
             todoIndex.Todos = new List<Todo>();
+
+
 
             //ログインしているマネージャーのIDを取得して全ユーザーから特定し、viewmodelのuserに追加
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -179,8 +182,29 @@ namespace 業務報告システム.Controllers
             //全ユーザーからManagerと同じプロジェクトのメンバーリストを作成
             var allusers = _userManager.Users.Where(x => x.UserProjects.First().ProjectId == pj.ProjectId && x.Role.Equals("Member")).ToList();
 
+           
+
+
+            // 進捗フィルターの値を確認
+            if (progressFilter != null && progressFilter != "")
+            {
+                // 進捗フィルターが指定された場合
+                if (progressFilter == "未完了のタスクのみ表示")
+                {
+                    // 未完了のタスクのみ表示する場合
+                    todoIndex.Todos = _context.todo.Where(t => t.Progress < 10).ToList();
+                    return View(todoIndex);
+                }
+                else if (progressFilter == "完了済のタスクのみ表示")
+                {
+                    // 完了済のタスクのみ表示する場合
+                    todoIndex.Todos = _context.todo.Where(t => t.Progress == 10).ToList();
+                    return View(todoIndex);
+                }
+            }
+
             //allusersのTodoのリストを作成
-            var alltodos =  _context.todo.ToList();
+            var alltodos = _context.todo.ToList();
 
             //viewmodelのtodosに追加
             foreach (var todo in alltodos)
