@@ -2,7 +2,6 @@
 @model 業務報告システム.ViewModels.ReportIndex;
 @{
     ViewData["Title"] = "MemIndex";
-    // var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 @if (TempData["AlertReport"] != null)
 {
@@ -13,79 +12,35 @@
 }
 
 <div class="text-center">
-<h1>報告一覧 : @Model.User.LastName @Model.User.FirstName</h1>
+    <h1>報告一覧 : @Model.User.LastName @Model.User.FirstName</h1>
     <a asp-action="Create" class="btn btn-warning m-3">報告の新規作成</a>
 </div>
 <div class="container-for-grid">
     @foreach (var item in Model.Reports.OrderByDescending(x => x.Date))
         {
-        <div class="r-card">
-            @{
-                string dow = item.Date.ToString("ddd");
-            }
-
-            <h4>@item.Date.Year 年 @item.Date.Month 月 @item.Date.Day 日 (@dow)</h4>
-
-                            @foreach (var itemA in Model.Attendances)
-                            {
-                                @if (item.ReportId.Equals(itemA.ReportId))
-                                {
-                                         <h4>@itemA.Status</h4>
-                                    @switch (itemA.HealthRating)
-                                    {
-                                        case 1:
-                                            <img class="select-icon" src="/images/bad.png" />
-                                            break;
-                                        case 2:
-                                            <img class="select-icon" src="/images/soso.png" />
-                                            break;
-                                        case 3:
-                                            <img class="select-icon" src="/images/fine.png">
-                                            break;
-                                        case 4:
-                                            <img class="select-icon" src="/images/good.png" />
-                                            break;
-                                        case 5:
-                                            <img class="select-icon" src="/images/great.png" />
-                                            break;
-                                    }
-                                }
-                            }
-                        @foreach (var itemA in Model.Attendances)
-                        {
-                            @if (item.ReportId.Equals(itemA.ReportId))
-                            {
-                                    @* <a asp-action="Edit" asp-route-id="@item.ReportId" class="btn btn-primary">編集</a> *@
-                                    <a asp-action="Details" asp-route-id="@item.ReportId" class="btn btn-warning">詳細</a>
-                                 @*    <form asp-action="Delete" onsubmit="return check()">
-                                        <input type="hidden" name="id" value="@item.ReportId" />
-                                        <input type="submit" value="削除" class="btn btn-danger" />
-                                    </form> *@
-
-                            }
-                        }
-            </div>
-
-        }
-</div>
-
-@* 湯山さん作業分 *@
-@* 
-<div class="rmi-card-container">
-    <div class="row">
-
-     @foreach (var item in Model.Reports)
+        var count = 0;
+        @if(Model.Feedbacks != null)
         {
-        <div class="col-md-4">
-        <div class="rmi-card">
-            <div class="rmi-card-body">
-            <h5 class="rmi-card-title">レポート作成日：@item.Date.ToString("yyyy/M/d")</h5>
-            <p class ="rmi-card-text">報告内容：@item.Comment</p>
-            <p class="rmi-card-text">
-                体調：@foreach (var itemA in Model.Attendances)
+            @foreach(var fb in Model.Feedbacks)
+            {
+                @if(fb.ReportId == item.ReportId)
+                {
+                    count += 1;
+                }
+            }
+        }
+        @if(count == 0)
+        {
+            <div class="f-card">
+                @{
+                    string dow = item.Date.ToString("ddd");
+                }
+                <h4>@item.Date.Year 年 @item.Date.Month 月 @item.Date.Day 日 (@dow)</h4>
+                @foreach (var itemA in Model.Attendances)
                 {
                     @if (item.ReportId.Equals(itemA.ReportId))
                     {
+                        <h4>@itemA.Status</h4>
                         @switch (itemA.HealthRating)
                         {
                             case 1:
@@ -106,110 +61,58 @@
                         }
                     }
                 }
-            </p>
                 @foreach (var itemA in Model.Attendances)
                 {
                     @if (item.ReportId.Equals(itemA.ReportId))
                     {
-                        <div class="rmi-button-group">
-                        <a asp-action="Edit" asp-route-id="@item.ReportId" class="btn btn-primary">編集</a>
-                        <a asp-action="Details" asp-route-id="@item.ReportId" class="btn btn-primary">詳細</a>
-                        <form asp-action="Delete" onsubmit="return check()">
-                            <input type="hidden" name="id" value="@item.ReportId" />
-                            <input type="submit" value="削除" class="btn btn-danger" />
-                        </form>
-                        </div>
+                        <a asp-action="Details" asp-route-id="@item.ReportId" class="btn btn-warning">詳細</a>
                     }
                 }
             </div>
-        </div>
-        </div>
         }
-    </div>
-</div> *@
-
-
-@* 編集前　ここから
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Date
-            </th>
-            <th>
-                Comment
-            </th>
-            <th>
-                HealthRating
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Reports)
+        else
         {
-            <tr>
-                <td>
-                    @item.Date.ToString("yyyy/M/d")
-                </td>
-                <td>
-                    @item.Comment
-                </td>
-                <td>
-                    @foreach (var itemA in Model.Attendances)
+            <div class="r-card">
+                @{
+                    string dow = item.Date.ToString("ddd");
+                }
+                <h4>@item.Date.Year 年 @item.Date.Month 月 @item.Date.Day 日 (@dow)</h4>
+                @foreach (var itemA in Model.Attendances)
+                {
+                    @if (item.ReportId.Equals(itemA.ReportId))
                     {
-                        @if (item.ReportId.Equals(itemA.ReportId))
+                                <h4>@itemA.Status</h4>
+                        @switch (itemA.HealthRating)
                         {
-                            @switch (itemA.HealthRating)
-                            {
-                                case 1:
-                                    <img class="select-icon" src="/images/bad.png" />
-                                    break;
-                                case 2:
-                                    <img class="select-icon" src="/images/soso.png" />
-                                    break;
-                                case 3:
-                                    <img class="select-icon" src="/images/fine.png">
-                                    break;
-                                case 4:
-                                    <img class="select-icon" src="/images/good.png" />
-                                    break;
-                                case 5:
-                                    <img class="select-icon" src="/images/great.png" />
-                                    break;
-                            }
+                            case 1:
+                                <img class="select-icon" src="/images/bad.png" />
+                                break;
+                            case 2:
+                                <img class="select-icon" src="/images/soso.png" />
+                                break;
+                            case 3:
+                                <img class="select-icon" src="/images/fine.png">
+                                break;
+                            case 4:
+                                <img class="select-icon" src="/images/good.png" />
+                                break;
+                            case 5:
+                                <img class="select-icon" src="/images/great.png" />
+                                break;
                         }
                     }
-                </td>
-                <td>
-                    @foreach (var itemA in Model.Attendances)
+                }
+                @foreach (var itemA in Model.Attendances)
+                {
+                    @if (item.ReportId.Equals(itemA.ReportId))
                     {
-                        @if (item.ReportId.Equals(itemA.ReportId))
-                        {
-                            <a asp-action="Edit" asp-route-id="@item.ReportId">Edit</a> 
-                            <a asp-action = "Details" asp-route-id = "@item.ReportId" > Details </a >
-                            <form asp-action="Delete" onsubmit="return check()">
-                                <input type="hidden" name="id" value="@item.ReportId"/>
-                                <input type="submit" value="削除" class="btn btn-danger" />
-                            </form>
-                            }
+                        <a asp-action="Details" asp-route-id="@item.ReportId" class="btn btn-warning">詳細</a>
                     }
-                    <script>
-                        function check() {
-                            if (window.confirm('このレポートを削除しますか？')) {
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                    </script>
-                </td>
-            </tr>
+                }
+            </div>
         }
-    </tbody>
-</table>
-編集前　ここまで*@
-
-
+    }
+</div>
 
 <script>
     function check() {
