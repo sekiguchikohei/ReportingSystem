@@ -31,12 +31,23 @@ namespace 業務報告システム.Controllers
 
         // GET: Reports/mgrindex　マネージャー用
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> MgrIndex(string? Id,string feedbackSearch, int monthSearch, string attendanceSearch)
+        public async Task<IActionResult> MgrIndex(string? Id,string feedbackSearch, string yearMonthSearch, int monthSearch, string attendanceSearch)
         {
+            int month = 0;
+            int year = 0;
+            var SearchConditions = "";
             if (Id == null || _context.report == null)
             {
                 return NotFound("存在しません");
             }
+
+            if(yearMonthSearch != null)
+            {
+                var yearMonthArray = yearMonthSearch.Split('-');
+                year = int.Parse(yearMonthArray[0]);
+                month = int.Parse(yearMonthArray[1]);
+            }
+            
 
             ReportIndex reportIndex = new ReportIndex();
             reportIndex.User = new ApplicationUser();
@@ -62,42 +73,50 @@ namespace 業務報告システム.Controllers
                     if (feedbackSearch.Equals("既読"))
                     {
                         reportIdsWithFeedback.AddRange(_context.feedback.Where(x => x.ReportId == feed.ReportId).Select(f => f.ReportId));
+                        SearchConditions = "既読";
                     }
                     else if (feedbackSearch.Equals("未読"))
                     {
                         reportIdsWithFeedback = allReportIds.Except(feedbackReportIds).ToList();
+                        SearchConditions =  "未読";
                     }
                 }
             }
-            if (feedbackSearch != null && monthSearch != 0 && attendanceSearch != null)
+            if (feedbackSearch != null && month != 0 && attendanceSearch != null)
             {
-                allReports = _context.report.Where(x => x.Date.Month == monthSearch && x.Attendance.Status.Equals(attendanceSearch) && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
-                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && x.Report.Date.Month == monthSearch && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                allReports = _context.report.Where(x => x.Date.Year == year && x.Date.Month == month && x.Attendance.Status.Equals(attendanceSearch) && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && x.Date.Year == year && x.Report.Date.Month == month && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                SearchConditions = SearchConditions + " / "+ year + "年" + month + "月" + " / " + attendanceSearch;
             }
-            else if (feedbackSearch != null && monthSearch != 0)
+            else if (feedbackSearch != null && month != 0)
             {
-                allReports = _context.report.Where(x => x.Date.Month == monthSearch && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
-                allAttendance = _context.attendance.Where(x =>  x.Report.Date.Month == monthSearch && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                allReports = _context.report.Where(x => x.Date.Year == year && x.Date.Month == month && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                allAttendance = _context.attendance.Where(x => x.Date.Year == year && x.Report.Date.Month == month && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                SearchConditions = SearchConditions + " / " + year + "年" + month + "月";
             }
             else if (feedbackSearch != null && attendanceSearch != null)
             {
                 allReports =  _context.report.Where(x =>  x.Attendance.Status.Equals(attendanceSearch) && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
                 allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                SearchConditions = SearchConditions + " / " + attendanceSearch;
             }
-            else if (monthSearch != 0 && attendanceSearch != null)
+            else if (month != 0 && attendanceSearch != null)
             {
-                allReports = _context.report.Where(x => x.Date.Month == monthSearch && x.Attendance.Status.Equals(attendanceSearch)).ToList();
-                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && x.Report.Date.Month == monthSearch).ToList();
+                allReports = _context.report.Where(x => x.Date.Year == year && x.Date.Month == month && x.Attendance.Status.Equals(attendanceSearch)).ToList();
+                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && x.Date.Year == year && x.Report.Date.Month == month).ToList();
+                SearchConditions = year + "年" + month + "月" + " / " + attendanceSearch;
             }
-            else if(monthSearch != 0)
+            else if(month != 0)
             {
-                allReports = _context.report.Where(x => x.Date.Month == monthSearch).ToList();
-                allAttendance = _context.attendance.Where(x => x.Report.Date.Month == monthSearch).ToList();
+                allReports = _context.report.Where(x => x.Date.Year == year && x.Date.Month == month).ToList();
+                allAttendance = _context.attendance.Where(x => x.Date.Year == year && x.Report.Date.Month == month).ToList();
+                SearchConditions = year + "年" + month + "月";
             }
             else if (attendanceSearch != null)
             {
                 allReports = _context.report.Where(x => x.Attendance.Status.Equals(attendanceSearch)).ToList();
                 allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch)).ToList();
+                SearchConditions = attendanceSearch;
             }
             else if(feedbackSearch != null)
             {
@@ -126,6 +145,7 @@ namespace 業務報告システム.Controllers
             reportIndex.Feedbacks = allFeedback;
 
             ViewBag.MemberName = $"{reportIndex.User.LastName} {reportIndex.User.FirstName}";
+            ViewBag.Condition = SearchConditions;
 
             var applicationDbContext = _context.report.Include(r => r.User);
             return View(reportIndex);
@@ -138,6 +158,7 @@ namespace 業務報告システム.Controllers
             ReportIndex reportIndex = new ReportIndex();
             reportIndex.Reports = new List<Report>();
             reportIndex.Attendances = new List<Attendance>();
+            reportIndex.Feedbacks = new List<Feedback>();
 
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             reportIndex.User = await _userManager.FindByIdAsync(loginUserId);
@@ -145,7 +166,7 @@ namespace 業務報告システム.Controllers
             //Reportsにデータを格納
             var allReports = _context.report.Where(x => x.UserId.Equals(loginUserId)).ToList();
             var allAttendance = _context.attendance.Where(x => x.Report.UserId.Equals(loginUserId)).ToList();
-
+            var allFeedbacks = _context.feedback.Where(x => x.Report.UserId.Equals(loginUserId)).ToList();
             foreach (var report in allReports)//-------------------------------------------
             {
                 Report re = new Report();
@@ -162,6 +183,8 @@ namespace 業務報告システム.Controllers
                 at.ReportId = attendance.ReportId;
                 reportIndex.Attendances.Add(at);
             }
+
+            reportIndex.Feedbacks = allFeedbacks;
 
             return View(reportIndex);
         }
