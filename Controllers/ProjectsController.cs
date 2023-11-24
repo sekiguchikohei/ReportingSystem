@@ -102,7 +102,7 @@ namespace 業務報告システム.Controllers
                     TempData["AlertProject"] = "プロジェクトを編集しました。";
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (/*DbUpdateConcurrency*/Exception)
                 {
                     if (!ProjectExists(project.ProjectId))
                     {
@@ -110,7 +110,9 @@ namespace 業務報告システム.Controllers
                     }
                     else
                     {
-                        throw;
+                        TempData["AlertProjectError"] = "既に同じプロジェクトが存在しています。";
+                        return View(project);
+                        /*throw;*/
                     }
                 }
                 return RedirectToAction(nameof(Index));
