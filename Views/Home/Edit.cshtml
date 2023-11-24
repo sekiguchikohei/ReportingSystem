@@ -54,6 +54,14 @@
                     <select class="form-control" asp-items="ViewBag.Projects" name="values"></select>
                 </div>
                 <input type="hidden" name="values" value="@Model.Role"/>
+                <div class="form-group">
+                    <label class="control-label">パスワードリセット</label>
+                    <p class="text-danger mb-0">※パスワードリセットした場合、パスワードが強制的に「User123,」になります。</p>
+                    <select name="values">
+                        <option selected>リセットしない</option>
+                        <option>リセットする</option>
+                    </select>
+                </div>
                @*  <div class="form-floating">
                     <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
                     <label asp-for="Input.Password"></label>
