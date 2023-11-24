@@ -102,11 +102,11 @@
     
     @if (User.IsInRole("Manager") && Model.Feedback == null)
     {
-        <p>報告の印象とコメントがあれば入力しましょう。</p>
+        <p>報告に対するリアクションとコメントがあれば入力しましょう。</p>
         <form method="POST" action="">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label name="values" class="control-label">印象</label>
+                @* <label name="values" class="control-label">印象</label> *@
                 <input name="values" type="radio" value="1" /> <img class="select-icon" src="/images/bad.png" />
                 <input name="values" type="radio" value="2" checked /> <img class="select-icon" src="/images/fine.png">
                 <input name="values" type="radio" value="3" /> <img class="select-icon" src="/images/great.png" />
