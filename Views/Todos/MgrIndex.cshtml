@@ -21,20 +21,10 @@
 <!-- 進捗の検索フォーム -->
 <div class="text-center">
     <form asp-controller="Todos" asp-action="MgrIndex" method="get">
-        <input name="search" type="text" placeholder="タスク名" />
         <select name="progressFilter">
-            <option value="">進捗</option>
-            <option value="0">0%</option>
-            <option value="1">10%</option>
-            <option value="2">20%</option>
-            <option value="3">30%</option>
-            <option value="4">40%</option>
-            <option value="5">50%</option>
-            <option value="6">60%</option>
-            <option value="7">70%</option>
-            <option value="8">80%</option>
-            <option value="9">90%</option>
-            <option value="10">100%</option>
+             <option>進捗(全て表示)</option>
+            <option>未完了のタスクのみ表示</option>
+            <option>完了済のタスクのみ表示</option>
         </select>
         <input type="submit" value="検索" class="btn btn-info" />
     </form>
