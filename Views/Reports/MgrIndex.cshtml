@@ -4,7 +4,7 @@
     ViewData["Title"] = "MgrIndex";
     var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     var uniqueMonths = Model.Reports.Select(x => x.Date.Month).Distinct().ToList();
-
+    var uniqueYears = Model.Reports.Select(x => x.Date.Year).Distinct().ToList();
 }
 
 <h2 class="text-center">報告一覧　@ViewBag.MemberName</h2>
@@ -16,12 +16,17 @@
             <option>既読</option>
             <option>未読</option>
         </select>
-        <select name="monthSearch">
+        <select name="yearMonthSearch">
             <option value="">選択してください</option>
-            @foreach (var month in uniqueMonths)
+            @foreach (var year in uniqueYears)
             {
-                <option value="@month">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)</option>
-            }  
+                @foreach (var month in uniqueMonths)
+                {
+                    <option value="@($"{year}-{month:D2}")">
+                        @($"{year}年{System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)}")
+                    </option>
+                }
+            }
         </select>
         <select name="attendanceSearch">
             <option value="">選択してください</option>
@@ -31,6 +36,10 @@
         </select>
         <input type="submit" value="検索" class="btn btn-info" />
     </form>
+    @if (!ViewBag.Condition.Equals(""))
+    {
+        <p>表示中の検索条件【 @ViewBag.Condition 】</p>
+    }
 </div>
 
 <div class="container-for-grid">
