@@ -244,11 +244,27 @@ namespace 業務報告システム.Controllers
                 await _userManager.RemoveFromRoleAsync(user, values[5]);
             }
 
-            var result = await _userManager.UpdateAsync(user);
+            if (values[6].Equals("リセットする"))
+            {
+                string password = "User123,";
+                await _userManager.RemovePasswordAsync(user);
+                await _userManager.AddPasswordAsync(user, password);
+
+            }
+
+                var result = await _userManager.UpdateAsync(user);
+
 
             if (result.Succeeded)
             {
-                    
+                if (values[6].Equals("リセットする"))
+                {
+                    string password = "User123,";
+                    await _userManager.RemovePasswordAsync(user);
+                    await _userManager.AddPasswordAsync(user, password);
+
+                }
+
                 TempData["AlertUser"] = "ユーザーを編集しました。";
                 return RedirectToAction(nameof(Index));
             }
