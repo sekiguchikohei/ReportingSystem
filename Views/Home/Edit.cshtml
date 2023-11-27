@@ -2,13 +2,7 @@
 
 @{
 }
-@if (TempData["AlertEditError"] != null)
-{
-    <div class="alert alert-danger alert-dismissable fade show m-1" role="alert">
-        @TempData["AlertEditError"]
-        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
+
 @if (User.IsInRole("Admin"))
 {
 
@@ -17,6 +11,12 @@
 
     <div class="container-form">
             <form method="post" action="">
+                @if (TempData["AlertEditError"] != null)
+                {
+                    <div class="text-danger">
+                        @TempData["AlertEditError"]
+                    </div>
+                }
 
                 @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
                 <div class="form-floating">
@@ -54,24 +54,27 @@
                     <select class="form-control" asp-items="ViewBag.Projects" name="values"></select>
                 </div>
                 <input type="hidden" name="values" value="@Model.Role"/>
-                <div class="form-group">
+               @*  <div class="form-group">
                     <label class="control-label">パスワードリセット</label>
                     <p class="text-danger mb-0">※パスワードリセットした場合、パスワードが強制的に「User123,」になります。</p>
                     <select name="values">
                         <option selected>リセットしない</option>
                         <option>リセットする</option>
                     </select>
-                </div>
-               @*  <div class="form-floating">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                    <label asp-for="Input.Password"></label>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div> *@
+                <div class="form-floating">
+                    <p class="mt-1 mb-0">パスワード設定</p>
+                    <p class="m-0 text-danger">※6文字以上、1つ以上の大文字アルファベット利用、1つ以上の数字(0~9)利用、1つ以上の記号利用が必要</p>
                 </div>
                 <div class="form-floating">
-                    <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                    <label asp-for="Input.ConfirmPassword"></label>
-                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                </div> *@
+                    <input name="values" type="password" class="form-control" autocomplete="new-password" aria-required="true" minlength="6" maxlength="100" />
+                    <label>パスワード</label>
+                </div>
+                <div class="form-floating">
+                    <input name="values" type="password" class="form-control" autocomplete="new-password" aria-required="true" minlength="6" maxlength="100" />
+                    <label>パスワード（確認用）</label>
+                </div>
+               
                 <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-warning">編集情報を保存</button>
             </form>
         </div>
