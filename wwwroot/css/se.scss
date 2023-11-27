@@ -15,9 +15,17 @@ $gray: #EDF2F7;
     margin-right: auto;
     margin-left: auto;
 
-    @media (min-width: 100px) and (max-width: 767px) {
+    @media (min-width: 1001px)  {
         min-width: 100%;
         width: 100%;
+        grid-template-columns: 1fr 1fr;
+    }
+
+
+    @media (min-width: 50px) and (max-width: 1000px) {
+        min-width: 100%;
+        width: 100%;
+        grid-template-columns: 1fr;
     }
 }
 
@@ -46,6 +54,25 @@ $gray: #EDF2F7;
 
 .mgrcard p {
     margin: 10px;
+}
+
+.todoTitle {
+    width: 100px;
+    white-space: normal;
+
+    @media (min-width: 1201px) {
+        width: 200px;
+    }
+}
+
+.todoProgress {
+    width: 100px;
+    height: 20px;
+}
+
+.remainingDaysStatus {
+    font-size: 13px;
+    margin-top: 11px;
 }
 
 .mgr-center {

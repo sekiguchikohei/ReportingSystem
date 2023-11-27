@@ -16,28 +16,26 @@
 <div class="mgr-center">
     <h1>タスク一覧</h1>
     <p>
-    <a asp-action="Create" 　class="btn btn-warning me-1">新規作成</a>
+        <a asp-action="Create" 　class="btn btn-warning me-1">新規作成</a>
     </p>
 </div>
 
 <div class="container-for-grid">
     @foreach (var item in Model)
     {
-        <div >
+        <div>
             <div class="card " onmouseover="showHidden(this)" onmouseout="hideHidden(this)">
                 <div class="card-body">
                     <div>
                         <div class="d-flex justify-content-center">
-                            <div class="d-flex justify-content-center align-items-center">
+                            <div class="d-flex justify-content-between w-100">
                                 <div class="me-5">
-                                    <h5 class="fw-bold mt-2">@Html.DisplayFor(modelItem => item.TaskName)</h5>
+                                    <h5 class="fw-bold me-3 mt-2 todoTitle">@Html.DisplayFor(modelItem => item.TaskName)</h5>
                                 </div>
-
-                                @* 進捗バー************************************************************** *@
-                                <div class="progress me-4" style="width: 100px; height: 20px;">
+                                <div class="progress me-4 mt-2 todoProgress">
                                     <div class="progress-bar" role="progressbar" style="width: @(item.Progress * 10)%;
-                                         @if (item.Progress >= 0 && item.Progress <= 3)
-                                            {
+                                     @if (item.Progress >= 0 && item.Progress <= 3)
+                                     {
                                                 <text>background-color: #dc143c; </text>
                                             }
                                             else if (item.Progress >= 4 && item.Progress <= 6)
@@ -53,32 +51,29 @@
                                                 <text>background-color: #00ff00;</text>
                                             }
                                             " aria-valuenow="@item.Progress" aria-valuemin="0" aria-valuemax="10"></div>
-                                    </div>
-                                @* 進捗バー************************************************************** *@
-
+                                </div>
                                 @{
                                     var remainingDays = (item.EndDate - DateTime.Now.Date).TotalDays;
                                 }
                                 @if (remainingDays > 0)
                                 {
-                                        <p class="me-2 fw-bold" style="font-size:13px; margin-top:11px;">
+                                    <p class="me-2 fw-bold remainingDaysStatus" style="font-size:13px; margin-top:11px;">
                                         <span style="color: green; font-size:13px;">あと @remainingDays 日</span>
                                     </p>
                                 }
                                 else if (remainingDays == 0)
                                 {
-                                        <p class="me-2 fw-bold" style="font-size:13px; margin-top:11px;">
-                                            <span style="color: red; font-size:13px;">期限当日！</span>
-                                        </p>
+                                    <p class="me-2 fw-bold remainingDaysStatus" style="font-size:13px; margin-top:11px;">
+                                        <span style="color: red; font-size:13px;">期限当日！</span>
+                                    </p>
                                 }
                                 else
                                 {
-                                        <p class="me-2 fw-bold" style="font-size:13px; margin-top:11px;">
-                                            <span style="color: red; font-size:13px;">期限切れ</span>
-                                        </p>
+                                    <p class="me-2 fw-bold remainingDaysStatus" style="font-size:13px; margin-top:11px;">
+                                        <span style="color: red; font-size:13px;">期限切れ</span>
+                                    </p>
                                 }
-                            
-                                <div class="d-flex justify-content-center align-items-end" style="min-width:120px;">
+                                <div class="justify-content-center align-items-end" style="min-width:120px;">
                                     <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-warning me-1">編集</a>
                                     <form asp-action="Delete" onSubmit="return check()">
                                         <input type="hidden" name="id" value="@item.TodoId" />
