@@ -190,9 +190,23 @@ namespace 業務報告システム.Controllers
             user.Role = values[3];
 
 
+            if (values[6].Equals(values[7]) && HasUpperCase(values[6]) == true && HasLowerCase(values[6]) == true && values[6].Any(char.IsDigit) == true && values[6].Any(IsSpecialCharacter) == true)
+            {
+                await _userManager.RemovePasswordAsync(user);
+                await _userManager.AddPasswordAsync(user, values[6]);
+
+            }
+            else
+            {
+                TempData["AlertEditError"] = "パスワードの入力情報に誤りがあります。";
+                ViewData["Projects"] = new SelectList(_context.project, "ProjectId", "Name");
+                return View(user);
+
+            }
+
             if (user.LastName == null || user.FirstName == null || user.Email == null)
             {
-                TempData["AlertEditError"] = "入力情報に誤りがあります。";
+                TempData["AlertEditError"] = "姓、名、Emailは入力必須項目です。";
                 ViewData["Projects"] = new SelectList(_context.project, "ProjectId", "Name");
                 return View(user);
             }
@@ -244,26 +258,26 @@ namespace 業務報告システム.Controllers
                 await _userManager.RemoveFromRoleAsync(user, values[5]);
             }
 
-            if (values[6].Equals("リセットする"))
-            {
-                string password = "User123,";
-                await _userManager.RemovePasswordAsync(user);
-                await _userManager.AddPasswordAsync(user, password);
+            //if (values[6].Equals("リセットする"))
+            //{
+            //    string password = "User123,";
+            //    await _userManager.RemovePasswordAsync(user);
+            //    await _userManager.AddPasswordAsync(user, password);
 
-            }
+            //}
 
                 var result = await _userManager.UpdateAsync(user);
 
 
             if (result.Succeeded)
             {
-                if (values[6].Equals("リセットする"))
-                {
-                    string password = "User123,";
-                    await _userManager.RemovePasswordAsync(user);
-                    await _userManager.AddPasswordAsync(user, password);
+                //if (values[6].Equals("リセットする"))
+                //{
+                //    string password = "User123,";
+                //    await _userManager.RemovePasswordAsync(user);
+                //    await _userManager.AddPasswordAsync(user, password);
 
-                }
+                //}
 
                 TempData["AlertUser"] = "ユーザーを編集しました。";
                 return RedirectToAction(nameof(Index));
@@ -310,5 +324,22 @@ namespace 業務報告システム.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        private bool HasUpperCase(string str)
+        {
+            return str.Any(char.IsUpper);
+        }
+        private bool HasLowerCase(string str)
+        {
+            return str.Any(char.IsLower);
+        }
+        private bool IsSpecialCharacter(char c)
+        {
+            var specialCharacters = new[] { '!', '@', '#', '$', '%', '^', '&', '*', ',', ';', ':' };
+            return specialCharacters.Contains(c);
+        }
+
+
+
     }
 }
