@@ -16,8 +16,8 @@ $gray: #EDF2F7;
     margin-left: auto;
 
     @media (min-width: 1001px) {
-        min-width: 100%;
-        width: 100%;
+        /*min-width: 100%;*/
+        /*width: 100%;*/
         grid-template-columns: 1fr 1fr;
     }
 
@@ -28,6 +28,7 @@ $gray: #EDF2F7;
         grid-template-columns: 1fr;
     }
 }
+
 
 .f-card {
     border: 1px solid $orange;
