@@ -27,60 +27,59 @@
             <div class="card " onmouseover="showHidden(this)" onmouseout="hideHidden(this)">
                 <div class="card-body">
                     <div>
-                        <div class="d-flex justify-content-center">
-                            <div class="d-flex justify-content-between w-100">
-                                <div class="me-5">
-                                    <h5 class="fw-bold me-3 mt-2 todoTitle">@Html.DisplayFor(modelItem => item.TaskName)</h5>
-                                </div>
-                                <div class="progress me-4 mt-2 todoProgress">
+                        <div style="height: 150px;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="fw-bold mt-2 todoTitle">@Html.DisplayFor(modelItem => item.TaskName)</h5>
+                                <div class="progress mt-2 todoProgress">
                                     <div class="progress-bar" role="progressbar" style="width: @(item.Progress * 10)%;
                                      @if (item.Progress >= 0 && item.Progress <= 3)
                                      {
                                                 <text>background-color: #dc143c; </text>
-                                            }
-                                            else if (item.Progress >= 4 && item.Progress <= 6)
-                                            {
-                                                <text>background-color: #4169e1; </text>
-                                            }
-                                            else if (item.Progress >= 7 && item.Progress <= 9)
-                                            {
-                                                <text>background-color: #32cd32;</text>
-                                            }
-                                            else if (item.Progress == 10)
-                                            {
-                                                <text>background-color: #00ff00;</text>
-                                            }
-                                            " aria-valuenow="@item.Progress" aria-valuemin="0" aria-valuemax="10"></div>
+                                        }
+                                        else if (item.Progress >= 4 && item.Progress <= 6)
+                                        {
+                                            <text>background-color: #4169e1; </text>
+                                        }
+                                        else if (item.Progress >= 7 && item.Progress <= 9)
+                                        {
+                                            <text>background-color: #32cd32;</text>
+                                        }
+                                        else if (item.Progress == 10)
+                                        {
+                                            <text>background-color: #00ff00;</text>
+                                        }
+                                        " aria-valuenow="@item.Progress" aria-valuemin="0" aria-valuemax="10">
+                                    </div>
                                 </div>
                                 @{
                                     var remainingDays = (item.EndDate - DateTime.Now.Date).TotalDays;
                                 }
                                 @if (remainingDays > 0)
                                 {
-                                    <p class="me-2 fw-bold remainingDaysStatus" style="font-size:13px; margin-top:11px;">
-                                        <span style="color: green; font-size:13px;">あと @remainingDays 日</span>
+                                    <p class=" fw-bold remainingDaysStatus" style="font-size:13px; margin-top:11px;">
+                                        <span style="color: green; font-size:13px; width: 80px;">あと @remainingDays 日</span>
                                     </p>
                                 }
                                 else if (remainingDays == 0)
                                 {
-                                    <p class="me-2 fw-bold remainingDaysStatus" style="font-size:13px; margin-top:11px;">
-                                        <span style="color: red; font-size:13px;">期限当日！</span>
+                                    <p class=" fw-bold remainingDaysStatus" style="font-size:13px; margin-top:11px;">
+                                    <span style="color: red; font-size:13px; width: 80px;">期限当日！</span>
                                     </p>
                                 }
                                 else
                                 {
-                                    <p class="me-2 fw-bold remainingDaysStatus" style="font-size:13px; margin-top:11px;">
-                                        <span style="color: red; font-size:13px;">期限切れ</span>
+                                    <p class="fw-bold remainingDaysStatus" style="font-size:13px; margin-top:11px;">
+                                    <span style="color: red; font-size:13px; width: 80px;">期限切れ</span>
                                     </p>
                                 }
-                                <div class="justify-content-center align-items-end" style="min-width:120px;">
+                                <div class="justify-content-center align-items-center" style="height: 145px; padding: 20px;">
                                     <a href="@Url.Action("Edit", new { id = item.TodoId })" class="btn btn-warning me-1">編集</a>
                                     <form asp-action="Delete" onSubmit="return check()">
                                         <input type="hidden" name="id" value="@item.TodoId" />
                                         <button type="submit" class="btn btn-danger">削除</button>
                                     </form>
                                 </div>
-                            </div>
+                             </div>
                         </div>
                         <p class="card-text custom-hidden" style="display: none;">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
                         <p class="card-text custom-hidden" style="display: none;">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>

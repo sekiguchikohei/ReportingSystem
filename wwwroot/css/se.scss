@@ -15,7 +15,7 @@ $gray: #EDF2F7;
     margin-right: auto;
     margin-left: auto;
 
-    @media (min-width: 1001px)  {
+    @media (min-width: 1001px) {
         min-width: 100%;
         width: 100%;
         grid-template-columns: 1fr 1fr;
@@ -57,10 +57,10 @@ $gray: #EDF2F7;
 }
 
 .todoTitle {
-    width: 100px;
+    width: 250px;
     white-space: normal;
 
-    @media (min-width: 1201px) {
+    @media (min-width: 120px) {
         width: 200px;
     }
 }
@@ -112,6 +112,7 @@ $gray: #EDF2F7;
 }
 
 .btn {
+    writing-mode: horizontal-tb;
     margin: 5px 0;
 }
 
@@ -120,6 +121,7 @@ $gray: #EDF2F7;
     justify-content: space-between;
     margin-top: 10px;
 }
+
 
 .hidden {
     display: none
