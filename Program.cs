@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using 業務報告システム.Data;
-using 業務報告システム.Models;
+using ReportSystem.Data;
+using ReportSystem.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

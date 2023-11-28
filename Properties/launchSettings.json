@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "業務報告システム": {
+    "ReportSystem": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

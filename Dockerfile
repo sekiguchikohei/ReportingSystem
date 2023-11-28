@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["業務報告システム.csproj", "."]
-RUN dotnet restore "./業務報告システム.csproj"
+COPY ["ReportSystem.csproj", "."]
+RUN dotnet restore "./ReportSystem.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "業務報告システム.csproj" -c Release -o /app/build
+RUN dotnet build "ReportSystem.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "業務報告システム.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "ReportSystem.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "業務報告システム.dll"]
+ENTRYPOINT ["dotnet", "ReportSystem.dll"]

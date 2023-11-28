@@ -7,12 +7,12 @@ using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Security.Claims;
-using 業務報告システム.Data;
-using 業務報告システム.Models;
-using 業務報告システム.ViewModels;
-using Project = 業務報告システム.Models.Project;
+using ReportSystem.Data;
+using ReportSystem.Models;
+using ReportSystem.ViewModels;
+using Project = ReportSystem.Models.Project;
 
-namespace 業務報告システム.Controllers
+namespace ReportSystem.Controllers
 {
     public class HomeController : Controller
     {

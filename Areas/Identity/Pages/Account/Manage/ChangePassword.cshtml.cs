@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using 業務報告システム.Models;
+using ReportSystem.Models;
 
-namespace 業務報告システム.Areas.Identity.Pages.Account.Manage
+namespace ReportSystem.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {

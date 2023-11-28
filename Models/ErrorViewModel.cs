@@ -1,4 +1,4 @@
-namespace 業務報告システム.Models
+namespace ReportSystem.Models
 {
     public class ErrorViewModel
     {

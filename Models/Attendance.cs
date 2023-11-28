@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace 業務報告システム.Models
+namespace ReportSystem.Models
 {
     //勤怠
     public class Attendance

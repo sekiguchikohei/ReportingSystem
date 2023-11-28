@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace 業務報告システム.Models
+namespace ReportSystem.Models
 {
     [Index(nameof(Project.Name),IsUnique = true)]
     public class Project
