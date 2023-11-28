@@ -83,7 +83,7 @@
                         </div>
                         <p class="card-text custom-hidden" style="display: none;">開始日: @Html.DisplayFor(modelItem => item.StartDate)</p>
                         <p class="card-text custom-hidden" style="display: none;">終了日: @Html.DisplayFor(modelItem => item.EndDate)</p>
-                        <p class="card-text custom-hidden" style="display: none;">詳細: @Html.DisplayFor(modelItem => item.Comment)</p>
+                        <p class="card-text custom-hidden" style="display: none; white-space:pre-wrap;">詳細: @Html.DisplayFor(modelItem => item.Comment)</p>
                         @if (item.Progress <= 4)
                         {
                             <p class="card-text custom-hidden text-danger fw-bold" style="display: none; font-size:13px; margin-top:11px;">

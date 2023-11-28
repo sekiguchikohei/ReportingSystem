@@ -65,8 +65,8 @@
             <p class="fw-bold pt-2 pb-2">退勤時間 : @Model.Attendance.EndTime.Hour : @eTime</p>
         </div>
         <p class="fw-bold pt-2 pb-2">報告内容</p>
-        <p>@Model.Report.Comment</p>
-        <p class="fw-bold pt-2 pb-2">明日やること</p>
+        <p style="white-space:pre-wrap;">@Model.Report.Comment</p>
+        <p class="fw-bold pt-2 pb-2" style="white-space:pre-wrap;">明日やること</p>
         <p>@Model.Report.TomorrowComment</p>
         @if (Model.Report.UpDate.HasValue)
         {
