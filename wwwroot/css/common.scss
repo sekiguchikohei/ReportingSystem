@@ -40,3 +40,19 @@ body {
     width: 50px;
     font-family: $fontType;
 }
+
+.select-icon:hover {
+/*    cursor: pointer;*/
+    animation: shake 2s infinite;
+    transform: rotate(20deg);
+}
+
+@keyframes shake {
+    50% {
+        transform: rotate(-20deg);
+    }
+
+    100% {
+        transform: rotate(20deg);
+    }
+}
