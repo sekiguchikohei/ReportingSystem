@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 
-namespace 業務報告システム.Models
+namespace ReportSystem.Models
 {
     public class ApplicationUser : IdentityUser
     {

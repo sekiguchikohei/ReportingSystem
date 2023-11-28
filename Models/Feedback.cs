@@ -1,7 +1,7 @@
 ﻿using NuGet.Protocol;
 using System.ComponentModel.DataAnnotations;
 
-namespace 業務報告システム.Models
+namespace ReportSystem.Models
 {
     //mgrのrepoatへのFB
     public class Feedback

@@ -20,10 +20,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using 業務報告システム.Data;
-using 業務報告システム.Models;
+using ReportSystem.Data;
+using ReportSystem.Models;
 
-namespace 業務報告システム.Areas.Identity.Pages.Account
+namespace ReportSystem.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {

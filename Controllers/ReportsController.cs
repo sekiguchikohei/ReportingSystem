@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
-using 業務報告システム.Data;
-using 業務報告システム.Models;
-using 業務報告システム.ViewModels;
+using ReportSystem.Data;
+using ReportSystem.Models;
+using ReportSystem.ViewModels;
 
 
-namespace 業務報告システム.Controllers
+namespace ReportSystem.Controllers
 {
     public class ReportsController : Controller
     {

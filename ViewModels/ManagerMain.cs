@@ -1,6 +1,6 @@
-﻿using 業務報告システム.Models;
+﻿using ReportSystem.Models;
 
-namespace 業務報告システム.ViewModels
+namespace ReportSystem.ViewModels
 {
     public class ManagerMain
     {

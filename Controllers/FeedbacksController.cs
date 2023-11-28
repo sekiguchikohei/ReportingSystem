@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using 業務報告システム.Data;
-using 業務報告システム.Models;
+using ReportSystem.Data;
+using ReportSystem.Models;
 
-namespace 業務報告システム.Controllers
+namespace ReportSystem.Controllers
 {
     [Authorize(Roles = "Manager")]
     public class FeedbacksController : Controller

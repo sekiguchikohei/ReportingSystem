@@ -14,11 +14,11 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using 業務報告システム.Models;
+using ReportSystem.Models;
 using System.Security.Policy;
-using 業務報告システム.Controllers;
+using ReportSystem.Controllers;
 
-namespace 業務報告システム.Areas.Identity.Pages.Account
+namespace ReportSystem.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {

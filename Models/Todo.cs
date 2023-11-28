@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace 業務報告システム.Models
+namespace ReportSystem.Models
 {
     //今日・明日・進捗度
     public class Todo
