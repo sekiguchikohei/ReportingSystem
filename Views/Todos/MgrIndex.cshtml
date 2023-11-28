@@ -53,42 +53,65 @@
                                         <div style="width:250px;">
                                             <h5 class="fw-bold mt-2 text-start">@todo.TaskName</h5>
                                         </div>
+                                    <div class="mt-3 me-1" style="font-size: 14px;">
                                         @switch (@todo.Progress)
                                         {
                                             case 0:
-                                                <p class="text-danger fw-bold mt-2">進捗 : 0%</p>
+                                            <p class="text-danger fw-bold">進捗 : 0%</p>
                                                 break;
                                             case 1:
-                                                <p class="text-danger fw-bold mt-2">進捗 : 10%</p>
+                                            <p class="text-danger fw-bold">進捗 : 10%</p>
                                                 break;
                                             case 2:
-                                                <p class="text-danger fw-bold mt-2">進捗 : 20%</p>
+                                            <p class="text-danger fw-bold">進捗 : 20%</p>
                                                 break;
                                             case 3:
-                                                <p class="text-danger fw-bold mt-2">進捗 : 30%</p>
+                                            <p class="text-danger fw-bold">進捗 : 30%</p>
                                                 break;
                                             case 4:
-                                                <p class="text-danger fw-bold mt-2">進捗 : 40%</p>
+                                            <p class="text-danger fw-bold">進捗 : 40%</p>
                                                 break;
                                             case 5:
-                                                <p class="fw-bold mt-2">進捗 : 50%</p>
+                                            <p class="fw-bold ">進捗 : 50%</p>
                                                 break;
                                             case 6:
-                                                <p class="fw-bold mt-2">進捗 : 60%</p>
+                                            <p class="fw-bold">進捗 : 60%</p>
                                                 break;
                                             case 7:
-                                                <p class="fw-bold mt-2">進捗 : 70%</p>
+                                            <p class="fw-bold ">進捗 : 70%</p>
                                                 break;
                                             case 8:
-                                                <p class="fw-bold text-success mt-2">進捗 : 80%</p>
+                                            <p class="fw-bold text-success">進捗 : 80%</p>
                                                 break;
                                             case 9:
-                                                <p class="fw-bold text-success mt-2">進捗 : 90%</p>
+                                            <p class="fw-bold text-success">進捗 : 90%</p>
                                                 break;
                                             case 10:
-                                                <p class="fw-bold text-success mt-2">進捗 : 100%</p>
+                                            <p class="fw-bold text-success">進捗 : 100%</p>
                                                 break;
                                         }
+                                        </div>
+                                        <div class="mgrmain-rd mt-3 me-2" style="font-size:14px;">
+                                        @{
+                                            var remainingDays = (todo.EndDate - DateTime.Now.Date).TotalDays;
+                                        }
+                                        @if (remainingDays > 0)
+                                        {
+                                            <p class="fw-bold">
+                                                <span class="text-success">あと @remainingDays 日</span>
+                                            </p>
+                                        }
+                                        else if (remainingDays == 0)
+                                        {
+                                            <p class="fw-bold text-danger">期限日当日！</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="fw-bold">
+                                                <span class="text-danger">期限切れ</span>
+                                            </p>
+                                        }
+                                        </div>
 
                                         <div>
                                             <form asp-controller="Todos" asp-action="Edit" asp-route-id="@todo.TodoId" method="get">
