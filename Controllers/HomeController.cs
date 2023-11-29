@@ -189,6 +189,11 @@ namespace ReportSystem.Controllers
             user.UserName = values[2];
             user.Role = values[3];
 
+            if (values[6] == null || values[7] == null) {
+                TempData["AlertEditError"] = "パスワードを入力してください。";
+                ViewData["Projects"] = new SelectList(_context.project, "ProjectId", "Name");
+                return View(user);
+            }
 
             if (values[6].Equals(values[7]) && HasUpperCase(values[6]) == true && HasLowerCase(values[6]) == true && values[6].Any(char.IsDigit) == true && values[6].Any(IsSpecialCharacter) == true)
             {
