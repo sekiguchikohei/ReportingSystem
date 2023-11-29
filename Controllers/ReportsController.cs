@@ -72,7 +72,7 @@ namespace ReportSystem.Controllers
                 {
                     if (feedbackSearch.Equals("既読"))
                     {
-                        reportIdsWithFeedback.AddRange(_context.feedback.Where(x => x.ReportId == feed.ReportId).Select(f => f.ReportId));
+                        reportIdsWithFeedback.AddRange(_context.feedback.Where(x => x.ReportId == feed.ReportId && x.Report.UserId.Equals(Id)).Select(f => f.ReportId));
                         SearchConditions = "既読";
                     }
                     else if (feedbackSearch.Equals("未読"))
@@ -84,44 +84,44 @@ namespace ReportSystem.Controllers
             }
             if (feedbackSearch != null && month != 0 && attendanceSearch != null)
             {
-                allReports = _context.report.Where(x => x.Date.Year == year && x.Date.Month == month && x.Attendance.Status.Equals(attendanceSearch) && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
-                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && x.Date.Year == year && x.Report.Date.Month == month && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                allReports = _context.report.Where(x => x.Date.Year == year && x.Date.Month == month && x.Attendance.Status.Equals(attendanceSearch) && reportIdsWithFeedback.Contains(x.ReportId) && x.UserId.Equals(Id)).ToList();
+                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && x.Date.Year == year && x.Report.Date.Month == month && reportIdsWithFeedback.Contains(x.ReportId) && x.Report.UserId.Equals(Id)).ToList();
                 SearchConditions = SearchConditions + " / "+ year + "年" + month + "月" + " / " + attendanceSearch;
             }
             else if (feedbackSearch != null && month != 0)
             {
-                allReports = _context.report.Where(x => x.Date.Year == year && x.Date.Month == month && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
-                allAttendance = _context.attendance.Where(x => x.Date.Year == year && x.Report.Date.Month == month && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                allReports = _context.report.Where(x => x.Date.Year == year && x.Date.Month == month && reportIdsWithFeedback.Contains(x.ReportId) && x.UserId.Equals(Id)).ToList();
+                allAttendance = _context.attendance.Where(x => x.Date.Year == year && x.Report.Date.Month == month && reportIdsWithFeedback.Contains(x.ReportId) && x.Report.UserId.Equals(Id)).ToList();
                 SearchConditions = SearchConditions + " / " + year + "年" + month + "月";
             }
             else if (feedbackSearch != null && attendanceSearch != null)
             {
-                allReports =  _context.report.Where(x =>  x.Attendance.Status.Equals(attendanceSearch) && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
-                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                allReports =  _context.report.Where(x =>  x.Attendance.Status.Equals(attendanceSearch) && reportIdsWithFeedback.Contains(x.ReportId) && x.UserId.Equals(Id)).ToList();
+                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && reportIdsWithFeedback.Contains(x.ReportId) && x.Report.UserId.Equals(Id)).ToList();
                 SearchConditions = SearchConditions + " / " + attendanceSearch;
             }
             else if (month != 0 && attendanceSearch != null)
             {
-                allReports = _context.report.Where(x => x.Date.Year == year && x.Date.Month == month && x.Attendance.Status.Equals(attendanceSearch)).ToList();
-                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && x.Date.Year == year && x.Report.Date.Month == month).ToList();
+                allReports = _context.report.Where(x => x.Date.Year == year && x.Date.Month == month && x.Attendance.Status.Equals(attendanceSearch) && x.UserId.Equals(Id)).ToList();
+                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && x.Date.Year == year && x.Report.Date.Month == month && x.Report.UserId.Equals(Id)).ToList();
                 SearchConditions = year + "年" + month + "月" + " / " + attendanceSearch;
             }
             else if(month != 0)
             {
-                allReports = _context.report.Where(x => x.Date.Year == year && x.Date.Month == month).ToList();
-                allAttendance = _context.attendance.Where(x => x.Date.Year == year && x.Report.Date.Month == month).ToList();
+                allReports = _context.report.Where(x => x.Date.Year == year && x.Date.Month == month && x.UserId.Equals(Id)).ToList();
+                allAttendance = _context.attendance.Where(x => x.Date.Year == year && x.Report.Date.Month == month && x.Report.UserId.Equals(Id)).ToList();
                 SearchConditions = year + "年" + month + "月";
             }
             else if (attendanceSearch != null)
             {
-                allReports = _context.report.Where(x => x.Attendance.Status.Equals(attendanceSearch)).ToList();
-                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch)).ToList();
+                allReports = _context.report.Where(x => x.Attendance.Status.Equals(attendanceSearch) && x.UserId.Equals(Id)).ToList();
+                allAttendance = _context.attendance.Where(x => x.Status.Equals(attendanceSearch) && x.Report.UserId.Equals(Id)).ToList();
                 SearchConditions = attendanceSearch;
             }
             else if(feedbackSearch != null)
             {
-                allReports = _context.report.Where(x => reportIdsWithFeedback.Contains(x.ReportId)).ToList();
-                allAttendance = _context.attendance.Where(x => reportIdsWithFeedback.Contains(x.ReportId)).ToList();
+                allReports = _context.report.Where(x => reportIdsWithFeedback.Contains(x.ReportId) && x.UserId.Equals(Id)).ToList();
+                allAttendance = _context.attendance.Where(x => reportIdsWithFeedback.Contains(x.ReportId) && x.Report.UserId.Equals(Id)).ToList();
             }
 
             foreach (var report in allReports)
@@ -712,7 +712,7 @@ namespace ReportSystem.Controllers
 
             var submitDay = DateTime.Parse(values[1]);
             var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var judgeDate = _context.report.Where(x => x.Date == submitDay && x.ReportId != int.Parse(values[0])).ToList();   
+            var judgeDate = _context.report.Where(x => x.Date == submitDay && x.ReportId != int.Parse(values[0]) && x.UserId == loginUserId).ToList();   
             DateTime startTime = new DateTime(submitDay.Year, submitDay.Month, submitDay.Day, int.Parse(values[3]), int.Parse(values[4]), 0);
             DateTime endTime = new DateTime(submitDay.Year, submitDay.Month, submitDay.Day, int.Parse(values[5]), int.Parse(values[6]), 0);
 
@@ -744,7 +744,7 @@ namespace ReportSystem.Controllers
 
             if (judgeDate.Count > 0)
             {
-                TempData["AlertReportError"] = "同じ日付の報告が既に存在しています。別の日付で作り直してください。。";
+                TempData["AlertReportError"] = "同じ日付の報告が既に存在しています。別の日付で作り直してください。";
                 return View(reportCRUD);
             }
 
