@@ -574,11 +574,11 @@ namespace ReportSystem.Controllers
             {
                 var loginUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var Re = _context.user.Include(x => x.Reports).Where(x => x.Id.Equals(loginUserId)).ToList();
-                var At = _context.report.Include(x => x.Attendance).Where(x => x.ReportId == Re.Last().Reports.Last().ReportId).ToList();
-                int startHour = At.First().Attendance.StartTime.Hour;
-                int startMinute = At.First().Attendance.StartTime.Minute;
-                int endHour = At.First().Attendance.EndTime.Hour;
-                int endMinute = At.First().Attendance.EndTime.Minute;
+                var At = _context.report.Include(x => x.Attendance).Where(x => x.UserId.Equals(loginUserId)).OrderByDescending(x => x.Date).FirstOrDefault();
+                int startHour = At.Attendance.StartTime.Hour;
+                int startMinute = At.Attendance.StartTime.Minute;
+                int endHour = At.Attendance.EndTime.Hour;
+                int endMinute = At.Attendance.EndTime.Minute;
 
                 ViewBag.StartHour = startHour;
                 ViewBag.StartMinute = startMinute;
