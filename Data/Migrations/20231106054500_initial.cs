@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace 業務報告システム.Data.Migrations
+namespace ReportSystem.Data.Migrations
 {
     public partial class initial : Migration
     {
